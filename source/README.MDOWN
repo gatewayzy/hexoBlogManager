@@ -1,0 +1,10 @@
+# gatewayzy.github.io
+
+## intro
+  Home of gatewayzy
+
+## list
+|名称 |说明 |
+|---|---|
+|home |home for gatewayzy |
+|studyBlog |some blogs |
