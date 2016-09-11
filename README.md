@@ -4,6 +4,11 @@
 ---
 hexo blog的原始代码。项目中含有大量的个人配置。
 
+## links
+---
+-  [home](http://bebetter.site/)
+-  [open my github](https://github.com/gatewayzy)
+
 ## 使用步骤
 ---
 - 安装git for windows。
