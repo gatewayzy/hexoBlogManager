@@ -12,6 +12,6 @@ hexo blog的原始代码。项目中含有大量的个人配置。
 - 在一个文件夹打开git bash，运行 `hexo init` 来下载hexo示例的git项目。
 - ssh下载github中的hexoBlogManager
 - 将hexoBlogManager项目(包括.git文件)复制到demo项目中覆盖原有文件(可以删除demo中的source文件夹)，此时已经可以本地运行hexo。
-- 还可以删除hexoBlogManager，将demo项目重命名为hexoBlogManager，并与与github建立ssh连接。
+- 还可以删除hexoBlogManager，将demo项目重命名为hexoBlogManager，并与与github建立ssh连接。如果要部署的话，应该接着运行命令`npm install hexo-deployer-git –save`。
 
 
