@@ -1,5 +1,5 @@
 ---
-title: Browser 配置
+title: Browser
 comments: true
 date: 2016-08-12 13:58:56
 updated: 2016-08-12 13:58:56
