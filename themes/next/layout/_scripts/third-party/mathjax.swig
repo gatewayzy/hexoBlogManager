@@ -18,4 +18,5 @@
     });
   </script>
   <script type="text/javascript" src="{{ theme.mathjax.cdn }}"></script>
+
 {% endif %}

@@ -1,14 +1,15 @@
 ---
 title: 搭建个人博客站点(1)-托管到github pages
 comments: true
-date: 2016-08-08 20:21:42
+date: 2016-08-08 20:21:04
 updated: 2016-08-08 20:21:42
-categories: 搭建网站
+categories: Blog
 tags: 
 - blog
 - github pages
 - github
 - hexo
+- 搭建网站
 ---
 **说明：**介绍建立个人blog站点的主要流程，使用github pages以及hexo进行实现。
 <!-- more -->
@@ -177,7 +178,7 @@ hexo new “ahexo” 	#创建新文章，默认是post，如果是page、draft�
 ````bash		
 	hexo generate	#生成静态页面
 ````
-- 发布项目到github个人站点，将public文件内容上传到github 个人仓库中。特定的配置可以放在source目录下，generate会自动放到public中。
+- 发布项目到github个人站点，将public文件内容上传到github 个人仓库中。特定的配置可以放在source目录下，generate会自动放到public中。如果运行下面的程序提示未找到git命令，可能需要npm安装插件 `npm install hexo-deployer-git --save`。
 
 ````bash		
 	hexo deploy	#发布项目到github个人站点
@@ -331,6 +332,27 @@ links:
   #Title: http://example.com/
   my-github: https://github.com/gatewayzy
   百度: http://baidu.com/
+```
+
+#### 支持LaTex公式
+* 开启next主题配置中的公式插件配置。
+* 不同主题有相应的配置方式，默认主题landscape可参看文章：[在hexo博客中使用Mathjax写LaTex数学公式](http://blog.csdn.net/sherlockzoom/article/details/43835613)
+* 公式举例如下。更多公式请查看LaTex使用教程。
+* 如果没有效果，应该确实是否是网络无法访问cdn.mathjax.org对应的js，建议开启全局代理模式以访问国外服务器。
+	* $ 表示行内公式：`$E=mc^2$`  $E=mc^2$
+	* $$ 表示整行公式：`$$\sum_{i=1}^n a_i=0$$` $$\sum_{i=1}^n a_i=0$$
+	* `$$f(x_1,x_2,\ldots,x_n) = x_1^2 + x_2^2 + \cdots + x_n^2$$` $$f(x_1,x_2,\ldots,x_n) = x_1^2 + x_2^2 + \cdots + x_n^2$$
+	* `$$\alpha (x)=\sum_{m=0}^{m<2^2} \alpha_2m +\mu$$` $$\alpha (x)=\sum_{m=0}^{m<2^2} \alpha_2m +\mu$$
+	* `$$dudx|x=0$$` $$dudx|x=0$$
+	* `$$f(x,y,z)=3y2z(3+7x+51+y2)$$` $$f(x,y,z)=3y2z(3+7x+51+y2)$$
+	* `$$\mbox{对任意的$x>0$}, \mbox{有 }f(x)>0. $$`  $$\mbox{对任意的$x>0$}, \mbox{有 }f(x)>0. $$
+	* `$$\LaTeX \ast\TeX$$` $$\LaTeX \ast\TeX$$
+	* `$$x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$$` $$x=\frac{-b\pm\sqrt[5]{b^2-4ac}}{2a}$$
+```
+# MathJax Support
+mathjax:
+  enable: true
+  cdn: //cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
 ```
 
 

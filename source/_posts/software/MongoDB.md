@@ -1,9 +1,9 @@
 ---
 title: MongoDB
 comments: true
-date: 2017-01-12 13:58:56
+date: 2017-01-12 13:58:13
 updated: 2017-01-12 13:58:56
-categories: 软件配置
+categories: Softwares
 tags:
 - MongoDB
 ---
@@ -13,13 +13,15 @@ tags:
 
 
 ## server安装
-
-* 将MongoDB安装为windows服务
-	* 用管理员cmd进入其bin目录，运行：
+---
+###  Windows下
+---
+一般将解压后的MongoDB安装为windows服务
+* 用管理员cmd进入其bin目录，运行：
 `mongod --logpath "D:\Program Files\mongodb\data\mongo.log" --logappend --dbpath "D:\Program Files\mongodb\data" --directoryperdb --serviceName "MongoDB" --serviceDisplayName "MongoDB" –install`
 其中两个路径分别设置日志路径、数据文件路径，还设置了日志是追加方式、服务命名、服务名。- -directoryperdb说明每个DB都会新建一个目录。- -install安装，mongod - -remove删除服务。
 
-	* 或者将上面的配置值写入新建的mongodb.config中，内容如下。修改并添加好对应的文件路径，到mongod.exe所在目录使用管理员cmd运行：
+* 或者将上面的配置值写入新建的mongodb.config中，内容如下。修改并添加好对应的文件路径，到mongod.exe所在目录使用管理员cmd运行：
 `mongod --config “D:\Program Files\mongodb-win32-x86_64-2008plus\mongodb.config” -install`
 
 ```
@@ -32,7 +34,7 @@ serviceDisplayName=MongoDB
 
 
 
-注意：启动失败的话，应该通过查看日志。
+注意：server启动失败的话，应该通过查看日志解决问题。
 
 ##  server配置
 ---

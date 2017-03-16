@@ -1,9 +1,9 @@
 ---
 title: Redis
 comments: true
-date: 2017-01-12 13:58:56
+date: 2017-01-12 13:58:18
 updated: 2017-01-12 13:58:56
-categories: 软件配置
+categories: Softwares
 tags:
 - Redis
 ---
@@ -26,7 +26,7 @@ tags:
 ### Linux下
 
 * 安装：
-	* 下载源码并解压
+	* 下载源码并解压cd src，make，（是否安装build-essential，make MALLOC=jemalloc等问题）make all等命令，主要看运行中的提示信息。不推荐make insatll成service。
 	* 使用源安装
 * 源安装的服务命令：service redisd start | stop | restart...
 * 启动server：
@@ -36,7 +36,7 @@ tags:
 	* ps -ef |grep redis
 	* ps -aux |grep redis
 * 停止server：
-	* redis-cli shutdown
+	* redis-cli -a passwd shutdown
 	* redis-cli -h 127.0.0.1 -p 6379 shutdown
 	* ps -aux |grep redis 然后运行： kill -9 pid
 
@@ -82,7 +82,19 @@ tags:
 ##  问题与解决
 ---
 ### 密码设置
+
 * 修改config文件，使用该配置启动server，上文已详述。
+
+### 数据库备份与恢复
+
+* 方案：重写所有数据
+	* 使用程序查询所有数据，写到新的redis
+* 方案：rdb快照
+	* 关闭server，可将dump.rdb视为数据库备份文件（数据库快照）
+	* 将dump.rdb复制到新的redis下，启动即可，注意会覆盖原有的rdb文件问题。
+	* 也可是使用client连接server，运行auth密码之后，使用SAVE命令生成rdb，存储路径在conf文件的working directory设置。
+* 方案：aof拓展
+	*  
 
 
 

@@ -1,9 +1,9 @@
 ---
 title: Browser
 comments: true
-date: 2016-08-12 13:58:56
-updated: 2016-08-12 13:58:56
-categories: 软件配置
+date: 2017-01-12 13:58:02
+updated: 2017-01-12 13:58:56
+categories: Softwares
 tags:
 - browser
 ---
@@ -16,6 +16,7 @@ tags:
 |快捷键	|功能	|
 |:---:	|:---:	|
 |ctrl + t	|打开新的标签	|
+|ctrl + e	|地址栏输入	|
 |ctrl + n	|打开新的窗口	，适用于资源管理器|
 |ctrl + w	|关闭标签页	|
 |ctrl + shift + t	|打开刚刚关闭的标签页	|

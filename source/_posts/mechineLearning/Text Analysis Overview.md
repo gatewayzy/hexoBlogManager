@@ -1,0 +1,41 @@
+---
+title: Text Analysis Overview
+comments: true
+date: 2017-01-14 13:58:20
+updated: 2017-01-14 13:58:56
+categories: Text Analysis
+tags:
+- Mechine Learning
+- Text Analysis
+---
+
+**说明：**Text analysis简介，如TF-IDF、Support Confidence等。
+<!-- more -->
+
+
+参考文章：
+
+## TF-IDF
+---
+* TF(Term Frequency)词频 = 特定单词在文件中出现的频率，常常使用归一化的值，即 `词语出现次数/文本单词数目`，以避免长文本的影响。
+* IDF(Inverse Document Frequency)逆向文件频率 = lg(总文件数/该词出现的文件数)。
+* TF*IDF 的值可以筛选出高频词和不常用的词。
+
+## 关联规则
+---
+
+### Support Confidence 
+---
+对于一条关联规则A->B，我们常用Support和Confidence来衡量它的重要性。关联规则的目标一般是产生支持度和置信度都较高的规则。
+
+* 支持度Support(A->B)=P(AB)，表示A和B同时出现在全域D中的概率。值越大说明二者相关性越大。
+* 置信度Confidence(A->B)=P(B|A)，表示在A出现时，B也出现的概率。值越大说明A出现时B也很可能出现。
+
+### 其他度量
+---
+与置信度相似的度量还有：
+
+* Lift： `P(LR)/(P(L)P(R))` Lift=1时表示L和R独立。这个数越大，越表明L和R存在在一个购物篮中不是偶然现象。
+* Leverage：`P(LR)-P(L)P(R)` 它和Lift的含义差不多。Leverage=0时L和R独立，Leverage越大L和R的关系越密切。
+* Conviction：`P(L)P(!R)/P(L!R)` （!R表示R没有发生） Conviction也是用来衡量L和R的独立性。这个值越大关联度越高。
+* 值得注意的是，用Lift和Leverage作标准时，L和R是对称的，Confidence和Conviction则不然。
