@@ -11,8 +11,14 @@ tags:
 **说明：**Windows配置，Windows的使用。
 <!-- more -->
 
+## 系统
+---
+### 环境变量
+---
+* set zy=zyy;echo %zy% 命令行设置环境变量和显示，只对当前terminal有效
 
-## 快捷键
+
+### 快捷键
 ---
 
 * Windows key键（简称win） + R  运行命令或打开文件
@@ -28,7 +34,7 @@ tags:
 * ctrl win 左右 #切换桌面
 * Ctrl + W  关闭窗口，包括资源管理器等窗口均有效
 
-## 个性化设置
+### 个性化设置
 ---
 *  Win7中在淡绿色背景：个性化-窗口颜色-高级外观设置-窗口-其他-自定义-窗口RGB值为（204，232，207）或色调:84饱和度:91亮度:205
 *  Win10中修改注册表：运行regedit，修改 `[HKEY_CURRENT_USER\Control Panel\Colors] windows`，修改值为202 234 206，修改 `[HKEY_LOCAL_MACHINE \SOFTWARE \Microsoft\Windows \CurrentVersion\Themes\DefaultColors\Standard\Window]`改为十六进制的caeace。点击确定退出注册表。重启电脑即可。

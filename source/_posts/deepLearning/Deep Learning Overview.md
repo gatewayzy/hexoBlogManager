@@ -1,5 +1,5 @@
 ---
-title: Deep Learning简介
+title: Deep Learning Overview
 comments: true
 date: 2017-01-14 13:58:04
 updated: 2017-01-14 13:58:56
@@ -68,4 +68,37 @@ java下的一款轻量级神经网络工具。支持GUI操作的Neuroph Studio�
 ### 参考文章
 * [最新自然语言处理(NLP)四步流程：Embed->Encode->Attend->Predict](http://www.toutiao.com/i6353561267763954178/?tt_from=mobile_qq&utm_campaign=client_share&app=news_article&utm_source=mobile_qq&iid=6168746227&utm_medium=toutiao_ios)
 * [人工神经网络](http://www.toutiao.com/i6353823576730108418/?tt_from=mobile_qq&utm_campaign=client_share&app=news_article&utm_source=mobile_qq&iid=6168746227&utm_medium=toutiao_ios)
+
+## cuda & gpu
+---
+* 介绍
+	* 目前高端的NVIDIA显卡有Geforce，Quadro，Tesla 三个系列的产品，并且他们都支持 NVIDIA CUDA并行计算平台。 然而 NVIDIA GeForce 和 NVIDIA Quadro 分别是为消费级图形处理和专业可视搜索化而设计的，只有 Tesla 产品系列是完全针对并行计算而设计的，可提供独有的计算特性。由于Tesla系列产品的专业性，所以就注定了它肯定要用在相关的领域，比如：地震处理, 信号与图像处理, 视频分析等对图形运算要求比较高的行业。（来自百度知道）
+	* NVIDIA共有两款Titan X，一款叫NVIDIA GeForce GTX Titan X，基于上一代的Maxwell架构，另一款叫NVIDIA Titan X，基于和1080一样的Pascal架构。Pascal的GTX1080吊打NVIDIA GeForce GTX Titan X，领先25％，但比NVIDIA Titan X弱了30％（来自百度知道）
+
+* 显卡安装
+	* 参考文章[Ubuntu 14.04 上安装 CUDA 7.5/8.0 超详细教程](http://blog.csdn.net/masa_fish/article/details/51882183)
+	* 安装NVIDIA显卡(支持的cudaNN版本)--安装cuda（7.5/8.0等版本）--tf/Theano等
+* 配置使用
+	* nvidia-smi 查看状态
+	* 指定显卡：
+		* 在环境变量（系统或者ide）中添加CUDA_VISIBLE_DEVICES=1或者CUDA_VISIBLE_DEVICES=0,2,3
+		* 程序中设置`import os os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID" os.environ["CUDA_VISIBLE_DEVICES"]="0"`等
+
+
+## TensorFlow
+---
+### 安装
+---
+* 安装多个python，系统环境变量默认选一个，不用改。每次运行时指定到对应python/bin目录下使用./pip或者./python进行操作。
+* 安装anaconda3，在其python位置运行./pip install 各种工具如scipy、tf.whl等。
+* 安装tensorflow：使用./pip安装tf.whl，注意tf.whl支持的python版本如cp35/cp34表示py3.5/py3.4，是cpu还是gpu，是linux还是windows，是32位还是x86_64位。安装过程中，少什么就装什么。
+
+### 使用
+---
+
+* tensorboard --logdir save/ 查看模型的tensorboard
+
+
+
+
 

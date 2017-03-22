@@ -32,7 +32,7 @@ tags:
 	* 使用各种文本编辑器写好python代码文件，运行`python a.py`或者用其他方式调用python运行即可。
 
 * IDE
-	* 推荐先装anaconda，再装pycharm。
+	* 推荐先装anaconda，再装pycharm或者wingIDE。
 	* 这样可以直接不用独立安装Python，并且anaconda自带的Python会提供pip管理，也可以为pycharm提供pip管理。
 	* 如果anaconda安装的库中存在问题，只需pip安装特定的包即可。
 * 安装pycharm for linux
@@ -52,6 +52,10 @@ Terminal=pycharm
 Categories=Pycharm;
 ```
 
+* python版本
+	* linux下面的python可能还有3.5、3.5m这种版本，表示：`--with-pydebug (flag: d)--with-pymalloc (flag: m)--with-wide-unicode (flag: u)`
+	* 
+
 ### 安装python插件
 ---
 * pip管理包
@@ -65,26 +69,33 @@ Categories=Pycharm;
 
 ##  语法
 ---
-* 略。
-
-## Anaconda使用
+### 基础语法
 ---
-###  设置国内镜像
+* python -v 查看系统环境变量的python的版本，相应的python可以用./python运行。
+* pip install/list/search/install --upgrade /[package]等或者./pip使用相对路径下的pip。
+* 编码：默认情况下，Python 3 源码文件以 UTF-8 编码，所有字符串都是 unicode 字符串，也可指定 `# -*- coding: utf-8 -*-`
+* 标识符：大小写敏感、开头是字母或下划线、非开头可用字母数字和下划线
+* 保留字：在keyword.kwlist中有列出，如'False','None','or'等等
+* 注释：单行注释用#开头，多行注释用'''注释且支持换行，也可用三个双引号'''
+* 行与缩进：必须相应对齐，因为没有{}，只要是对齐的，可缩进多个。句尾不要写分号，用分号的话，后面后面可以写另一句代码。
+* 多行语句：用\连接起来多行，如a+\换行b，但是如果是[]、{}、()内部的多行，不需要使用\表示换行。
+* 数据类型：4种数：整数、长整数、浮点数、复数
+* 字符串：
+	* py中单引号与双引号等价。
+	* 三引号或三个双引号可以指定一个多行字符串，用于定义字符串或者当做注释。
+	* 转移符是'\'
+	* 自然字符串，用r或者R拼接，如r"此时\n不会换行而是显示为\n"
+	* 处理Unicode字符串，用u或U拼接，如U"这是一个Unicode的字符串"
+	* 字符串是不可变的，只会新建
+	* 字符串按照字面意义进行级联成字符串
+* 等待用户输入：n=input('输入n=');print(n)
+* 输出语句：print默认是之后会换行，添加end参数，如print("string", end='随便')设置结尾不是\n而是指定的内容。
+
+### 基本数据类型
 ---
-* 如果需要安装很多packages，你会发现conda下载的速度经常很慢，因为Anaconda.org的服务器在国外。所幸的是，清华TUNA镜像源有Anaconda仓库的镜像，我们将其加入conda的配置即可。
-* 执行完上述命令后，会生成~/.condarc(Linux/Mac)或C:UsersUSER_NAME.condarc文件，记录着我们对conda的配置，直接手动创建、编辑该文件是相同的效果。
+* 
 
 
-```
-
-# 添加Anaconda的TUNA镜像
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
-# TUNA的help中镜像地址加有引号，需要去掉
- 
-# 设置搜索时显示通道地址
-conda config --set show_channel_urls yes
-
-```
 
 ## pycharm使用
 ---
@@ -104,4 +115,4 @@ conda config --set show_channel_urls yes
 ### tensorflow提示没有debug.lib
 * 问题描述：运行程序时提示没有debug.lib模块
 * 原因分析：由于使用了anaconda的python和pip，自动安装的tensorflow没有相应的模块
-* 解决方法：下载tf的whl文件，使用pip install的方式进行安装。
+* 解决方法：下载tf在github上或者官网的whl文件，使用./pip install的方式进行安装。

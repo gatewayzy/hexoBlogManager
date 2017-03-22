@@ -287,7 +287,7 @@ comments: false
 - 使用了参考文章中的NexT主题。
 
 #### 插件配置
-- 创建多说评论网站，修改`themes/next/layout/_partials/comments.swig`内容如下。
+- 创建多说评论网站，修改`themes/next/layout/_partials/comments.swig`内容如下。(多说评论在2017-06-01停止服务)
 
 ```bash
 {% if page.comments %}
