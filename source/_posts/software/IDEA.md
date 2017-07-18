@@ -43,6 +43,7 @@ tags:
 |ctrl shift space 	|智能提示	|
 |alt enter 	|快速修复，一般是快速import类	|
 |ctrl F5 	|重新运行程序	|
+|ctrl q 	|查看方法说明	|
 |使用/**然后回车 	|生成方法注释|
 
 

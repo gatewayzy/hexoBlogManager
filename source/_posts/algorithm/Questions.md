@@ -80,6 +80,52 @@ tags:
 		* 三角形面积判断法：该点与三个顶点相连构成的三个小三角形面积与外三角形面积相比，如果原面积与三个小面积之差绝对值接近于0则在内部。
 	* Cn2解法：将该点相对移动到原点，连接所有线段，必经过所有4个象限才能围住，问题是如何判断一条线段经过哪几个象限，如不同象限11,12,13,14的四个线段经过哪几个象限
 * 24点问题：四个数如8833,7744
+	* 选取两个数处理得到一个数，将该数和其余两个数进行递归处理，每次处理两个数。既然是递归，就应该能想到用栈，因为递归本身就栈实现的，那么就可以全入栈，不断出栈处理。
+
+## 动态规划 Dynamic Programming
+---
+* dp问题是很重要的一类问题，关键在于状态定义和状态转移方程的书写，然后才是算法实现。
+
+### 背包问题
+---
+* 问题描述：用一个承受重量m的背包装货物，每个货物不同的重量weight和价值value，求解可以装货的最大价值。这里我们讨论0-1背包问题。
+* 问题解析：背包问题属于NP问题，也是典型的动态规划问题。每个货物至多装一个就是0-1背包。每个货物可以装count(i)个就是有界背包。每个货物可以装无限多个就是完全背包问题，无界背包问题。
+* 状态定义与状态转移方程：
+	* 状态定义为dp[i][j]，表示前i个货物总重不超过j的情况下所含有的最大价值。
+	* 状态转移过程为：前i-1个已经确定装不装之后，当前货物装或者不装两种情况使用j所能对应的最大价值。
+	* 状态转移方程为 dp[i][j] = max(dp[i-1][j] ,value[i] + dp[i-1][j-weight[i]] )。
+* 每决定当前这个装不装就是两个转移路径，对应着两个价值。
+```bash
+	/**
+	 * 使用动态规划求解背包问题
+	 * 
+	 * @param m 要求的容量是m
+	 * @param w weight
+	 * @param v value
+	 */
+	public static void solution(int m, int[] w, int[] v) {
+		System.out.println(Arrays.toString(w));
+		System.out.println(Arrays.toString(v));
+		int n = w.length;
+		int[][] dp = new int[n + 1][m + 1];
+		// 初始化，数组元素相当于对象的成员变量，所以默认会自动初始化
+		// 进行dp推算
+		for (int i = 1; i <= n; i++) {
+			for (int j = 1; j <= m; j++) {
+				if (j >= w[i-1]) { // 如果能够装下当前这个，就是转移方程：max（添加、非添加时对应的状态）
+					dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - w[i - 1]] + v[i-1]);
+				}else{
+					// 装不当前这个，就是前i-1的value
+					dp[i][j] = dp[i-1][j]; 
+				}
+			}
+		}
+		System.out.println(dp[n][m]);
+
+	}
+
+```
+
 
 
 
@@ -87,19 +133,5 @@ tags:
 
 ## 查找
 ---
-* 对一个有序表查找第i大的数字
-	* 随机查找：递归查找数组从head到tail中i大的数值，使用随机分块选定分割枢纽，对前后半段进行递归查找。注意更新head、tail和i
 
-```
-randomized_select(A,s,t,i)
-if s == t
-	return A[s]
-q = randomized_partition(A,s,t) // 类似快排的随机partition方法确定分割枢纽
-k = t-s+1
-if i == k  // 枢纽就是第i个大的
-	return A[q]
-elseif i<k
-	return randomized_select(A,s,q-1,i)
-else
-	return randomized_select(A,q+1,i,i-k)
-```
+

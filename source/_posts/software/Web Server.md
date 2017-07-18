@@ -277,6 +277,31 @@ done
 echo "#############################"
 ```
 
+### tomcat 启用 https
+参考文章 [tomcat7+jdk的keytool生成证书 配置https](http://www.cnblogs.com/sixiweb/p/3339698.html)
+* window下https
+	1. 确定tomcat使用的jdk。以使用系统环境变量中的jdk1.8为例。
+	2. 用jdk生成keystore文件并导出证书
+		1. %JAVA_HOME%\bin\keytool -genkey -alias sr -keyalg RSA  # 这是设置证书别名叫sr，别名任选不重复就行
+		2. 输入信息，假设密码是changeit，填写要求的信息，国家代码用cn，正确按y，输入tomcat的秘钥口令也假设为changeit。
+		3. 会在用户主目录生成.keystore文件，将其拷贝到tomcat的bin目录下。
+		4. 在tomcat的bin目录下运行命令：keytool -selfcert -alias sr -keystore .keystore，输入之前的命令changeit
+		5. 接着运行keytool -export -alias sr -keystore .keystore -storepass changeit -rfc -file sr.cer 会导出证书sr.cer
+	4. tomcat启用https
+		* 配置tomcat/conf/server.xml
+		* 找到`<Connector port="8443"` 取消注释并改成`port="443" ... sslProtocol="TLS" keystoreFile="bin/.keystore" keystorePass="changeit" />`
+		* 上面设置了https采用默认端口443，且配置http是证书。重启tomcat，访问https/127.0.0.1/ 
+		* 正常的话，应该会提示https不安全，证书不安全，点击继续访问后可以访问页面。
+	5. 用户安装证书
+		* 将证书sr.cer发给使用者，让他们安装该证书（具体步骤同12306.cn网站证书的安装步骤）
+		* 用户下载sr.cer双击运行，添加到“本地计算机”，“就所有证书都放入下列存储”，选择“受信任的根证书颁发机构”，一路确定即可。
+
+* linux下配置方式与window下类似，只不过建议所有的keytool都使用绝对路径，因为locate keytool可以看到ubuntu有很多keytool。
+
+* 错误问题
+	* 访问https时提示“您的连接不是私密连接...此服务器无法证明其所在网域是...”，但是可以继续访问。
+	* 由于证书是自己给自己颁发的，所以浏览器不相信证书颁发机构。原因是浏览器没有 CA 证书，只有 CA 证书，服务器才能够确定这个用户就是真实的访问请求（比如不是代理过来的）。
+	* 如果我们的证书不是自己颁发，而是去靠谱的机构去申请的，就不会出现这样的问题，因为靠谱机构的证书会放到浏览器中，浏览器会各种安全检查。初次尝试的同学可以去 startssl.com 申请一个免费的证书，相关操作可以参考[startssl申请免费ssl证书的方法](http://www.tuicool.com/articles/VbeEfyz)，需要注册邮箱，域名验证，证书下载...
 
 ## 问题与解决
 ---
@@ -291,3 +316,6 @@ echo "#############################"
     <param-value>app1.root</param-value>
 </context-param>
 ```
+
+### ubuntu tomcat提示isARPRequired()Z错误
+* 解决方法：重新下载官网的新版的tomcat。注意新版需要修改设置：端口修改、中文支持URLEncoding=utf-8、系统没有中文乱码。

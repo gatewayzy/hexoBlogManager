@@ -43,15 +43,8 @@ tags:
 * service --status-all  显示所有服务
 * date  日期时间
 * ps -A 显示所有运行中的进程
-* 关机
-	* shutdown -s [时间]，立即关机使用0或者now
-	* init 0，这个是运行级别关机，需要确保系统没有在读写硬盘等操作，否则可能导致损坏
-	* power off，这个命令很好用
-	* halt，这个命令不太好用
-* 重启 
-	* reboot 主要用于单用户模式
-	* shutdown -r [时间] 如now
 * shell编程
+	* echo "passwd" | sudo -S reboot可以实现脚本中执行sudo，-S sudo从标准输入读取密码
 	* nohup ./test & 用&后台运行，用nohup保证关闭当前shell不会关闭运行中的程序
 	* jobs  显示当前shell中的所有作业信息，包括运行状态等，-l列出pid、作业号，-r运行中的，-s指stopped
 	* bg 2 以后台模式重启作业号为2的作业
@@ -60,7 +53,7 @@ tags:
 	* at -f test.sh +25 定时任务25分钟后运行文件中的命令，结合atq查看列表，atrm删除
 	* crontab -l  显示cron定时任务时刻表，-e编辑时刻表
 	* anacron 可以弥补cron停机期间错过定时任务的问题
-	* $? 返回上一条执行语句的状态返回值，$0代表程序名，$1为第一个参数类推，$#表示参数个数（不含程序名）
+	* `$?` 返回上一条执行语句的状态返回值，`$0`代表程序名，`$1`为第一个参数类推，`$#`表示参数个数（不含程序名）
 	* read -p "hello" a 输出hello并读取用户输入存放到a变量
 	* 文件描述符fd：每个进程最多9个fd，且0是STDIN，1是STDOUT，2是STDREE，可进行重定向
 		* lsof 查看所有文件描述符，可能被隐藏，用/usr/sbin/lsof全路径才能运行
@@ -71,27 +64,40 @@ tags:
 		* sed -f script1.sed data1 用文件中的规则处理一个文件
 		* sed 还有删除d、插入i、追加o、修改c、转换y等功能
 		* sed 支持N、D、P等多行文本操作
-	* gawk是awk的gnu版本，提供了流编辑器的编程语言，支持复杂编程和格式化输出，处理也是按行输入处理，$0表示整行，$1表示第一个字段（默认用空白符分割字段）
+	* gawk是awk的gnu版本，提供了流编辑器的编程语言，支持复杂编程和格式化输出，处理也是按行输入处理，`$0`表示整行，`$1`表示第一个字段（默认用空白符分割字段）
 		* gawk '{print "hello " $1;$2="bb"}' data1 输出hello 第一个字段
 		* gawk 'BEGIN {print "before dealing: "}{print $0}' data1 运行前输出以及文本处理
 		* gawk -f test.gawk data1 使用gawk脚本文件处理data1文件
 
 ## 系统设置
 ---
+### 系统关机与系统信息
+
+* 关机
+	* shutdown -s [时间]，立即关机使用0或者now
+	* init 0，这个是运行级别关机，需要确保系统没有在读写硬盘等操作，否则可能导致损坏
+	* power off，这个命令很好用
+	* halt，这个命令不太好用
+* 重启 
+	* reboot 主要用于单用户模式
+	* shutdown -r [时间] 如now
+* 查看电脑型号：sudo dmidecode | grep Product 查看服务器型号，如Dell PowerEdge R730
+
+
 ### 系统编码
 
+* 通过修改/var/lib/locales/supported.d/local文件 为三行`en_US.UTF-8 UTF-8` `zh_CN.UTF-8 UTF-8` `zh_CN GB2312`
 * Ubuntu默认的中文字符编码为zh_CN.UTF-8，这个可以在/etc/environment中看到：
 * sudo gedit /etc/environment，可以看到如下内容：
-`PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
-LANG="zh_CN.UTF-8"
-LANGUAGE="zh_CN:zh:en_US:en"`
+`PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"`  `LANG="zh_CN.UTF-8"` 
+`LANGUAGE="zh_CN:zh:en_US:en"`
 * 第二行即是默认的中文字符编码。注：可以通过这里修改默认的中文编码字符，比如修改为zh_CN.GBK
-* 运行sudo dpkg-reconfigure locales 重启ubuntu
+* 运行sudo dpkg-reconfigure locales 重启ubuntu。如果存在部分中文乱码，建议查看下一步中`安装字体的部分`。
 
 ### 使用ibus的中文输入法
 
 * 可以先将系统编码设置为中文
-* 如果不想安装中文语言包，则需要安装中文字体：`$ sudo apt-get install ttf-wqy-* ``$ sudo apt-get install xfonts-wqy ``$ sudo apt-get install fonts-wqy-*`
+* 如果不想安装中文语言包，则需要安装中文字体：`$ sudo apt-get install ttf-wqy-* ` `$ sudo apt-get install xfonts-wqy ` `$ sudo apt-get install fonts-wqy-*`
 * 安装ibus框架：`sudo apt-get install ibus ibus-clutter ibus-gtk ibus-gtk3 ibus-qt4`
 * 安装输入法：`sudo apt-get install ibus-pinyin ibus-table-wubi ibus-googlepinyin ibus-sunpinyin`
 * 进行配置ibus `ibus-setup`，添加输入法。
@@ -117,10 +123,29 @@ ibus-daemon -drRx
 	* 编辑用户对应的 ~/.profile， 添加运行命令。该文件在用户登录后只运行一次，常用于初始化环境变量和程序设定等操作。
 	* 用户对应的~/.bashrc 每个shell都会读一遍该文件。
 
-## 磁盘
+## 磁盘内存
 ---
-* df  查看磁盘使用情况
+* df  查看磁盘使用情况，df -lh 格式化查看磁盘
+* free 查看内存使用情况
 * du  查看当前文件夹下的文件占用磁盘大小，-s /etc列出目录下所有目录一级，-S对子目录进行占用大小统计展示
+
+
+### 系统环境变量
+---
+* 使用env查看当前环境变量，可进行grep。
+* /etc/profile 文件的环境变量对所有用户生效，且只在开机时加载。修改之后，source /etc/profile 生效，但只有该terminal有效，重启后所有terminal有效。
+* ~/.profile 文件是每个用户名用户的环境变量，在用户初次登陆时加载。修改之后，source ~/.profile 生效，但只有该terminal有效，logout该用户，重新登录后有效。
+* 如在/etc/profile和~/.profile中都添加如下的内容，或者用户可以自修改个人的env值。
+
+```
+export JAVA_HOME=/opt/jdk1.8.0
+export JRE_HOME=${JAVA_HOME}/jre  
+export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib  
+export M2_HOME=/opt/maven3.3.3
+export PATH=$PATH:$M2_HOME/bin:$JAVA_HOME/bin
+export NODE_HOME=/opt/node7.7.2
+export  PATH=$PATH:${NODE_HOME}/bin
+```
 
 ## 文件文件夹
 ---
@@ -229,6 +254,43 @@ ibus-daemon -drRx
 
 ## 网络
 ---
+### 网络IP设置
+---
+* 修改ip地址
+	* 即时生效: ifconfig eth0 192.168.1.155 netmask 255.255.255.0
+	* 重启生效: 修改/etc/network/interfaces，修改如下内容即可，然后重启服务service networking restart或者sudo /etc/init.d/networking restart
+
+```
+auto em1
+iface em1 inet static
+address 10.15.82.64
+gateway 10.15.82.53
+netmask 255.255.255.0
+network 10.15.82.0
+broadcast 10.15.82.255
+dns-nameservers 10.10.0.21
+```
+
+* 修改dns
+	* 修改 /etc/resolvconf/resolv.conf.d/base 修改后即时并永久生效，添加两行：nameserver 192.168.1.1 nameserver 220.170.64.68
+* zju-vpn-ubuntu 使用 vpn-connect
+	1. 下载一个全自动vpn安装包。http://zjufiles.lifetoy.org/linux/vpn/xl2tpd_1.2.5+zju-1_i386.deb (ftp和org等找)
+	2. 安装之前先删除原来的xl2tpd包。命令：`sudo dpkg --purge xl2tpd`
+	3. 安装。命令：sudo dpkg -i xl2tpd_1.2.5-zju1_i386.deb (根据提示或错误信息完成安装)
+	4. 配置。命令：sudo vpn-connect -c (用户名后面一定要加@a)。
+	5. 连接。命令：sudo vpn-connect
+	6. 断开。命令：sudo vpn-connect -d
+
+```
+#!/bin/bash
+echo ">>>> disconnecting vpn >>>>"
+sudo vpn-connect -d
+#vpn-connect -c
+echo ">>>> using 21326@a >>>>"
+sudo vpn-connect
+```
+
+
 ### 端口控制
 ---
 * 防火墙，使用ufw进行端口设置
@@ -337,6 +399,7 @@ export STARTUP="/usr/bin/gnome-session --session=ubuntu-2d"$STARTUP	（仅供参
 * 还有问题的话应该通过查看vnc4server对应的log文件排查问题，比如用户权限问题。
 	* 比如提示没有权限在~/.config下创建文件等提示，可将.config文件夹属主修改为当前用户和用户组（chown -R zju:zju .config/），注意应确保不影响其他用户和用户组。
 	* 比如提示gnome-session的shell失败，可以分配~/.dbus的权限或者直接改chown。
+	* 比如界面很丑，蓝色背景和黑色导航栏，提示`failed to load theme adwaita`，可以`sudo apt-get install gnome-themes-standard`，重启
 * 修改分辨率：
 	* 一种是每次启动vnc4server命令行添加参数：vncserver -geometry 800x600
 	* 修改配置文件：查看whereis vncserver的相关文件，查看相关路径。我是修改/usr/bin/vnc4server中的-geometry参数为1920乘以1080

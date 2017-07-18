@@ -500,19 +500,20 @@ Central是maven默认仓库，一般会配置3个hosted repository，分别是3r
 
 #### 文件上传到私服
 
-直接将jar文件复制到nexus仓库storage下对应的GAV，更新index即可。虽然简单，但是只适用于文件少，更新不频繁的操作，因为每次都要找jar相应的文件夹。比较粗暴的方式是上传整个本地仓库，与私服仓库文件夹进行覆盖，但是可能存在上传.lastUpdate文件等情况。
+* 直接将jar文件(含pom文件等)复制到nexus仓库storage下对应的GAV，更新index即可。虽然简单，但是只适用于文件少，更新不频繁的操作，因为每次都要找jar相应的文件夹。比较粗暴的方式是上传整个本地仓库，与私服仓库文件夹进行覆盖，但是可能存在上传.lastUpdate文件等情况。
+* 适用于私服没翻墙，但是想把一些从墙外下载的包放到私服上。
 
 #### 页面上传到私服
 
-直接用admin登录nexus管理界面，找到3rd方仓库，使用页面上传的方式。
+* 直接用admin登录nexus管理界面，找到3rd方仓库，使用页面上传的方式。
+* 适用于上传自定义的jar文件。
  
 #### 使用maven deploy发布到私服
 
-这种发布方式的缺点在于所有用户都需要配置自己的maven中的server用户信息，优点在于一旦配置之后，可以支持高频率自动化的发布工作。
+这种发布方式的缺点在于所有用户都需要配置自己的maven中的server用户信息，优点在于一旦配置之后，可以支持高频率自动化的发布工作。适用于发布项目构件。
 
 * 设置项目pom将构件发布到snapshot。在私服将snapshot设置允许allow deployment，并在group repo中涵盖snapshot仓库，记录snapshot的routing地址。
-* 配置项目pom.xml的`<distri
-* butionManagement>`。其中包括`<repository><snapshotRepository>` snapshot版本构件设置。
+* 配置项目pom.xml的`<distributionManagement>`。其中包括`<repository><snapshotRepository>` snapshot版本构件设置。
 * 设置nexus用户权限。因为发布构建需要用户登录的权限。先管理员登录nexus，在security中的users配置，可以看到admin、anonymous、deployment三个用户，他们的权限privilege trace是不同的，具体权限略。本文选用deployment用户进行登录并发布。在deployment用户右键，设置密码为deployment。
 * 在maven软件的settings.xml的`<servers>`中进行用户配置。这里面的id值对应的就是项目pom中设置的zyy-snapshots，填写好登录nexus的用户名和密码如下。
 * 用cmd进入maven工程下，运行mvn deploy，进行发布。

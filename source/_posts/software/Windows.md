@@ -33,6 +33,7 @@ tags:
 * Win + Tab  切换窗口，停留式切换 
 * ctrl win 左右 #切换桌面
 * Ctrl + W  关闭窗口，包括资源管理器等窗口均有效
+* Ctrl shift esc  调出任务管理器
 
 ### 个性化设置
 ---
@@ -76,9 +77,10 @@ tags:
 * cmd运行java程序：cd到a.java目录，用javac a.java编译生成a.class，运行java a。
 * shutdown –f –s –t 60表示60秒后强制（f）关机（shutdown），-r为重启reboot
 * shutdown –a表示取消关机计划
-* rasdial  VPN名称  用户名  密码 ：连接vpn，可以设置自动连接任务。`rasdial VPNckcest6 ckcest6 cadal22`
+* rasdial  VPN名称  用户名  密码 ：连接vpn，可以设置自动连接任务。`rasdial VPNckce6 ckce6 cad22`
 * rasdial VPN名称 /disconnect 断开该VPN连接，可能需要管理员身份运行
 * 文件夹下按shift并右键，可以显示更多选项，包括在此目录打开cmd。
+* cmd后台运行start /b ping 127.0.0.1，关闭当前cmd会结束进程。
 
 ### 程序自启动
 设置程序自启动有多种方法。
@@ -112,7 +114,12 @@ tags:
 * Xmanager：包含xshell、xftp、xbrowser等，支持一站式解决window访问linux的问题。
 * MarkdownPad：实时编写markdown，支持extra扩展版、css样式修改等。
 
-
+### 问题与解决
+---
+#### 资源管理器消失
+----
+* 问题描述：资源管理器消失不见
+* 解决方法：使用ctrl shift esc 调出任务管理器，在文件->运行新任务->输入 explorer确定即可。
 
 
 

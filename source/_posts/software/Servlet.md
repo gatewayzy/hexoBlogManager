@@ -283,6 +283,10 @@ if (!flag) {
 cookie.setMaxAge(0)；
 response.addCookie(cookie);// 必须写这一句让浏览器执行cookie的销毁动作
 ```
+### cookie添加中文
+
+* cookie不支持存储中文编码，需要后台进行编码，前台解码。
+* request正常存放正文，显示可以用jsp直接${userName}。cookie后台添加时使用new Cookie("username",URLEncoder.encode(username,"UTF-8"));，前台js使用alert(decodeURI($.cookie('username'))，因为decodeURI是采用UTF-8来编码的。
 
 ### Cookie常用场景
 

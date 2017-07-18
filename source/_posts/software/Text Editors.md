@@ -15,11 +15,42 @@ tags:
 参考文章：
 
 
+## Visual Studio Code
+---
+###  简介
+---
+* 微软开发的开源编辑器，支持linux、windows、macos，有强大的插件扩展。
+
+### 安装使用
+---
+* 安装vs code。配置文件分为系统和用户，在文件、设置、首选项中。
+* 安装插件
+	* markdown+math 面板安装或者插件商店安装，ctrl shift . 预览markdown文件
+	* python 插件同样安装，设置用户配置指定python："python.pythonPath": "C:\\Program Files\\Anaconda3\\python"，书写一个.py文件即可自动提示。
+
+### 快捷键
+---
+* ctrl shift p 快捷调出命令面板
+* ctrl shift b 资源管理器显示隐藏
+* ctrl shift . 预览markdown文件，不支持同时滚动
+* ctrl+k v     预览markdown文件，支持源码点击，预览跳转 
+
+
+
+## Atom
+---
+### 简介
+---
+* github开发的开源编辑器，支持linux、windows、macos，功能强大。
+* atom与vscode比较类似，都是非常棒的软件。
+
+
 ## Sublime Text
 ---
 ### Sublime Text简介
 ---
 * Sublime Text是一款强大的文本编辑器，支持Windows、Linux、Mac OS X等操作系统，支持多种语法高亮和补全，所有插件均通过package control进行下载。
+* 最近sublime text的维护更新越来越慢了，还是更喜欢vscode或者atom。
 
 ### Package control插件
 ---
@@ -97,7 +128,7 @@ A [link](http://example.com).
 ---
 打开Submine Text，找到Preferences -> Settings-User，在最后的花括号（“｝”）前添加 `"update_check":false` 。条目之间用,分开。
 
-## vi编辑器
+## VI
 ---
 ### vi模式
 ---

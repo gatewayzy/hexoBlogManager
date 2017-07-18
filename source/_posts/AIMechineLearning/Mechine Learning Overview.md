@@ -3,7 +3,7 @@ title: Mechine Learning Overview
 comments: true
 date: 2017-01-14 13:58:13
 updated: 2017-01-14 13:58:56
-categories: Mechine Learning
+categories: AI Mechine Learning
 tags:
 - Mechine Learning
 ---
@@ -38,14 +38,14 @@ tags:
 	* 有监督学习中，训练集包含数据和期望输出，根据期望输出学习相关参数。
 	* 无监督学习中，训练集只有数据，而没有标签，训练得到稳定状态结束。
 
-### 有监督学习
+### 有监督学习supervised learning
 ---
 * 有监督学习包括分类、回归等等。
 * 分类算法（Classification Algorithms）包括逻辑回归（Logic Regression）、分类树（Classification Tree）、支持向量机（Suport Vector Machines，SVMs）、随机森林（Random Forests）、人工神经网络（Artificial Neural Network，ANNs）等。
 
 * 回归算法（Regression Algorithms）包括线性回归（Linear Regression）、决策树（Decision Trees）、贝叶斯网络（Bayesian Networks）、模糊分类（Fuzzy Classification），以及ANNs。
 
-### 无监督学习
+### 无监督学习unsupervised learning
 ---
 * 无监督学习包括聚类、降维等等。
 * 聚类算法（Clustering Algorithms），将数据按相关性的远近分为多个簇，最常见的如K-means 聚类，还有分层聚类（Hierarchical Clustering）、高斯混合模型（Gaussian Mixture Models）、遗传算法（Genetic Algorithms）、ANNs。
@@ -78,14 +78,26 @@ tags:
 |神经网络	|神经网络	|神经网络	|神经网络|
 |……	|……	|……	|……	|
 
-
-## 模型评估
 ---
+### 强化学习 Reinforcement Learning
+
+
+### 迁移学习 Transfer Learning
+---
+* 迁移学习：运用已有知识对不同领域但是相关领域进行求解。主要用于目标领域仅有少数标签样本数据甚至没有样本数据的学习问题。迁移好了没什么问题，迁移不好则会产生负作用。
+* 迁移学习分类：
+	* 同构空间下基于实例的迁移学习： 比如用户A，B的购买行为预测C的行为，这种迁移学习应用范围狭窄，仅能应用于样本数据与目标数据非常相似的情况下。常见的是boosting算法，建立自动调整权重的机制，使高度相关的权重增加，不重要的权重减小。
+	* 同构空间下基于特征的迁移学习： 比如男士喜欢看球，推断男士A喜欢看球，这种迁移学习主要是使用聚类算法对样本与目标数据进行聚类，找到相同的特征，实现样本到目标数据的迁移。常见的算法有CoCC算法、TPLSA算法、谱分析算法、自学习算法等。通过特征可以进行有监督迁移学习或者无监督迁移学习。
+	* 异构空间下的迁移学习（翻译学习）： 比如用文本知识进行图像分类，这种迁移学习的样本数据与目标数据属于不同的特征空间，通过找到二者之间的某种桥梁关系，从而构建一个翻译器，从而进行目标数据的学习。
+
+---
+## 模型评估
+
 * 评判模型需要测试模型以下数据是否合理：偏差 bias，方差 variance，正确率 precision，查全率 recall
 * 参考文章
 	* [你的机器学习模型为什么会出错？奉上四大原因解析及五条改进措施](http://www.toutiao.com/i6369826318221050369/)
 
-###  bias variance precision recall
+###  bias variance precision recall 
 ---
 
 * 机器学习模型的设计目标是低偏差、低方差，高准确率、高查全率
@@ -111,12 +123,16 @@ tags:
 	* 查全率是指正向判断中正确的次数，占实际正向结果的比例。查全率反应了一个模型的实际应用效果。
 	* 计算方法是针对一个正向判断： `模型判断正确的次数 / 实际正向数量` ，即 `True Positives / Actual Positives` = `TP / (TP+FN)`
 	* 改进：降低概率阈值（判断更为宽松）。
-	
+
+* 调和均值F1：
+	* 2/F1 = 1/precision + 1/recall。F1值是precision和recall 的调和均值。
+	* 当准确率和召回率都比较高的时候，对应比较高的F1值。
+
 * 正确率与查全率关系举例：
 	* 判断邮件是否为垃圾邮件：实际收到了12封邮件，其中9封是正常邮件，3封是垃圾邮件。一个模型一共做了2次正向判断，其中1次是正确的，10次反向判断，其中8次是正确的。那么其正确率就是1/2=50%，而查全率就是1/3=33%。
 
 
-###  Cross Validation交叉验证
+###  Cross Validation 交叉验证
 ---
 
 * 检测模型是否具有高偏差或者高方差最直接的办法就是对数据进行交叉验证。
@@ -128,7 +144,7 @@ tags:
 
 
 
-## Dimensionality reduction 降维
+## Dimensionality Reduction 降维
 ---
 * high-dimensional vectors 高维数据需要进行降维，方便计算和实现去噪。
 * 常见降维方法有：Random Projection、PCA、SVD、LSI等
@@ -142,7 +158,7 @@ tags:
 	* 高斯分布，或者简化为r(i,j)=sqrt(3)*(1/6概率的1，1/6概率的-1，2/3概率的0)，其中乘以sqrt(3)是为了保证每一列的模为1，维持元数据的强度。
 	* 随机生成rij，但是要保证每一列是单位长度。
 
-### PCA 主成分分析
+### PCA 主成分分析 Principal Components Analysis
 ---
 * 参考文章
 	* [主成分分析PCA](http://www.cnblogs.com/zhangchaoyang/articles/2222048.html) 
@@ -162,7 +178,7 @@ tags:
 		* SVD求解，得到`A=U*S*V^T`
 		* 选取S中比重高的k行作为降维矩阵Sk，将A进行降维结果为 `Uk*Sk`
 
-### SVD 奇异值分解
+### SVD 奇异值分解 Singular Value Decomposition
 ---
 * 参考文章
 	* [SVD与PCA](http://blog.selfup.cn/1243.html)
@@ -176,7 +192,7 @@ tags:
 
 
 
-## LDA 线性判别分析
+## LDA 线性判别分析 Linear Discriminant Analysis
 ---
 * 参考文章
 	* [机器学习中的数学(4)-线性判别分析（LDA）, 主成分分析(PCA)](http://www.cnblogs.com/LeftNotEasy/archive/2011/01/08/lda-and-pca-machine-learning.html)
@@ -190,67 +206,9 @@ tags:
 * 基本方法
 	* 将数据打上分类标签，求解系数矩阵使得同类之间距离差小，类别之间距离差大。比如使用最小二乘法求解系数矩阵。
 
-## kNN
----
-* kNN 分类(k-Nearest Neighbor)
-* 参考文章：
-	* [kNN百度百科](http://baike.baidu.com/view/1485833.htm?fromtitle=Knn&fromid=3479559&type=syn)
-	* [KNN算法](http://www.voidcn.com/blog/u010726042/article/p-2497507.html)
-	* [用KNN算法分类CIFAR-10图片数据](http://www.mamicode.com/info-detail-1316003.html)
-* 参考论文：
-	* [Hastie, Trevor, and Robert Tibshirani. "Discriminant adaptive nearest neighbor classification." IEEE transactions on pattern analysis and machine intelligence 18.6 (1996): 607-616.]
 
-### 核心思想
----
-* 查找一个数据在特征空间中的k个最相似的样本，在这k个样本中，所属类别最多的一类作为该数据的分类。
 
-### 算法
----
-* 准备训练集和测试集，选定不同的k（一般k小于训练样本数的平方根，k太小会受噪声点影响，k太大会包含太多其他类的点）。
-* 对每一个测试点，计算他和所有训练点的距离，保留最相近的k个训练点（可以存在优先级队列中），并设置k中所属类最多的为该测试点的类别
-* 统计所有测试集的分类误差，选取误差最小的k作为kNN参数，以后就用这个k对新数据进行分类。
-
-### 优点
----
-* 适合对稀有事件进行分类：发生概率很小的分类问题（例如当流失率很低时，比如低于0.5%，构造流失预测模型）
-* 简单方便：直接设置多次的k在样本集和测试集上进行分类，选取误差率较小的k即可。
-* 适用于多分类或分类界限不明显的情况：由于数据分类时只和相近的样本有关，与类和类之间的分类界限无关。这方面比SVM可能更好。
-* 不仅可以用于分类，还可以用于回归：通过找出一个样本的k个最近邻居，将这些邻居的属性的平均值赋给该样本，就可以得到该样本的属性。更或者，用权值与距离成反比等权值设置代替平均值。
-
-### 缺点
----
-* 分类局限：样本分类不均衡时，分类会偏移向该类，因为k中占得太多。
-* 时空消耗大：因为对每一个待分类的文本都要计算它到全体已知样本的距离，才能求得它的K个最近邻点。
-* 可理解性差，无法给出像决策树那样的规则。
-
-###  改进
----
-* 分类效率：处理掉影响较小的属性...
-* 分类效果：合适的权值计算方式、内部可变的k、合适的距离衡量方法：高维度不宜使用欧式距离，值域越大的变量应先对变量进行标准化...
-
-### kd-tree
----
-* 参考文章
-	* [KNN（三）--KD树详解及KD树最近邻算法](http://blog.csdn.net/app_12062011/article/details/51986805)
-	* [KNN之KD树实现](http://m.blog.csdn.net/article/details?id=20542209)
-* 基本概念
-	* kd树中，kd代表k-dimension，每个节点即为一个k维的点。每个非叶节点可以想象为一个分割超平面，用垂直于坐标轴的超平面将空间分为两个部分，这样递归的从根节点不停的划分，直到没有实例为止。
-* 为什么用kd-tree
-	* 在knn计算中，传统线性计算方法是一个数据要和所有样本点计算距离，再进行比较，计算量和存储量都比较大
-	* kd-tree的目标是将样本数据进行分层存储，所以在查找一个数据的knn时避免和不必要的样本点进行计算，降低计算量。
-
-#### 构造kd-tree
-* 经典的构造k-d tree的规则如下：随着树的深度增加，循环的选取坐标轴，作为分割超平面的法向量。对于3-d tree来说，根节点选取x轴，根节点的孩子选取y轴，根节点的孙子选取z轴，根节点的曾孙子选取x轴，这样循环下去。每次均为所有对应实例的中位数的实例作为切分点，切分点作为父节点，左右两侧为划分的作为左右两子树。建立kd-tree的时间复杂度为`O(k*n*logn)`。
-* 根据方差选取split域的构造方法：
-1.确定：split域=x。具体是：6个数据点在x，y维度上的数据方差分别为39，28.63，所以在x轴上方差更大，故split域值为x；
-2.确定：Node-data=（7,2）。具体是：根据x维上的值将数据排序，6个数据的中值(所谓中值，即中间大小的值)为7，所以Node-data域位数据点（7,2）。这样，该节点的分割超平面就是通过（7,2）并垂直于split=x轴，即直线x=7；
-3.确定：左子空间和右子空间。具体是：分割超平面x=7将整个空间分为两部分：x<=7的部分为左子空间，包含3个节点={(2,3),(5,4),(4,7)}；另一部分为右子空间，包含2个节点={(9,6)，(8,1)}；
-4.递归：转1。对左子空间和右子空间内的数据重复根节点的过程就可以得到一级子节点（5,4）和（9,6），同时将空间和数据集进一步细分，如此往复直到空间中只包含一个数据点。
-
-#### kd-tree的使用
-kd-tree的搜索、插入、删除等
-
-## k-Means
+## k-Means k均值聚类算法
 ---
 * 参考文章
 	* [K Means Clustering Java Code](https://my.oschina.net/mazhiyuan/blog/141090)

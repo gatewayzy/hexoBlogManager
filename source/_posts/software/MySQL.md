@@ -15,6 +15,13 @@ tags:
 ---
 参考文章：
 
+## sql 语法
+---
+### sql 内容
+
+* ddl、dml、
+* 设置自增起始值：alter table mytable AUTO_INCREMENT=1
+
 ## 常用函数
 ---
 ### Date_formate日期格式转换
@@ -46,7 +53,7 @@ tags:
 ---
 
 ```
-SELECT * from qa_dis_dic_code a where not EXISTS (SELECT 1 from qa_dis_dic_code b where a.category_2= b.category_2 and b.id<a.id)
+SELECT * from qa_dis_dic_code a where EXISTS (SELECT 1 from qa_dis_dic_code b where a.category_2= b.category_2 and b.id<a.id)
 ```
 
 ## 命令行操作

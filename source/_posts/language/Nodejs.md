@@ -24,5 +24,10 @@ tags:
 ## 安装
 ---
 * Windows下的运行msi安装程序即可。
-* 运行node –v 查看版本。
+    * 使用CMD测试node命令和npm命令。
+
+* ubuntu
+    * 不推荐使用apt-get install方式安装nodejs，因为之后使用命令为node，但是apt-get安装的nodejs命令为nodejs。
+    * 使用`https://nodejs.org/download/`查找对应版本，下载源码安装nodejs（解压、添加path）。
+
 

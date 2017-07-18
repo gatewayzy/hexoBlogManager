@@ -109,3 +109,15 @@ http {
 * 运行状态控制：sudo service nginx restart|stop|start|status|…
 * 查看端口：netstat –ntlp |grep nginx， 或者ps -aux
 * 修改配置文件：sudo vi /etc/nginx/nginx.conf
+
+
+### Nginx配置多个虚拟主机
+---
+* 参考文章
+	* [Virtual Hosts on nginx](https://gist.github.com/soheilhy/8b94347ff8336d971ad0)
+	* [Nginx反向代理后端多个Tomcat、Nginx+PHP服务器](http://7424593.blog.51cto.com/7414593/1762432)
+* 需求描述：有多个ip:port需要使用一个nginx进行代理。比如说想用域名mydomain.com代理几个nodejs工程10.10.10.10:4000、10.10.10.22:8000.
+* 解决方法
+
+
+
