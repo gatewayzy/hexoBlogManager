@@ -12,7 +12,7 @@ comments:
 
 1. Blog:  [bebetter.site](http://bebetter.site).
 2. GitHub:  [gatewayzy](https://github.com/gatewayzy).
-3. Email:  [gatewayzy@163.com](mailto:gatewayzy@163.com)
+3. Email:  [gatewayzy@163.com](mailto:gatewayzy@163.com).
 
 ---
 ## 关于本站
