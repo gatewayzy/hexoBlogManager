@@ -30,7 +30,7 @@ tags:
 
 ##  常用软件
 * ftp： 使用finder的cmd+k连接服务器。
-* 远程桌面： ssh可以用命令行，vnc使用vncviewer，微软桌面使用Microsoft Remote Desktop（难得找到一个下载页面http://bbs.feng.com/read-htm-tid-10464436.html）。
+* 远程桌面： ssh可以用命令行，vnc使用vncviewer，微软桌面使用Microsoft Remote Desktop（难得找到一个[下载页面](http://bbs.feng.com/read-htm-tid-10464436.html)）。
 * markdown编辑器： 为了安装macdown先安装homebrew： 　`/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)”` 再安装macdown： `brew cask install macdown`
 * shadowsocks： 下载[ShadowsocksX-NG](https://github.com/shadowsocks/ShadowsocksX-NG)，配置wifi的代理，指定自动代理的pac即可，可参考[Safari 如何快速切换代理服务器？](https://www.zhihu.com/question/20818790)
 * nodejs和npm安装：  官网下载nodejs安装，完成试验：`npm -v`
