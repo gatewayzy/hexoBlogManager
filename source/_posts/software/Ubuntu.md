@@ -6,6 +6,7 @@ updated: 2017-01-12 13:58:56
 categories: Softwares
 tags:
 - Ubuntu
+- OS
 ---
 
 **说明：**Ubuntu配置，Ubuntu的使用。

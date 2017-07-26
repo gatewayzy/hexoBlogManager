@@ -5,11 +5,8 @@ date: 2016-08-08 20:21:04
 updated: 2016-08-08 20:21:42
 categories: Blog
 tags: 
-- blog
 - github pages
-- github
 - hexo
-- 搭建网站
 ---
 **说明：**介绍建立个人blog站点的主要流程，使用github pages以及hexo进行实现。
 <!-- more -->

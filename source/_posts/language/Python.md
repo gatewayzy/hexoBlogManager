@@ -6,7 +6,6 @@ updated: 2017-01-10 13:58:56
 categories: Language
 tags:
 - Python
-- 编程语言
 ---
 
 **说明：**Python的使用。

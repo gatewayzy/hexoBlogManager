@@ -17,50 +17,32 @@ tags:
 
 ## 简介
 ---
-* Java是强类型语言。
-* 属于编译型语言。
 
-
- 
-## 安装
----
-jre用于运行Java，jdk用于开发调试Java，注意jdk中也包含一个jre。
-### Windows安装jdk
----
-* 下载jdk或安装jdk，添加JAVA_HOME类似于`D:\Program Files\Java\jdk1.8.0_65x64`；
-在path中添加`%JAVA_HOME%\bin； %JAVA_HOME%\jre\bin； 
-%JAVA_HOME%\lib`。
-* 运行`java -version`查看安装状态。
-* 运行`javac Hello.java`编译生成了Hello.class，运行`java Hello`运行程序。
-
-### Ubuntu安装jdk
----
-* 下载解压jdk，添加path的操作为：将下面内容添加到/etc/profile，并运行`source /etc/profile`
-
-```
-export JAVA_HOME=/opt/jdk
-export JRE_HOME=${JAVA_HOME}/jre  
-export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib  
-export M2_HOME=/opt/maven
-export PATH=$PATH:$M2_HOME/bin:$JAVA_HOME/bin
-```
+* 语言的分类
+	* 其实，现在用编译型、解释型来分类编程语言已经有点力不从心了。
+	* JAVA的第一道工序是javac编译，当然目标文件是bytecode字节码文件。后续可能有三种处理方式：
+		* 运行时，BYTECODE由JVM逐条解释执行，
+		* 运行时，部分代码可能由JIT翻译为目标机器指令（以method为翻译单位，还会保存起来，第二次执行就不用翻译了）直接执行；
+		* RTSJ。继JAVAC之后执行AOT二次编译，生成静态的目标平台代码（典型的就是IBM WEBSHPERE REAL TIME）。
+	* 有的时候，可能是以上三种方式同时在使用，至少1和2是同时使用的，3需要程序员手工指定。所以讨论语言需要更细化一点了：强类型的、弱类型的，静态的、动态的，GC-based的、手工管理内存的，有没有VM...
+* 目前看来，Java语言特点为：
+	* 强类型（类型在编译期严格确定和检查）
+	* 动态的（java语言编译时不需要进行连接工作，所以得到的class文件不能直接在内存中运行。java语言中，类型的加载、连接和初始化操作是在程序运行期间完成的，这种策略虽然会有一定性能开销，但是可以为java应用程序提供高度灵活性。java的动态拓展性就是依赖于运行期动态加载和动态连接实现的。）
+	* GC-based
+	* 有jvm。
 
 ## 语法
----
-* 略。
-
-## Java模板引擎
----
-* Velocity、FreeMarker、Beetl、Httl、Smarty4j等等开源模板引擎，用于替代解决JSP加EL、JSTL等的复杂性。
+### abstract和interface
+** 【需要整理】 abstract 类才能有abstract方法，方法可以不实现。abstract类不能用new实例化，一般用于存放一些通用的方法，给一些具体的类实现其方法：abstract方法需要子类重写并实现；普通方法可以重写，也可以不重写而直接调用。*
 
 ##  问题与解决
 ---
 
 ### 子类与父类的静态代码块的加载
 ---
-* 父类的静态代码块 static{}
+* 父类的静态代码块 static{} // 类加载阶段的初始化要先运行父类的<clinit>类构造器，而<clinit>合并了类变量赋值和static代码块。
 * 子类的静态代码块 static{}
-* 父类的非静态代码块 {}
+* 父类的非静态代码块 {}  // **需要整理**
 * 子类的非静态代码块 {}
 * 父类的构造器 constructor
 * 子类的构造器 constructor
@@ -81,6 +63,11 @@ export PATH=$PATH:$M2_HOME/bin:$JAVA_HOME/bin
 * List集合都是有序的，linkedList会保存原有顺序，map集合是无序的。
 * List与map都可以放入null，map.put(null,null)。
 * List可以放入相同的对象不会覆盖，map放入相同的key时会产生覆盖。
+
+
+
+
+
 
 
 

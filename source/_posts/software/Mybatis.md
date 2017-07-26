@@ -5,7 +5,7 @@ date: 2017-01-12 13:58:13
 updated: 2017-01-12 13:58:56
 categories: Softwares
 tags:
-- Eclipse
+- Mybatis
 ---
 
 **说明：**Mybatis配置使用。

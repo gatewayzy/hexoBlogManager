@@ -1,5 +1,5 @@
 ---
-title: Django
+title: Python Django
 comments: true
 date: 2017-01-12 13:58:04
 updated: 2017-01-12 13:58:56
@@ -37,10 +37,15 @@ tags:
 ### django使用
 
 #### 基本页面与路由
-* 使用return HttpResponse返回html文本，所以不适合返回完整html页面。
-    * `from django.http import HttpResponse`
-    * `def home(request): return HttpResponse(`'<p>你好</p>'`) `
-    * 必须使用request，不能省，不能简写
+* 使用return HttpResponse返回html文本，不适合返回完整html页面。
+	* 必须使用request，不能省，不能简写
+
+```
+    from django.http import HttpResponse
+    def home(request): return HttpResponse('<p>你好</p>') 
+```
+    
+
 * 使用render方法返回html模板，将html文本和数据分开返回，类似于mvc结构。
  
  ```

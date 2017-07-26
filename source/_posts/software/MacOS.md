@@ -6,6 +6,7 @@ updated: 2017-01-12 13:58:56
 categories: Softwares
 tags:
 - MacOS
+- OS
 ---
 
 **说明：**MacOS配置使用。

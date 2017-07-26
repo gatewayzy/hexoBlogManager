@@ -6,6 +6,7 @@ updated: 2017-01-12 13:58:56
 categories: Softwares
 tags:
 - Windows
+- OS
 ---
 
 **说明：**Windows配置，Windows的使用。
