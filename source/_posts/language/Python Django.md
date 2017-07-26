@@ -1,9 +1,9 @@
 ---
 title: Python Django
 comments: true
-date: 2017-01-12 13:58:04
-updated: 2017-01-12 13:58:56
-categories: Softwares
+date: 2017-01-10 13:58:16
+updated: 2017-01-10 13:58:56
+categories: Language
 tags:
 - Django
 ---

@@ -5,7 +5,7 @@ date: 2017-03-01 13:58:04
 updated: 2017-03-01 13:58:04
 categories: Algorithm
 tags:
-- 数据结构
+- Data Structure
 ---
 
 **说明：**数据结构概论，常用算法。
