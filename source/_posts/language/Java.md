@@ -65,6 +65,11 @@ tags:
 * List可以放入相同的对象不会覆盖，map放入相同的key时会产生覆盖。
 
 
+* 如果一个对象的一个方法用了synchronize关键字,那么其他的线程可以访问该对象的其他方法么？
+假定该方法是A ()分为两种情况 <1> A是static的 分为2种情况        a.其他方法是synchronized 或没加锁的  那么其他的线程可以访问该对象的其他方法       b.其他方法是static  synchronized   不可以访问<2>A是非static的 那么又分三种情况a.其他方法是synchronize 不可访问b.其他方法没有加synchronize 可以访问c.其他方法是 static synchronized 可以访问
+也就是说，如果AB同时是非static synchronized，那么不可以同时访问；如果AB同时是static synchronized，不可以同时访问。其他情况，如A是static syn，B是syn或没加锁，B是可以访问该对象的；再如A是非static synchronized，B是没加锁或者是static syn可以访问A锁定的对象。
+
+
 
 
 

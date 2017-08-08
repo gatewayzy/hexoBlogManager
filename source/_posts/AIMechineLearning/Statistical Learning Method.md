@@ -251,8 +251,9 @@ tags:
 ###  逻辑斯蒂回归Logistic Regression与最大熵模型Maximum Entropy Model/MEM
 
 * Logistic Regression 逻辑斯谛回归是经典的分类方法，基于Logistic Distribution逻辑斯谛分布。最大熵是概率模型学习的一个准则，推广到分类问题得到最大熵模型Maximum Entropy Model。二者都是对数线性模型。
-* 二项逻辑斯谛回归模型
-	* 
+* 二项逻辑斯谛回归模型：二分类到0和1，概率分别是1/(1+exp(wx))和exp(wx)/(1+exp(wx))。取对数几率logit(y=1)=log(分为1的概率/不分为1的概率)=化简得到wx，表示逻辑回归分类到1的对数几率是关于特征x线性的。
+
+* 个人理解：逻辑回归用于二分类问题，softmax用于多分类问题，都是求解对应到不同分类的概率值，选取最大概率作为分类。比如逻辑回归是0和1，概率分别是1/(1+exp(wx))和exp(wx)/(1+exp(wx))，其中的1就是exp(0)。此外，逻辑回归使用的函数就是sigmod函数g(z)=1/(1+exp(-z))
 
 
 ---

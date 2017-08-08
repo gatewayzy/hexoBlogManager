@@ -1,5 +1,5 @@
 ---
-title: Deep Learning Overview
+title: Deep Learning Hardwares
 comments: true
 date: 2017-01-14 13:58:04
 updated: 2017-01-14 13:58:56
@@ -8,61 +8,20 @@ tags:
 - Deep Learning
 ---
 
-**说明：**Deep Learning简介。
+**说明：**Deep Learning 服务器、显卡等相关硬件。
 <!-- more -->
 
 
 参考文章：
 
-## 深度学习理论模型
----
-### 参考文章
+## 服务器与工作站
+### Amax服务器
+* 苏州超集Amax公司。
+* 2017年深度学习服务器更新DGX系列，DGC-1V要80万，据说相当于250台服务器，支持8卡最新的P100显卡。
+* 工作站DevMax-400,401都支持4卡水冷，不到10万单价，满卡401需要99K。
 
-* [CNN(卷积神经网络)、RNN(循环神经网络)、DNN(深度神经网络)的内部网络结构有什么区别？](http://www.toutiao.com/i6316989504984973825/)
-
-
-## 深度学习开源框架
----
-### 参考文章
-* [十个值得一试的开源深度学习框架](http://www.cnblogs.com/bluestorm/p/5328585.html)
-* [深度学习框架的评估与比较](http://www.infoq.com/cn/news/2016/01/evaluation-comparison-deep-learn?utm_campaign=infoq_content&)
-
-
-|学习框架|开发语言|接口语言|特点|支持模型|部署环境|
-|:---:|:---:|:---:|:---:|
-|Caffe	|C++/cuda	|C++/python	|稳定	|CNN	|win/linux |
-|TensorFlow	|C++/cuda/python	|C++/python	|	|CNN/RNN/…	|linux	|
-|MXNet	|C++/cuda	|python/R/Julia	|可以自己折腾	|CNN/RNN	|win/linux	|
-|CNTK	|C++	|C++	|	|	|win/linux	|
-|Marvin	|C++	|	|	|	|	|
-|Theano	|Python	|Python	|派生出Blocks和Keras等框架	|	|win/linux	|
-|Torch	|Lua	|Lua	|	|	|linux	|
-|Deeplearning4j	|Java	|	|可与Hadoop和Spark集成，即插即用	|	|	|
-
-在单GPU的场景下，多数工具集都调用了CuDNN。CuDNN(CUDA Deep Neural Network library)是Nvidia显卡专门针对Deep Learning框架设计的一套GPU计算加速方案，目前支持的DL库包括Caffe, TensorFlow, Theano, Torch, CNTK等。
-
-## 框架对比
----
-1. 封装层次
-	1. TensorFlow、theano属于底层data flow，属于陈述式的（declarative），所以学习成本高，可修改性高。
-	* Caffe、Torch、MXNet、Keras等属于高层，属于命令式的，所以直接调用使用简单，但是不易修改调参。
-2. 流行性
-	1. Theano是Bengio和GoodFellow写的，出现早，在学界广泛。keras等框架是基于Theano等封装来的。
-	* TensorFlow出现晚，有谷歌支持，使用更广泛，GoodFellow也去了TF。职业开发推荐用TF。一种说法是Theano和TF属于数据流架构，算不上真正的深度学习框架。
-	* Caffe原本是进行图像卷积的，但是后来也支持更多网络。优点是python交互界面漂亮，但是安装麻烦，缺乏商业支持。
-	* Torch基于Lua（Facebook等在用），MXnet基于R（亚马逊等在用），他们也在提供更多语言的接口。
-3. 其他内容
-	1. SciKit-learn是python的一个机器学习库，又叫sklearn，实现了一些回归、聚类等算法，类似于java的weka。
-
-## Neuroph
----
-###  参考文章
-* [neuroph.sourceforge](http://neuroph.sourceforge.net/)
-* [Neuroph Studio手册](http://neuroph.sourceforge.net/Getting%20Started%20with%20Neuroph%202.7.pdf)
-
-### 简介
-java下的一款轻量级神经网络工具。支持GUI操作的Neuroph Studio，或者使用java编写程序。
-
+### Dell服务器
+* Dell PowerEdge系列：T630 塔式服务器，R720、R730 2U机架式服务器。
 
 ## GPU 显卡
 ---
@@ -87,9 +46,10 @@ java下的一款轻量级神经网络工具。支持GUI操作的Neuroph Studio�
 		* NVIDIA TITAN系列：
 			* 常见产品：早期的GeForce GTX TITAN（白泰坦）、GeForce GTX TITAN Black（黑泰坦）、GeForce GTX TITAN Z、GeForce GTX TITAN X。之后命名系列去掉GeForce GTX ，改为NVIDIA TITAN X、NVIDIA TITAN Xp等。Compute Capability参数指的是version，一般version越高，并行计算能力越强。
 			* 两个Titan X？早期的NVIDIA GeForce GTX Titan X和后期的NVIDIA Titan X名称上都包含Titan X。但是早期的NVIDIA GeForce GTX Titan X基于上一代的Maxwell架构，NVIDIA Titan X基于新一代的Pascal架构。NVIDIA Titan X领先GTX 1080（基于Pascal） 30％，GTX 1080领先GTX Titan X 25％（来自百度知道）。
-			* gtx titan z是内置的2路SLI，所以是单卡双核。gtx titan x是单卡单核。titan z早于 gtx titan x，titan z的功耗更大，性价比不是很高。多路SLI需要支持多路SLI的PCI-E Xx的主板或者服务器AMAX等，常见两路、三路、四路SLI，如一个电脑加四个gtx titan x构成四路SLI（四卡SLI），两个titan z构成两路SLI（两卡SLI），都能构成四核芯GPU。一般Nvidia最大支持4核芯，4卡SLI性能并不高，常用双卡SLI或者三卡SLI性能最高。
+				* gtx titan z是内置的2路SLI，所以是单卡双核。gtx titan x是单卡单核。titan z早于 gtx titan x，titan z的功耗更大，性价比不是很高。多路SLI需要支持多路SLI的PCI-E Xx的主板或者服务器AMAX等，常见两路、三路、四路SLI，如一个电脑加四个gtx titan x构成四路SLI（四卡SLI），两个titan z构成两路SLI（两卡SLI），都能构成四核芯GPU。一般Nvidia最大支持4核芯，4卡SLI性能并不高，常用双卡SLI或者三卡SLI性能最高。
 	* Tesla系列
 		* 适用于专业领域，如Tesla K20/K40/K80等适合双精度要求高的场合，Tesla M40等适合单精度计算快，适合只训练深度学习网络。
+		* 2017年看到V100，比之前的M40、P100更新。
 	* 显卡参数
 		* 核心和显存。核心是决定性的，显存对性能有辅助作用。
 		* 核心： 核心型号和核心参数。常见参数有：
@@ -113,30 +73,3 @@ java下的一款轻量级神经网络工具。支持GUI操作的Neuroph Studio�
 	* 指定显卡：
 		* 在环境变量（系统或者ide）中添加CUDA_VISIBLE_DEVICES=1或者CUDA_VISIBLE_DEVICES=0,2,3
 		* 程序中设置`import os os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID" os.environ["CUDA_VISIBLE_DEVICES"]="0"`等
-
-
-## TensorFlow
----
-### 安装
----
-* 安装多个python，系统环境变量默认选一个，不用改。每次运行时指定到对应python/bin目录下使用./pip或者./python进行操作。
-* 安装anaconda3，在其python位置运行./pip install 各种工具如scipy、tf.whl等。
-* 安装tensorflow：使用./pip安装tf.whl，注意tf.whl支持的python版本如cp35/cp34表示py3.5/py3.4，是cpu还是gpu，是linux还是windows，是32位还是x86_64位。安装过程中，少什么就装什么。
-
-### 使用
----
-* [TensorFlow 官方文档中文版](http://docs.pythontab.com/tensorflow/)
-* [TensorFlow 官方文档中文版-wiki](http://wiki.jikexueyuan.com/project/tensorflow-zh/)
-* tensorboard --logdir save/ 查看模型的tensorboard
-
-## Keras
----
-### 安装
-
-
-### 使用
----
-* [Keras中文文档](https://keras-cn.readthedocs.io/en/latest/)
-
-
-
