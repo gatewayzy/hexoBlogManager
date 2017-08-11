@@ -42,7 +42,7 @@
 	* 在hexo项目中运行`npm install --save hexo-pdf`安装插件
 	* 如果是外部网站pdf文件，直接使用网址引入：`{% pdf http://www.mywebsite/readme.pdf %}`
 	* 本站的话：在/source/statics中添加pdfs文件夹，存放pdf文件，hexo g生成的时候会自动生成到/public/statics/pdfs目录下，md文件中引入：`{% pdf /statics/pdfs/1.pdf %}`。
-	* *为了便于更新和管理pdf，本站将word等源文件放在posts里，然后生成pdf并手动拷贝到/source/statics中。*
+	* *为了便于更新和管理pdf，本站将word等源文件放在posts里，然后生成pdf并手动拷贝到/source/statics中。但是github的速度慢，将pdf放到CDN服务器上。*
 
 
 

@@ -15,7 +15,12 @@ tags:
 
 ## 简介
 ---
-* Log4j作为常用的Java日志记录包，简要记一下使用方法。
+* Log4j作为常用的Java日志记录包。
 
 
-{% pdf /statics/pdfs/log4j.pdf  %}
+## 详细内容
+---
+* [点此进行全文阅读](http://zcy.ckcest.cn/cdn/zy/log4j.pdf)。
+
+{% pdf http://zcy.ckcest.cn/cdn/zy/log4j.pdf  %}
+

@@ -13,7 +13,14 @@ tags:
 
 ## 概述
 ---
-微软MS的Office功能强大。Word文本编辑器符合“所见即所得”特点。部分使用描述如下。
+微软MS的Office功能强大。Word文本编辑器符合“所见即所得”特点。
 
-{% pdf /statics/pdfs/word.pdf %}
+
+## 详细内容
+---
+* [点此进行全文阅读](http://zcy.ckcest.cn/cdn/zy/word.pdf)。
+
+{% pdf http://zcy.ckcest.cn/cdn/zy/word.pdf  %}
+
+
 
