@@ -36,5 +36,14 @@
 - 在本项目路径下，依次运行`hexo clean`、 `hexo g`、 `hexo s`，然后访问 `127.0.0.1::4000`即可
 - 如果需要发布到github，需要搭建github page，并设置`_config.yml`的`deploy`配置，然后运行命令`npm install hexo-deployer-git --save`安装发布工具，然后运行 `hexo d` 进行发布。
 
+## Hexo功能拓展
+### 支持pdf：
+* 参考：[Github: superalsrk/hexo-pdf](https://github.com/superalsrk/hexo-pdf/)
+	* 在hexo项目中运行`npm install --save hexo-pdf`安装插件
+	* 如果是外部网站pdf文件，直接使用网址引入：`{% pdf http://www.mywebsite/readme.pdf %}`
+	* 本站的话：在/source/statics中添加pdfs文件夹，存放pdf文件，hexo g生成的时候会自动生成到/public/statics/pdfs目录下，md文件中引入：`{% pdf /statics/pdfs/1.pdf %}`。
+	* *为了便于更新和管理pdf，本站将word等源文件放在posts里，然后生成pdf并手动拷贝到/source/statics中。*
+
+
 
 
