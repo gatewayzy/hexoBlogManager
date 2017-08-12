@@ -25,7 +25,7 @@ tags:
 * ctr 单击 就是右键，或者双指轻点
 * cmd 是多选的control
 * cmd delete 删除文件等
-* cmd 上下箭头  打开上下级目录
+* cmd 上下箭头  打开上下级目录，在finder等中快速到顶端或底部
 * cmd o 打开文件／夹子
 * alt cmd space 打开finder的搜索
 
