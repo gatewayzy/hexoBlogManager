@@ -1,17 +1,136 @@
 ---
-title: MongoDB
+title: SQL NoSQL
 comments: true
-date: 2017-01-12 13:58:13
+date: 2017-01-12 13:58:19
 updated: 2017-01-12 13:58:56
 categories: Softwares
 tags:
-- MongoDB
+- SQL
+- NoSQL
 ---
 
-**说明：**MongoDB配置，MongoDB的使用。
+
+**说明：**SQL和NoSQL的配置使用，包括MySQL、SQL Server、Redis、MongoDB等。
 <!-- more -->
 
+# MySQL
+--------------------------------------------------------------------------------------------------------
+## sql 语法
+---
+### sql 内容
 
+* ddl、dml、
+* 设置自增起始值：alter table mytable AUTO_INCREMENT=1
+
+## 常用函数
+---
+### Date_formate日期格式转换
+---
+将datetime转换为字符串： `Select date_format(feedback_time,'%Y-%c-%d %h:%i:%s') AS feedbackTime`
+
+### Concat拼接函数
+---
+* 拼接条件 `Select * from table1 where title like concat('%', #{title} ,'%')` 
+* 拼接字符串 `SELECT CONCAT('HELLO', ' WORLD') AS exp`
+* 将符合条件的同一列中的不同行数据拼接, 以逗号分隔 `SELECT GROUP_CONCAT(name) AS names FROM xxx GROUP BY yy `
+
+### 中文排序问题
+---
+* 如果存储使用gbk字符集，直接order by就不会出现中文拼音排序的问题。如果mysql使用UTF-8存储中文，则order by中文拼音排序有问题，需要变换编码。
+`select * from user order by convert(username USING gbk) asc; `
+
+### 服务器状态信息
+---
+* 常用show status查看运行统计状态。
+* show status like '%queries%'
+
+### Explain语句解析
+---
+* 使用explain查看sql 语句的解析。
+* explain select * from… 
+
+### 选取存在重复项的数据
+---
+
+```
+SELECT * from qa_dis_dic_code a where EXISTS (SELECT 1 from qa_dis_dic_code b where a.category_2= b.category_2 and b.id<a.id)
+```
+
+## 命令行操作
+---
+* mysql登陆root：mysql -u root -p
+	* 在Linux下mysql使用$HOME/.my.cnf读取特定的启动命令和设置，可以在里面设置连接mysql的默认密码，然后将配置文件设置为本人权限 chmod 700 .my.cnf 就可以用默认密码登录，方便shell编程等
+* 显示数据库：mysql> show databases;
+* 创建用户及授权：
+mysql> create database zyy; mysql> create user zyy; mysql> use mysql; mysql> update user set Password values PASSWORD("112233445566") where user='zyy'; mysql> flush privileges;
+* 使用更改
+mysql> grant all on zyy.* to 'zyy'@'localhost' ;  mysql> flush privileges; mysql> show grants for snort@localhost; localhost换为%指可以远程登陆。
+* 修改用户密码：
+root登陆，mysql>update mysql.user set password=password('新密码') where User="test" and Host="localhost";mysql>flush privileges;
+* 删除用户密码
+mysql>Delete FROM user Where User='test' and Host='localhost';
+mysql>flush privileges;
+mysql>drop database testDB; //删除用户的数据库
+* 删除账户及权限：
+drop user 用户名@'%';
+drop user 用户名@ localhost; 
+* 查看表结构信息方法：
+1.desc 表名;
+2.show columns from 表名;
+3.describe 表名;
+* 修改类型：ALTER TABLE S MODIFY sno SMALLINT NOT NULL;
+* 支持汉字：创表前：set names utf8;或者创建数据库时：create database yan2 default character set utf8;就可以在varchar字段里写汉字了。
+
+### shell编程
+
+假设设置了默认连接的密码，进行下面的shell编程
+* 使用单行编程
+
+```
+#!/bin/bash
+mysql1=$(which mysql)
+# 查找mysql命令的位置
+$mysql1 defaultdb -u root -X -e 'select * from students'
+# 使用默认的密码连接数据库并运行一行命令，运行该脚本即可查看结果，与正常在mysql中运行效果一样
+# -X使用XML输出结果
+```
+
+* 使用多行编程
+
+```
+#!/bin/bash
+mysql1=$(which mysql)
+# 查找mysql命令的位置
+$mysql1 defaultdb -u root <<EOF
+show tables;
+select * from students;
+insert ...
+EOF
+echo "运行该文件即对mysql进行shell多行，注意多行需要添加EOF开始，结束时的EOF必须为开头"
+```
+
+
+
+# SQL Server
+--------------------------------------------------------------------------------------------------------
+## 简介
+
+## 安装启动
+---
+* 安装
+	* 安装sql server2016等版本，安装功能选择包括服务器和管理工具。
+* 启动
+	* 启动sql server 管理配置工具配置进行服务状态管理
+
+## 管理配置
+---
+启动sql server management studio连接数据库，进行数据库、安全性、管理等方面的配置。
+
+* 数据库：进行数据库、数据的增查改删等操作。
+* 安全性：进行登录用户名管理、角色管理、加密等管理。
+
+# MongoDB
+--------------------------------------------------------------------------------------------------------
 ## server安装
 ---
 ###  Windows下
@@ -198,3 +317,98 @@ public class TestMongoDB {
 ### 模糊查询速度太慢
 * Mongodb自带的模糊检索可能效率很低。
 	* 一种解决方案是使用mongodb存储全文，然后将需要查找的内容使用Lucene建立索引，利用Lucene进行模糊查询并返回结果，也就是说不使用mongodb进行检索业务。
+
+
+
+
+
+
+# Redis
+--------------------------------------------------------------------------------------------------------
+参考文章：[Redis的三种启动方式](http://www.tuicool.com/articles/aQbQ3u)
+
+## 简介
+* 内存数据库，cs架构，服务器将数据存到文件，运行时读入内容，采用键值对。
+
+### redis与memcached的比较
+* memcached仅支持key-value数据，且不能数据持久化，redis支持key-value、list、set、hash等结构，支持数据持久化，二者擅长点不同
+
+##  server安装
+---
+### Linux下
+
+* 安装：
+	* 下载源码并解压cd src，make，（是否安装build-essential，make MALLOC=jemalloc等问题）make all等命令，主要看运行中的提示信息。不推荐make insatll成service。
+	* 使用源安装
+* 源安装的服务命令：service redisd start | stop | restart...
+* 启动server：
+	* ./redis-server &，默认端口6379，&是为了后台运行，不使用配置文件（无密码等配置）
+	* ./redis-server path/redis.conf & ，指定使用的配置文件
+* 查看服务：
+	* ps -ef |grep redis
+	* ps -aux |grep redis
+* 停止server：
+	* redis-cli -a passwd shutdown
+	* redis-cli -h 127.0.0.1 -p 6379 shutdown
+	* ps -aux |grep redis 然后运行： kill -9 pid
+
+
+###  Windows下
+
+* 下载压缩包进行解压。
+* 作为服务：在目录下运行命令`redis-server --service-install redis.windows.conf` 注意修改相应的redis.config
+* 卸载服务`redis-server --service-uninstall`
+
+## server 配置
+* 设置server密码：
+	* 打开redis.conf配置文件，找到requirepass，然后修改requirepass一行为:requirepass yourpassword
+	* 然后使用./redis-server path/redis.conf & ，指定使用的配置文件启动server
+* 配置tomcat的session共享
+	* 由于redis存在安全漏洞，应确保redis server启用密码。
+	* tomcat的lib中添加相应的jar包，如tomcat-redis-session-manager-2.0.0.jar、commons-pool-1.6.jar、jedis-2.1.0.jar
+	* 在tomcat的conf/context.xml中配置<Context>添加如下内容。
+
+```
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>  
+    <Valve className="com.orangefunction.tomcat.redissessions.RedisSessionHandlerValve" />
+    <Manager className="com.orangefunction.tomcat.redissessions.RedisSessionManager"
+           host="10.15.82.57"
+           port="6379"
+           password="password"
+           database="0"
+           maxInactiveInterval="60" />
+
+```
+## client使用
+---
+###  client 连接server
+* 运行./redis-cli，默认连接本地的server端口
+* 使用可视化管理工具RedisDesktopManager等
+
+### 语法
+
+
+### Jedis
+
+
+##  问题与解决
+---
+### 密码设置
+
+* 修改config文件，使用该配置启动server，上文已详述。
+
+### 数据库备份与恢复
+
+* 方案：重写所有数据
+	* 使用程序查询所有数据，写到新的redis
+* 方案：rdb快照
+	* 关闭server，可将dump.rdb视为数据库备份文件（数据库快照）
+	* 将dump.rdb复制到新的redis下，启动即可，注意会覆盖原有的rdb文件问题。
+	* 也可是使用client连接server，运行auth密码之后，使用SAVE命令生成rdb，存储路径在conf文件的working directory设置。
+* 方案：aof拓展
+	*  
+
+
+
+
+
