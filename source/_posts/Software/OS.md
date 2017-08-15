@@ -639,13 +639,31 @@ Enable=true		#开启远程桌面
 
 ##  terminal命令
 * open a.app 运行一个app
+* lsof -i :4000 查看一个端口对应的进程，然后使用kill -9 pid关闭进程
 
+## 脚本
+
+```
+#!/bin/sh
+echo "==================== shutdown pid for port 4000 =============="
+ID=`lsof -i:4000 |tail -1 | awk '{print $2}'`
+echo $ID
+for id in $ID
+do
+  kill -9 $id
+  echo "killed $id"
+done
+echo "==================== hexo s & ===================="
+cd ~/Projects/www/hexoBlogManager
+hexo s &
+```
 
 ## 自动运行
 __注意脚本权限chmod u+x。__
 
 * 系统偏好设置--用户与群组--登录项--添加运行脚本即可。
 * ～／.bash_profile 是用户个人配置，用户新建一个terminal就会运行该脚本。不存在可新建该文件。修改即可生效。可以使用`source  bash_profile `强制刷新。  
+
 
 
 ## 环境变量

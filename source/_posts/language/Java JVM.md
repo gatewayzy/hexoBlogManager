@@ -248,10 +248,10 @@ Volatile 变量具有 synchronized 的可见性特性，但是不具备原子特
 ```
 // 对象级别锁
 public class DemoClass{	
-	// 普通的synchronized方法
+    // 普通的synchronized方法
     public synchronized void demoMethod(){}
 	
-	// 同步代码块的部分会加锁，this锁定的是对象实例本身
+    // 同步代码块的部分会加锁，this锁定的是对象实例本身
     public void demoMethod(){
         synchronized (this)
         {
@@ -259,7 +259,7 @@ public class DemoClass{
         }
     }
 	
-	// 同步代码块也可以锁定 final 的对象，不是static，所以实例对象都会有该lock
+    // 同步代码块也可以锁定 final 的对象，不是static，所以实例对象都会有该lock
     private final Object lock = new Object();
     public void demoMethod(){
         synchronized (lock)
@@ -272,10 +272,10 @@ public class DemoClass{
 
 // 类级别锁
 public class DemoClass{
-	// static的synchronized方法就是获取类级别的锁了
+    // static的synchronized方法就是获取类级别的锁了
     public synchronized static void demoMethod(){}
 
-	// 同步代码块直接锁定该类的类级别锁
+    // 同步代码块直接锁定该类的类级别锁
     public void demoMethod(){
         synchronized (DemoClass.class)
         {
@@ -283,7 +283,7 @@ public class DemoClass{
         }
     }
 	
-	// 同步代码块直接锁定类常量获得类级别锁，只需要加锁对象是类的final static对象。
+    // 同步代码块直接锁定类常量获得类级别锁，只需要加锁对象是类的final static对象。
     private final static Object lock = new Object();
     public void demoMethod(){
         synchronized (lock)
