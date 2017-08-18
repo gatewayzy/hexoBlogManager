@@ -194,11 +194,41 @@ java从编译到执行经过3个重要机制：源码编译机制、类加载机
 
 ## 多线程与并发性
 ---
-锁提供了两种主要特性：互斥（mutual exclusion） 和可见性（visibility）。互斥即一次只允许一个线程持有某个特定的锁，因此可使用该特性实现对共享数据的协调访问协议，这样，一次就只有一个线程能够使用该共享数据。可见性要更加复杂一些，它必须确保释放锁之前对共享数据做出的更改对于随后获得该锁的另一个线程是可见的 —— 如果没有同步机制提供的这种可见性保证，线程看到的共享变量可能是修改前的值或不一致的值，这将引发许多严重问题。
+* 锁提供了两种主要特性：互斥（mutual exclusion） 和可见性（visibility）。互斥即一次只允许一个线程持有某个特定的锁，因此可使用该特性实现对共享数据的协调访问协议，这样，一次就只有一个线程能够使用该共享数据。可见性要更加复杂一些，它必须确保释放锁之前对共享数据做出的更改对于随后获得该锁的另一个线程是可见的 —— 如果没有同步机制提供的这种可见性保证，线程看到的共享变量可能是修改前的值或不一致的值，这将引发许多严重问题。
+* 线程调度：java线程调度有协同式和抢占式
+	* 协同式：由各个线程自身运行完成之后才会通知系统切换下一个线程。优点是实现简单，不需要太多线程同步问题。缺点是长时间的线程会导致阻塞后续线程。
+	* 抢占式：系统分配各个线程时间。java早期用协同式，现在都用抢占式，Thread.yield()虽然是让出执行时间，但是真正的执行还需要系统安排，不会真的决定当前线程最后运行。抢占式调度的优点是各线程可控，缺点是同步比较麻烦。
+* java线程状态：
+	* New 新建  通过new Thread创建的处于新建态。线程运行start()进入runable态。
+	* Runable 运行 包括了得到CPU时间的running态和等待分配CPU时间的ready态。
+	* Waiting 无限期等待 这种状态需要其他线程显示唤醒（notify()、notifyAll()），一般没有设置Timeout参数的Object.wait()和Thread.join()
+	* Timed waiting 定时等待  不需要其他线程显示唤醒，一般是设置了Timeout参数的Thread.sleep()，Object.wait()，Thread.join()方法。
+	* Blocked 阻塞 程序进入同步区域的时候线程会阻塞。阻塞是在等待获取一个排它锁，定时等待和无限期等待是在等待时间或者等待唤醒事件。 
+	* Terminated 结束  已终止线程状态，线程正常运行结束或异常退出。
+* java实现线程安全的方法
+	* 互斥同步：
+		* 同步是指在多线程并发访问共享数据时，保证共享数据在同一时刻只被一个线程使用。互斥是实现同步的一种方法，常用临界区critical section、互斥量mutex、信号量semaphore。
+		* java实现互斥常用synchronized关键字（对象级锁和类级别锁），早期效果不太好，现在优化之后synchronized的效率提高了很多。
+		* java实现互斥也用java.util.concurrent包（JUC包）的ReentrantLock可重入锁。ReentrantLock与synchronized同样具有线程可重入特性。不同点在于ReentrantLock使用的是lock() unlock() condition() 实现，以及提供了高级特性：等待可中断、可实现公平锁、锁可以绑定多个条件。
+			* 等待可中断：持有锁的线程长时间不释放锁的话，等待线程可以放弃等待，改为处理其他事情。适用于用时很长的同步块。
+			* 公平锁：多个线程等待同一个锁时按照申请顺序依次获得锁。默认synchronized和ReentrantLock的锁都是非公平锁，ReentrantLock提供传入boolean实现公平锁的方法。
+			* 锁可以绑定多个条件：ReentrantLock可以使用多个newCondition()方法实现多个条件，但是synchronized需要额外添加锁才能实现多个条件。
+		* 互斥同步主要问题在于线程阻塞和唤醒需要转入内核态运行，非常影响并发性能，属于阻塞同步Blocking Synchronization。
+	* 非阻塞同步
+		* 互斥同步这种阻塞同步属于悲观的并发策略、悲观锁：总认为必须进行加锁才能实现安全，否则就会出错。
+		* 非阻塞同步Non-Blocking Synchronization采用基于冲突检测的乐观并发策略：先进行操作，如果没有其他线程争用共享数据，则操作成功，如果有共享数据争用，产生了冲突，就采用补偿措施，常用的是不断重试直到成功。
+		* 非阻塞同步不需要线程挂起等待，通常基于硬件指令集保证同步。
+	* 无同步方法：可重入代码、线程本地存储。
+* 锁优化
+	* 自旋锁和自适应锁
+	* 锁消除
+	* 锁粗化
+	* 轻量级锁
+	* 偏向锁
 
 ### Thread类和Runnable接口
 * 继承Thread类，重写run方法：class MyThread extends Thread{ public void run(){ }} 然后new MyThread().start(); 启动线程。
-* 实现Runnable接口，实现run方法：class MyRun implements Runnable{ public void run(){ }}，然后MyRun my = new MyRun();new Thread(my).start(); 如果使用多个new Thread(my).start();访问的是同一个my对象，注意是否存在线程安全问题。
+* 实现Runnable接口，实现run方法：class MyRun implements Runnable{ public void run(){ }}，然后MyRun my = new MyRun();new Thread(my).start(); 如果使用多个new Thread(my).start() 访问的是同一个my对象，注意是否存在线程安全问题。
 
 ### volatile 关键字
 * 共享内存(主存)与私有拷贝
