@@ -268,6 +268,19 @@ java从编译到执行经过3个重要机制：源码编译机制、类加载机
 	* JVM会将CAS特殊处理，编译为一条与平台相关的CAS处理器指令。
 
 ```
+// CAS 的C语言实现
+int compare_and_swap (int* reg, int oldval, int newval) 
+{
+  ATOMIC();
+  int old_reg_val = *reg;
+  if (old_reg_val == oldval) 
+     *reg = newval;
+  END_ATOMIC();
+  return old_reg_val;
+}
+```
+
+```
 package jvm;
 import sun.misc.Unsafe;
 import java.lang.reflect.Field;

@@ -20,7 +20,7 @@ tags:
 
 ## 详细内容
 ---
-* [点此进行全文阅读](http://zcy.ckcest.cn/cdn/zy/log4j.pdf)。
+* [点此进行全文阅读](http://zcy.ckcest.cn/cdn/zy/Log4j.pdf)。
 
-{% pdf http://zcy.ckcest.cn/cdn/zy/log4j.pdf  %}
+{% pdf http://zcy.ckcest.cn/cdn/zy/Log4j.pdf  %}
 

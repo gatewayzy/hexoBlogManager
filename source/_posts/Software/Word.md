@@ -18,9 +18,9 @@ tags:
 
 ## 详细内容
 ---
-* [点此进行全文阅读](http://zcy.ckcest.cn/cdn/zy/word.pdf)。
+* [点此进行全文阅读](http://zcy.ckcest.cn/cdn/zy/Word.pdf)。
 
-{% pdf http://zcy.ckcest.cn/cdn/zy/word.pdf  %}
+{% pdf http://zcy.ckcest.cn/cdn/zy/Word.pdf  %}
 
 
 
