@@ -70,6 +70,12 @@ tags:
 
 ## 方法与接口
 ----------------------------------------------------------------------------------------------------------
+### String StringBuffer StringBuilder
+* String是final常量，各种split、+、substring等方法都是新建一个String而不是修改原有String。注意s="a"+"b"这种会在编译期直接转为s="ab"，但是s=s1+"a"，还是会转成sb（jdk1.5以前用线程安全的StringBuffer，jdk1.5开始变成非线程安全的StringBuilder）并append；
+* StringBuffer可变，sb.append("123")，而且StringBuffer是线程安全的，自动使用sb的对象锁进行同步。
+* StringBuilder可变，sb.append("123")，但是StringBuilder非线程安全，速度更快。
+* String（先转成sb再操作）慢于StringBuffer（线程安全，加锁耗时），StringBuffer慢于StringBuilder（非线程安全）。
+
 ### error与exception
 * 捕获异常与非捕获异常
 

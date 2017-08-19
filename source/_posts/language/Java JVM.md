@@ -194,37 +194,179 @@ java从编译到执行经过3个重要机制：源码编译机制、类加载机
 
 ## 多线程与并发性
 ---
-* 锁提供了两种主要特性：互斥（mutual exclusion） 和可见性（visibility）。互斥即一次只允许一个线程持有某个特定的锁，因此可使用该特性实现对共享数据的协调访问协议，这样，一次就只有一个线程能够使用该共享数据。可见性要更加复杂一些，它必须确保释放锁之前对共享数据做出的更改对于随后获得该锁的另一个线程是可见的 —— 如果没有同步机制提供的这种可见性保证，线程看到的共享变量可能是修改前的值或不一致的值，这将引发许多严重问题。
-* 线程调度：java线程调度有协同式和抢占式
-	* 协同式：由各个线程自身运行完成之后才会通知系统切换下一个线程。优点是实现简单，不需要太多线程同步问题。缺点是长时间的线程会导致阻塞后续线程。
-	* 抢占式：系统分配各个线程时间。java早期用协同式，现在都用抢占式，Thread.yield()虽然是让出执行时间，但是真正的执行还需要系统安排，不会真的决定当前线程最后运行。抢占式调度的优点是各线程可控，缺点是同步比较麻烦。
-* java线程状态：
-	* New 新建  通过new Thread创建的处于新建态。线程运行start()进入runable态。
-	* Runable 运行 包括了得到CPU时间的running态和等待分配CPU时间的ready态。
-	* Waiting 无限期等待 这种状态需要其他线程显示唤醒（notify()、notifyAll()），一般没有设置Timeout参数的Object.wait()和Thread.join()
-	* Timed waiting 定时等待  不需要其他线程显示唤醒，一般是设置了Timeout参数的Thread.sleep()，Object.wait()，Thread.join()方法。
-	* Blocked 阻塞 程序进入同步区域的时候线程会阻塞。阻塞是在等待获取一个排它锁，定时等待和无限期等待是在等待时间或者等待唤醒事件。 
-	* Terminated 结束  已终止线程状态，线程正常运行结束或异常退出。
-* java实现线程安全的方法
-	* 互斥同步：
-		* 同步是指在多线程并发访问共享数据时，保证共享数据在同一时刻只被一个线程使用。互斥是实现同步的一种方法，常用临界区critical section、互斥量mutex、信号量semaphore。
-		* java实现互斥常用synchronized关键字（对象级锁和类级别锁），早期效果不太好，现在优化之后synchronized的效率提高了很多。
-		* java实现互斥也用java.util.concurrent包（JUC包）的ReentrantLock可重入锁。ReentrantLock与synchronized同样具有线程可重入特性。不同点在于ReentrantLock使用的是lock() unlock() condition() 实现，以及提供了高级特性：等待可中断、可实现公平锁、锁可以绑定多个条件。
-			* 等待可中断：持有锁的线程长时间不释放锁的话，等待线程可以放弃等待，改为处理其他事情。适用于用时很长的同步块。
-			* 公平锁：多个线程等待同一个锁时按照申请顺序依次获得锁。默认synchronized和ReentrantLock的锁都是非公平锁，ReentrantLock提供传入boolean实现公平锁的方法。
-			* 锁可以绑定多个条件：ReentrantLock可以使用多个newCondition()方法实现多个条件，但是synchronized需要额外添加锁才能实现多个条件。
-		* 互斥同步主要问题在于线程阻塞和唤醒需要转入内核态运行，非常影响并发性能，属于阻塞同步Blocking Synchronization。
-	* 非阻塞同步
-		* 互斥同步这种阻塞同步属于悲观的并发策略、悲观锁：总认为必须进行加锁才能实现安全，否则就会出错。
-		* 非阻塞同步Non-Blocking Synchronization采用基于冲突检测的乐观并发策略：先进行操作，如果没有其他线程争用共享数据，则操作成功，如果有共享数据争用，产生了冲突，就采用补偿措施，常用的是不断重试直到成功。
-		* 非阻塞同步不需要线程挂起等待，通常基于硬件指令集保证同步。
-	* 无同步方法：可重入代码、线程本地存储。
-* 锁优化
-	* 自旋锁和自适应锁
-	* 锁消除
-	* 锁粗化
-	* 轻量级锁
-	* 偏向锁
+### 互斥与可见性
+* 锁提供了两种主要特性：互斥（mutual exclusion） 和可见性（visibility）。
+* 互斥即一次只允许一个线程持有某个特定的锁，因此可使用该特性实现对共享数据的协调访问协议，这样，一次就只有一个线程能够使用该共享数据。
+* 可见性要更加复杂一些，它必须确保释放锁之前对共享数据做出的更改对于随后获得该锁的另一个线程是可见的 —— 如果没有同步机制提供的这种可见性保证，线程看到的共享变量可能是修改前的值或不一致的值，这将引发许多严重问题。
+
+### 线程调度
+* java线程调度也有协同式和抢占式。
+* 协同式：由各个线程自身运行完成之后才会通知系统切换下一个线程。优点是实现简单，不需要太多线程同步问题。缺点是长时间的线程会导致阻塞后续线程。
+* 抢占式：系统分配各个线程时间。java早期用协同式，现在都用抢占式，Thread.yield()虽然是让出执行时间，但是真正的执行还需要系统安排，不会真的决定当前线程最后运行。抢占式调度的优点是各线程可控，缺点是同步比较麻烦。
+
+### java线程状态
+总的来说，就是new一个得到new状态的线程；start成runable得到CPU是running，等待cpu是ready；runable遇到无限期等待和定时等待变成等待状态，等待对应的时间或者唤醒事件；runable遇到同步块变成blocked阻塞，等待获取锁；运行结束为terminated。
+
+* New 新建  通过new Thread创建的处于新建态。线程运行start()进入runable态。
+* Runable 运行 包括了得到CPU时间的running态和等待分配CPU时间的ready态。
+* Waiting 无限期等待 这种状态需要其他线程显示唤醒（notify()、notifyAll()），一般没有设置Timeout参数的Object.wait()和Thread.join()
+* Timed waiting 定时等待  不需要其他线程显示唤醒，一般是设置了Timeout参数的Thread.sleep()，Object.wait()，Thread.join()方法。
+* Blocked 阻塞 程序进入同步区域的时候线程会阻塞。阻塞是在等待获取一个排它锁，定时等待和无限期等待是在等待时间或者等待唤醒事件。 
+* Terminated 结束  已终止线程状态，线程正常运行结束或异常退出。
+
+
+### java实现线程安全的方法
+#### 互斥同步
+* 同步是指在多线程并发访问共享数据时，保证共享数据在同一时刻只被一个线程使用。互斥是实现同步的一种方法，常用临界区critical section、互斥量mutex、信号量semaphore。
+* java实现互斥常用synchronized关键字（对象级锁和类级别锁），早期效果不太好，现在优化之后synchronized的效率提高了很多。
+* java实现互斥也用java.util.concurrent包（JUC包）的ReentrantLock可重入锁。ReentrantLock与synchronized同样具有线程可重入特性。不同点在于ReentrantLock使用的是lock() unlock() condition() 实现，以及提供了高级特性：等待可中断、可实现公平锁、锁可以绑定多个条件。
+	* 等待可中断：持有锁的线程长时间不释放锁的话，等待线程可以放弃等待，改为处理其他事情。适用于用时很长的同步块。
+	* 公平锁：多个线程等待同一个锁时按照申请顺序依次获得锁。默认synchronized和ReentrantLock的锁都是非公平锁，ReentrantLock提供传入boolean实现公平锁的方法。
+	* 锁可以绑定多个条件：ReentrantLock可以使用多个newCondition()方法实现多个条件，但是synchronized需要额外添加锁才能实现多个条件。
+* 互斥同步主要问题在于线程阻塞和唤醒需要转入内核态运行，非常影响并发性能，属于阻塞同步Blocking Synchronization。
+* 互斥同步这种阻塞同步属于悲观的并发策略、**悲观锁**：总认为必须进行加锁才能实现安全，否则就会出错。
+
+#### 非阻塞同步
+* 非阻塞同步Non-Blocking Synchronization采用基于冲突检测的乐观并发策略**乐观锁**：先进行操作，如果没有其他线程争用共享数据，则操作成功，如果有共享数据争用，产生了冲突，就采用补偿措施，常用的是不断重试直到成功。
+* 非阻塞同步不需要线程挂起等待，通常基于硬件指令集保证同步。
+	* 硬件指令集之**CAS 比较并交换Compare-and-Swap**指令：一种硬件上保证语义上需要多次操作的行为只需要一条处理器指令就能完成。除了CAS还有swap、fetch-andincrement、test-and-set、load-linked/store-conditional等等。
+
+#### 无同步方法
+* 可重入代码
+* 线程本地存储
+
+
+
+### 锁优化
+* **自旋锁和自适应锁**：
+	* 自旋锁：线程挂起和恢复是很费事的，而共享数据的锁定往往很快就会结束，所以在多处理器可以并行执行两个及以上线程时，第一个线程锁定共享数据后，第二个请求共享数据的线程并不挂起，不会放弃CPU时间，而是执行一个忙循环（自旋），看看持有锁的线程是否会很快释放锁。
+	* 锁定的时间越短，自旋等待的效果越好，否则就是白白消耗cpu在等待。自旋等待超过了限定次数（默认10），应该正常挂起线程。
+	* 自适应的自旋锁：根据之前的自旋效果决定本次自旋等待次数（自旋时间），如果该锁上一次的自旋等待成功了，现在又要对其自旋等待，那么可以适当增加本次自旋等待时间，否则就减少等待时间。
+* 锁消除：
+	* 逃逸分析技术：分析对象动态作用域。当一个对象在方法中被定义后，如果被外部方法引用，就是**方法逃逸**，比如对象作为方法的调用参数传递到其他方法；如果被外部线程访问到，就是**线程逃逸**，比如对象赋给类变量，或者赋给其他线程的实例变量。
+	* 基于逃逸分析技术，如果一段代码中所有堆上数据都不会逃逸到其他线程，就可以作为栈上数据对待，认为线程私有，不必同步加锁，实现锁消除。
+* 锁粗化
+	* 大部分情况下同步块应尽量小，减少同步操作数量，但是频繁加锁和解锁的操作需要粗化扩大加锁同步的范围，典型例子就是连续的sb.append()。
+* 轻量级锁
+	* HotSpot虚拟机中对象头包括了自身运行时数据Mark Word，是实现轻量级锁和偏向锁的关键。
+	* 轻量级锁是在无竞争的情况下使用CAS操作避免使用同步互斥量mutex。
+	* 如果存在竞争（多于两个线程在竞争同一个锁），轻量级锁会失效，需要膨胀使用重量级锁（传统使用互斥量实现的锁机制），使用轻量级锁反而会增加开销。
+* 偏向锁
+	* 偏向锁是在无竞争的情况下把整个同步都消除掉，连CAS都不做。
+	* 偏向锁是指这个锁总是偏向于第一个获得它的线程，如果接下来该锁一直不被其他线程获取，则持有偏向锁的线程永远不需要再同步。
+	* 和轻量级锁一样，偏向锁也只适合有同步但无竞争的程序，如果出现竞争，就会退出偏向模式，徒增同步开销。
+
+
+## 多线程具体技术
+---
+### CompareAndSwap CAS乐观锁
+* CAS指令包括内存位置V、旧值A、V新值B，操作过程为：“我认为V的值应该为A，如果是，那么将V的值更新为B，否则不修改，最后返回V的值实际为多少”。
+* CAS属于乐观锁技术，当多个线程尝试使用CAS同时更新同一个变量时，只有其中一个线程能更新变量的值，而其它线程都失败，失败的线程并不会被挂起，而是被告知这次竞争中失败，并可以再次尝试。
+* 使用CAS
+	* JDK1.5开始java中可以使用CAS操作，但是封装在sun.misc.Unsafe类里面，包装为compareAndSwapInt()、compareAndSwapLong()等几个方法，编译之后的结果就是平台相关的一条CAS指令。
+	* Unsafe类是无法直接调用的，java限定只能由Bootstrap ClassLoader加载的类才能访问，所以开发人员只能用反射机制或者使用封装CAS方法的类才能使用CAS。
+	* JVM会将CAS特殊处理，编译为一条与平台相关的CAS处理器指令。
+
+```
+package jvm;
+import sun.misc.Unsafe;
+import java.lang.reflect.Field;
+import java.util.Arrays;
+
+/**
+ * 使用反射机制使用CAS CompareAndSwap
+ */
+public class _14CompareAndSwap {
+    private static Unsafe unsafe;
+
+    static {
+        try {
+            // 通过反射获取rt.jar下的Unsafe类, getDeclaredField是可以获取一个类的所有字段. getField只能获取public字段
+            Field field = Unsafe.class.getDeclaredField("theUnsafe");
+            //Unsafe类提供了一个private static final Unsafe theUnsafe，可以用于反射
+            field.setAccessible(true);
+            // 在java的反射中,通过字段获取对象的字段值field.get(object),字段不是静态字段的话,要传入反射类的对象
+            // 如果传null是会报错，如果字段是静态字段的话,传入任何对象都是可以的,包括null
+            unsafe = (Unsafe) field.get(null);  // 获取Unsafe类的 private static final Unsafe theUnsafe 对象。
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    static class Target {
+        int intParam = 3;
+        long longParam;
+        String strParam;
+        String StrParam2;
+    }
+
+    /**
+     * compareAndSwapInt是通过反射根据字段偏移去修改对象的.
+     * 可以看到int是4个字节的偏移量,long是4个字节的偏移量,string是4个字节的偏移量
+     * 注意 Unsafe的对象不能直接new,要通过反射去获取.
+     */
+    public static void main(String[] args) throws Exception {
+        Class targetClass = Target.class;
+        Field[] fields = targetClass.getDeclaredFields();
+        System.out.println("fieldName:fieldOffset");
+        // 获取属性偏移量
+        Arrays.asList(fields).forEach(field ->
+                System.out.println(field.getName() + ":" + unsafe.objectFieldOffset(field)));
+        Target target = new Target();
+        Field intFiled = targetClass.getDeclaredField("intParam");
+        int a = (Integer) intFiled.get(target); // 反射，field.get(obj)获取对象相应的field
+        System.out.println("原始值是:" + a);
+        //intParam的字段偏移是12 原始值是3 我们要改为10
+        // CAS方法封装，对target进行内存偏移V旧值是否是3，是则更新为新值10，返回更新boolean
+        System.out.println(unsafe.compareAndSwapInt(target, 12, 3, 10));
+        int b = (Integer) intFiled.get(target);
+        System.out.println("改变之后的值是:" + b);
+        //这个时候已经改为10了,所以会返回false
+        System.out.println(unsafe.compareAndSwapInt(target, 12, 3, 10));
+        System.out.println(unsafe.compareAndSwapObject(target, 24, null, "5"));
+    }
+}
+
+```
+
+```
+package jvm;
+import java.util.concurrent.atomic.AtomicInteger;
+
+/**
+ * AtomicInteger AtomicLong等封装了CAS的方法，封装为getAndSet()、compareAndSet()、accumulateAndGet()等原子性方法
+ * 调用这些原子性方法
+ * Created by dell on 2017/8/19.
+ */
+public class _15AtomicInteger {
+    static AtomicInteger atomicInteger = new AtomicInteger(0);
+
+    static void increase() {
+        atomicInteger.incrementAndGet();  // 调用AtomicInteger类的原子性方法进行原子性自增
+        System.out.println(atomicInteger.getAndIncrement());
+    }
+
+    public static void main(String[] args) {
+        int threadCount = 20;
+        Thread[] threads = new Thread[threadCount];
+        for (int i = 0; i < threadCount; i++) {
+            threads[i] = new Thread(() -> {
+                for (int j = 0; j < 1000; j++) {
+                    increase();
+                }
+            });
+            threads[i].start();
+        }
+
+//        while (Thread.activeCount() > 1) {
+//            Thread.yield();
+//        }
+        System.out.println(atomicInteger);
+
+    }
+}
+
+```
 
 ### Thread类和Runnable接口
 * 继承Thread类，重写run方法：class MyThread extends Thread{ public void run(){ }} 然后new MyThread().start(); 启动线程。
@@ -325,7 +467,10 @@ public class DemoClass{
 
 ### 死锁
 * 死锁条件：资源互斥使用、不可抢占、请求和保持、循环等待。
-* java避免死锁方法：synchronized对象级别锁和类级别锁，Lock/Condition对象。
+* java避免死锁方法（实现线程安全的方法）：
+	* 互斥同步（悲观锁）：总认为必须进行加锁才能实现线程安全。临界区、互斥量、信号量。常用互斥量有synchronized同步块实现的对象级别锁和类级别锁，以及Reentrant可重入锁提供的Lock/Condition方法。
+	* 非阻塞同步（乐观锁）：先进行操作，争用失败则重试补偿。硬件指令集保证一条硬件指令完成多次操作。常见指令：swap、fetch-andincrement、test-and-set、CAS、load-linked/store-conditional。
+	* 无同步方法：可重入代码、线程本地存储。
 
 
 
