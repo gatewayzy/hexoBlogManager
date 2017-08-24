@@ -14,13 +14,115 @@ tags:
 ---
 * 参考文章：
 
-##  未分类
+
+
+###  未分类理论
 
 * 除法与乘法使用位运算<<、>>，以提高效率，但是注意溢出等问题。
 * 精度问题，导致=0不能用=0，而是用绝对值小于一个小数
 * 解决问题需要先处理特殊情况，考虑负面测试、边界测试，再进行功能测试。
 * 树的优点在于：同时具有快速查找和快速移动，基本都是O(lgN)，算是对数组查找O(1)和删除O(n)以及链表查找O(n)和删除O(1)的折中（或者说是平衡）。
 * 树的遍历：先序、中序、后续遍历常用递归实现（递归本身就是用栈实现的），可以用非递归的栈和循环实现。层次遍历用队列实现，存放各级并将出队节点的子节点入队尾。
+
+
+### 语言
+
+* s2 单例模式？ 既然是单例，只存在一个对象，那么就用类变量，但是要考虑到多线程和加载时机。多线程可以考虑同步锁，加载时机分为饥饿模式和懒汉模式（预加载和懒加载）
+	* 只支持单线程的方法：懒汉式、未同步
+	* 支持多线程但加锁消耗太多的方法：懒汉式、同步锁（同步方法块）
+	* 支持多线程并改进加锁消耗的方法：懒汉式、同步锁（同步代码块，比方法块更细粒度）
+	* 静态方法自动加载的方法：饿汉式、类加载机制中的初始化
+	* 静态内部类掉用时才创建的方法：懒汉式、类加载机制中的初始化（改进上面的懒汉式变成饿汉式）
+
+```
+/**
+ * java 单例模式1
+ * 注解:Singleton的静态属性instance中，只有instance为null的时候才创建一个实例，构造函数私有，确保每次都只创建一个，避免重复创建。<br>
+ * 缺点：只在单线程的情况下正常运行，在多线程的情况下，就会出问题。
+ * 例如：当两个线程同时运行到判断instance是否为空的if语句，并且instance确实没有创建好时，那么两个线程都会创建一个实例。
+ */
+public class $002Singleton1 {
+	private $002Singleton1() {}
+	private static $002Singleton1 instance = null;
+	public static $002Singleton1 getInstance() {
+		if (instance == null) {
+			instance = new $002Singleton1();
+		}
+		return instance;
+	}
+}
+
+/**
+ * java 单例模式2<br> 
+ * 不推荐，多线程的情况可以用，但是是懒汉式，同步锁的消耗较大，只在方法1的getInstance()中添加了synchronized关键词<br>
+ * 注解：在解法一的基础上加上了同步锁，使得在多线程的情况下可以用
+ */
+public class $002Singleton2 {
+	private $002Singleton2() {}
+	private static $002Singleton2 instance = null;
+	public static synchronized $002Singleton2 getInstance() {
+		if (instance == null) {
+			instance = new $002Singleton2();
+		}
+		return instance;
+	}
+}
+
+/**
+ * java 单例模式3<br>
+ * 可行，多线程的情况可以用，修改方法2的getInstance()的同步机制，不必进行方法级锁定，在创建实例时锁定即可<br>
+ * 注解：只有当instance为null时，需要获取同步锁，创建一次实例。当实例被创建，则无需试图加锁。<br>
+ * 缺点：用双重if判断，复杂，容易出错。
+ */
+public class $002Singleton3 {
+	private $002Singleton3() {}
+	private static $002Singleton3 instance = null;
+	public static $002Singleton3 getInstance() {
+		if (instance == null) {
+			synchronized ($002Singleton3.class) {
+				if (instance == null) {
+					instance = new $002Singleton3();
+				}
+			}
+		}
+		return instance;
+	}
+}
+
+/**
+ * java 单例模式4<br>
+ * 推荐，多线程的情况可以用，饿汉式，不管有没有需要使用instance，都会在类初次调用就会初始化静态instance一次，无法按需创建<br>
+ * 注解：初试化静态的instance创建一次。如果我们在Singleton类里面写一个静态的方法不需要创建实例，它仍然会早早的创建一次实例。而降低内存的使用率。<br>
+ * 缺点：没有lazy loading的效果，从而降低内存的使用率。
+ */
+public class $002Singleton4 {
+	private $002Singleton4() {}
+	private static $002Singleton4 instance = new $002Singleton4();
+	// 类在加载时就已经创建了static的属性一次
+	public static $002Singleton4 getInstance() {
+		return instance;
+	}
+}
+
+/**
+ * java 单例模式5<br>
+ * 推荐，多线程的情况可以用，使用私有内部类，按需创建<br>
+ * 注解：私有内部类singletonHolder，别人无法调用他创建实例<br>
+ * $002Singleton5类在初次调用getInstance()才会调用加载singletonHolder创建实例，$002Singleton5之后不会调用static方法
+ */
+public class $002Singleton5 {
+	private $002Singleton5() {}
+
+	private static class singletonHolder {
+		public static final $002Singleton5 instance = new $002Singleton5();
+	}
+
+	public static $002Singleton5 getInstance() {
+		return singletonHolder.instance;
+	}
+}
+```
+
 
 ### 查找：各种查找算法与特点
 

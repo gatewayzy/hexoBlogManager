@@ -655,6 +655,112 @@ hash（散列）适合处理关键字不相关的情况，直接将关键字去�
 	* 算法没有最好，只是适合的场景不同，需要考虑数据的初始排序状态、时间限制、空间限制、稳定性限制、算法特性等
 	* 虽然改进算法比简单算法要复杂，但是一些情况下还是简单算法比较高效。如基本有序时用直插更高效。 
 
+* 堆排序
+	* 堆排序一般用最大堆（所有父节点的值>=子结点的值），最小堆一般用于构造优先队列。
+	* 
+
+```
+/**
+ * 堆排序
+ * 建立n次的最大堆，每次输出堆顶，对未输出的数字递归建堆输出。复杂度：建堆是log(n)，乘以n次就是n*log(n)
+ */
+public class HeapSort {
+    public static void main(String[] args) {
+        int[] a = {7, 6, 0, 3, 2, 1, 4};
+        System.out.println("开始排序");
+        int arrayLength = a.length; // 循环建堆
+        for (int i = 0; i < arrayLength - 1; i++) { // 建堆
+            buildMaxHeap(a, arrayLength - 1 - i); // 交换堆顶和最后一个元素
+            swap(a, 0, arrayLength - 1 - i);
+        }
+        System.out.println(Arrays.toString(a));
+    }
+
+    private static void swap(int[] data, int i, int j) {
+        int tmp = data[i];
+        data[i] = data[j];
+        data[j] = tmp;
+    }
+
+    // 对data数组从0到lastIndex建大顶堆
+    private static void buildMaxHeap(int[] data, int lastIndex) {
+        // 从lastIndex处节点（最后一个节点）的父节点开始
+        for (int i = (lastIndex - 1) / 2; i >= 0; i--) {
+            // k保存正在判断的节点
+            int k = i;
+            // 如果当前k节点的子节点存在
+            while (k * 2 + 1 <= lastIndex) {
+                // k节点的左子节点的索引
+                int biggerIndex = 2 * k + 1;
+                // 如果biggerIndex小于lastIndex，即biggerIndex+1代表的k节点的右子节点存在
+                if (biggerIndex < lastIndex) {
+                    // 如果右子节点的值较大
+                    if (data[biggerIndex] < data[biggerIndex + 1]) {
+                        // biggerIndex总是记录较大子节点的索引
+                        biggerIndex++;
+                    }
+                }
+                // 如果k节点的值小于其较大的子节点的值
+                if (data[k] < data[biggerIndex]) {
+                    // 交换他们
+                    swap(data, k, biggerIndex);
+                    // 将biggerIndex赋予k，开始while循环的下一次循环，重新保证k节点的值大于其左右子节点的值
+                    k = biggerIndex;
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+}
+```
+
+* 快速排序
+	* 优化方法：
+		* base优化：每次的base随机选取（随机化快速排序，适用于已有序的排序）、首尾和随机选取的均值作为base。
+		* 前后逼近策略修改：采用两个指针都从头向后逼近（可避免一些不必要的交换）。
+		* 小数组优化：改用直插排序。
+
+```
+/**
+ * 快速排序
+ * 每趟排序选一个基准（如第一个值），两端用指针向中间逼近，前面大于base，后面小于base的二者进行交换，直到中间位置。
+ * 递归前面到中间位置、中间位置到后面
+ *
+ */
+public class QuickSort {
+    public static void main(String[] a) {
+        int[] b = new int[]{7, 6, 0, 3, 2, 1, 4};
+        quickSort(b, 0, b.length - 1);
+        System.out.println(Arrays.toString(b));
+    }
+
+    public static void quickSort(int[] numbers, int start, int end) {
+        if (start < end) {
+            int base = numbers[start]; // 选定的基准值（第一个数值作为基准值）
+            int temp; // 记录临时中间值
+            int i = start, j = end;
+            do {
+                while ((numbers[i] < base) && (i < end))
+                    i++;
+                while ((numbers[j] > base) && (j > start))
+                    j--;
+                if (i <= j) {
+                    temp = numbers[i];
+                    numbers[i] = numbers[j];
+                    numbers[j] = temp;
+                    i++;
+                    j--;
+                }
+            } while (i <= j);
+            if (start < j)
+                quickSort(numbers, start, j);
+            if (end > i)
+                quickSort(numbers, i, end);
+        }
+    }
+}
+```
 
 
 
