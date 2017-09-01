@@ -31,7 +31,8 @@ tags:
 	* GC-based
 	* 有jvm。
 * java语言的特性
-	* 继承、封装、多态、抽象
+	* java 从C++改进而来，去掉了多继承、指针等，使用自动垃圾回收等。java前身是Oak。
+	* 单继承、封装、多态、抽象 
 
 
 
@@ -76,8 +77,7 @@ tags:
 * StringBuilder可变，sb.append("123")，但是StringBuilder非线程安全，速度更快。
 * String（先转成sb再操作）慢于StringBuffer（线程安全，加锁耗时），StringBuffer慢于StringBuilder（非线程安全）。
 
-### error与exception
-* 捕获异常与非捕获异常
+### Throwable接口的类继承体系
 
 ### Map与Collection接口
 * 继承extends Collection接口的有List接口、Set接口。List的实现类有ArrayList、LinkedList等，Set接口实现类有TreeSet、HashSet等

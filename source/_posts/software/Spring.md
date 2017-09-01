@@ -24,6 +24,90 @@ Bean可以是java中的javabean/service/action/数据源/dao等等
 IOC（控制反转，inverse of control）：将创建对象bean和维护对象的关系的权利从程序中转移动spring容器（applicationContext.xml），程序本身不再维护。
 DI（dependency injection，依赖注入）：di和IOC实际相同，但开发者认为DI更能体现依赖关系，bean之间的关系用ref关系配置。
 
+## IOC容器
+### IOC相关java基础
+* 类加载器ClassLoader与类加载机制
+	* RootClassLoader、ExtClassLoader、AppClassLoader
+	* Class AAClazz = Thread.currentThread().getContextClassLoader().loadClass("com.tcm.AA"); // 使用当前ClassLoader加载用户类
+* 反射机制java.lang.reflect
+	* class获取构造器Constructor  AA a=AAClazz.getConstructor(null).newInstance(Object... initArgs); //反射获取对应方法签名的构造器，并实例化一个对象
+	* class获取方法Method  AAClazz.getDeclaredMethods()获取所有方法，如果是getMethods只能获取public方法，可以getMethod获取非private方法，然后使用setAccessible(true)取消java访问检查，然后才能method.invoke(a,"新的颜色")
+		*  Method setColor=AAClazz.getMethod("setColor",String.class); // 获取方法名是setcolor，参数是String的方法
+		*  setcolor.invoke(a,"新的颜色");  // Method最重要的就是invoke方法，传入对象和参数
+	* class获取成员变量Field AAClazz.getDeclaredFields()获取所有成员变量，getFields()获取public的成员变量，使用field.setAccessible(true)取消java访问检查
+		*  Field color = AAClazz.getField("color");
+		*  color.set(a,"成员变量的新颜色"); // 设置对象成员变量
+	* 反射机制还提供package包反射、annotatedElement注解类反射等等。 
+
+### 资源访问
+* 资源加载
+	* `classpath：com/module*.xml` classpath只会加载第一个module*.xml
+	* `classpath*：com/module*.xml` classpath*会加载所有的`module*.xml`
+	* file:/home/  使用相对路径或绝对路径加载文件
+	* http:// 
+	* ftp://
+* 使用Resource接口的实现类解析资源
+	* AbstractResource抽象类继承Resource接口
+	* ByteArrayResource、ClassPathResource、FileSystemResource以及InputStreamResource、ServletContextResource、URLResource等类实现AbstractResource类。
+
+### BeanFactory 与 ApplicationContext
+* IOC的功能任务
+	* Spring通过xml文件描述bean与bean之间的依赖关系，利用java反射功能实例化bean，建立bean之间的依赖关系。除了实例化和依赖注入，IOC还提供了bean实例缓存、生命周期管理、bean实例代理、事件发布、资源装载等高级服务。
+* IOC容器：BeanFactory是Spring最核心的接口，通常称为IOC容器。ApplicationContext建立在BeanFactory之上，通常称为应用上下文，由于ApplicationContext是对BeanFactory的高层封装，所以ApplicationContext也称为spring容器。
+	* BeanFactory，bean工厂是Spring最基础、最核心的接口，提供了各种IOC的配置机制，对应IOC的任务。利用反射功能，BeanFactory可以管理不同类型的java对象。BeanFactory是面向spring框架本身，属于spring底层支撑。
+	* ApplicationContext 应用上下文/spring容器，对BeanFactory进行了封装，提供了更多面向应用的服务，面向的是业务开发者，ApplicationContext可以满足绝大部分的业务开发需求。
+
+#### BeanFactory 本文简写为bf
+* BeanFactory接口最主要就是getBean(String beanName)方法。其他接口继承BeanFactory接口并进行功能拓展，包括的接口有：
+	*  ListableBeanFactory： 接口含有查看bean个数、获取bean配置名、是否包含某个bean等方法
+	*  HierarchicalBeanFactory： 父子级联IOC容器的接口，子容器获取父容器等方法
+	*  ConfigurableBeanFactory： 一个重要的bean定制接口，有类加载器、属性编辑、容器初始化的后置处理器等方法
+	*  AutowireCapableBeanFactory： 有bean按照名字匹配、类型匹配等自动装配的方法
+	*  SingletonBeanFactory： 注册单实例Bean的方法
+	*  BeanDefinitionRegistry： 提供手工注册bean的方法。spring所有的bean都通过一个BeanDefinition对象表示和配置。
+* XmlBeanFactory：通过继承这些接口以及一些抽象类，实现了BeanFactory的类继承体系。最常用的BeanFactory的实现类是XmlBeanFactory。
+	*  Resource res = new FileSystemResource(filePath); // 资源加载 BeanFactory bf = new XmlBeanFactory(res); // 容器初始化 Car a=bf.getBean("carA",Car.class); //获取bean
+	*  XmlBeanFactory通过Resource加载spring配置信息，并启动IOC容器，然后利用BeanFactory进行getBean。
+	*  BeanFactory启动IOC容器时并不会初始化配置文件中定义的Bean，当第一次调用该bean时才会初始化该bean。（启动IOC时，虽然各个实例不会初始化，但是还是要进行类加载检验的，类是否存在、字段是否存在等检验，spring要求必需提供一种日志框架，常见是类路径下提供Log4J配置文件即可）
+	*  如果是singleton单实例的bean，首次调用后被初始化，并缓存到一个HashMap(beanName,bean实例)中，第二次调用直接使用缓存的实例。
+
+#### ApplicationContext 本文简写为cxt
+* ApplicationContext和BeanFactory的一个重大区别：初始化容器时，bf不会初始化bean实例，调用bean才会相应初始化；ctx会在初始化时，实例化所有单实例的bean，所以初始化时间稍长。
+* ApplicationContext接口类的继承体系：cxt接口继承了bf体系的HierarchicalBF和ListableBF接口，也继承了功能拓展的一些接口：
+	* ApplicationEventPulisher：容器可以发布应用上下文事件的接口，提供容器启动、关闭等功能。一个bean通过实现ApplicationListener接口监听容器事件；所有的监听器利用抽象类AbstractApplicationContext统一通知。
+	* MessegeSource： 支持i18n国际化消息访问接口
+	* ResourcePatternResolver： 提供配置加载的接口
+	* LifeCycle： 提供start和stop方法，主要同于控制异步处理。
+* ctx通过继承这些接口，再派生出众多抽象方法和接口，如CoufigurableApplicationContext接口拓展了ctx接口，提供了refresh和close方法，用于提供ctx的重启(清除缓存，重新装载)和关闭。
+	*  ctx最主要的实现类有FileSystemXmlApplicationContext和ClassPathXmlApplicationContext，二者区别在于配置文件的加载路径。
+		*  ApplicationContext ctx=new FileSystemApplicationContext(new String[]{"com/tcm/beans.xml","beans2.xml"}); //自动合并多个配置文件 Car a=ctx.getBean("carA",Car.class); //获取bean
+	*  ctx为注解类的配置方式提供AnnotationConfigApplicationContext实现类，相比xml配置方式更加灵活。和ctx一样初始化所有bean。
+		*  @Configuration public class Beans{@Bean(name="car") public Car getCar(){Car car=new Car();car.setcolor("1");return car;}}
+		*  ApplicationContext ctx=new AnnotationConfigApplicationContext(Beans.class); Car car=ctx.getBean("car",Car.class);
+	
+	*  ctx为web项目提供了WebApplicationContext实现类(记为wctx)。wctx必须依赖于web项目的上下文即ServletContext(记为sc)：wctx存储为servletContext的属性，wctx使用getServletContext获取其引用。
+		*  wctx初始化：wctx依赖于ServletContext，所以需要先初始化ServletContext。初始化ServletContext的方法可以使用自启动的servlet或者使用servletContextListener。对应地，spring封装了启动ServletContext的服务为：ContextLoaderServlet、ContextLoaderServlet。二者都可以启动web上下文，并通过web的<context-param>的contextConfigLocation设置spring配置文件，自动把wctx设置到sc的属性中。低版本的servlet规范可能不支持servletContextListener，只能使用自启动的servlet和对应的ContextLoaderServlet。
+		*  由于spring的ctx需要先配置日志，所以需要在wctx之前装配log，实现方式类似于wctx：配置<context-param>的log4就、ConfigLocation指定日志配置，使用自启动的Log4jConfigServlet或者使用listener：Log4jConfigLoader加载log。
+		*  如果使用的是注解类的bean配置，需要配置<context-param>指定contextClass为AnnotationConfigWebApplicationContext类，指定contextConfigLocation为@Configuration的bean类。
+
+#### 父子容器
+* HierarchicalBeanFactory接口提供父子容器的层级关联。为容器添加子容器可以实现特殊的功能。
+	* 子容器可以访问父容器的bean，但是父容器不能访问子容器的bean。
+	* 容器中的bean的id必须唯一，但是子容器可以拥有和父容器一样的bean。
+	* 比如springMVC中，业务层和持久层属于父容器，展现层属于子容器，展现层可以引用业务层和持久层的bean，反过来就不行。
+
+### Bean 生命周期
+* web容器中servlet有自己的生命周期，spring容器中bean也有生命周期。
+* bean的生命周期可以从bean的实例化和作用范围两个方面探讨。对于BF和ctx我们分开讨论。
+
+#### bf中的bean的生命周期
+
+
+
+### ctx中的bean的生命周期
+
+
+
 ---
 ## 简单Spring项目
 ### 最小配置包
