@@ -133,7 +133,7 @@ tags:
 ```
 Map<String, String> synchronizedHashMap = Collections.synchronizedMap (new HashMap<String, String>());
 
-// jdk8 源码如下
+// jdk8中 Collections.synchronizedMap 源码如下
 public static <K,V> Map<K,V> synchronizedMap(Map<K,V> m) { return new SynchronizedMap<>(m);}
 
 private static class SynchronizedMap<K,V> implements Map<K,V>, Serializable {

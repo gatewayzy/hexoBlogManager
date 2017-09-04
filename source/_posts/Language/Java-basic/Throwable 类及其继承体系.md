@@ -17,6 +17,7 @@ tags:
 
 
 ## Throwable 类及其继承体系
+java.lang.Throwable 类
 
 * Throwable类有子类：Error类*（往往很严重的错误）*和Exception类*（严重或者不严重的错误）*。
 	* Error类有子类：VirtualMachineError*（jvm运行错误）*、AWTError*（Abstract Window Toolkit抽象窗口工具集错误，属于javaGUI）*

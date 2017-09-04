@@ -1,3 +1,20 @@
+---
+title: NLP
+comments: true
+date: 2017-01-18 13:58:23
+updated: 2017-01-18 13:58:56
+categories: AI Deep Learning
+tags:
+- NLP
+---
+
+**说明：**NLP介绍。
+<!-- more -->
+
+
+参考文章：
+
+
 ## NLP 
 
 ### 语义表示embedding

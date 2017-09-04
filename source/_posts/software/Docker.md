@@ -319,7 +319,7 @@ echo 'http://localhost:8888/-------------------'
 ### push到私有仓库失败，提示https问题
 * 这是因为私人的registry服务是http，不是安全的https仓库。
 * 解决方法：
-	* Ubuntu修改/etc/docker/daemon.json，添加`{"insecure-registries" : ["myregistrydomain.com:5000"]}`，然后docker restart。
+	* Ubuntu修改/etc/docker/daemon.json，添加`{"insecure-registries" : ["myregistrydomain.com:5000"]}`，然后service docker restart。
 	* Windows在C:\ProgramData\docker\config\daemon.json，如docker for windows等软件就设置软件的setting--daemon。（仓库镜像也在这里添加）
 	* 参考[Deploying a plain HTTP registry](https://docs.docker.com/registry/insecure/)，原文如下，就不翻译了
 

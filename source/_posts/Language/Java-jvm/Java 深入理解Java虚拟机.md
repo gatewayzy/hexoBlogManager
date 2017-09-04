@@ -1,12 +1,11 @@
 ---
-title: Java JVM
+title: Java 深入理解Java虚拟机
 comments: true
-date: 2017-01-10 13:58:10
-updated: 2017-01-10 13:58:56
+date: 2017-09-01 13:58:10
+updated: 2017-09-01 13:58:10
 categories: Language
 tags:
 - Java
-- Language
 ---
 
 **说明：**Java virtual machine，主要来自《深入理解Java虚拟机》，有关java内存如何分配，类加载过程等。
@@ -484,10 +483,3 @@ public class DemoClass{
 	* 互斥同步（悲观锁）：总认为必须进行加锁才能实现线程安全。临界区、互斥量、信号量。常用互斥量有synchronized同步块实现的对象级别锁和类级别锁，以及Reentrant可重入锁提供的Lock/Condition方法。
 	* 非阻塞同步（乐观锁）：先进行操作，争用失败则重试补偿。硬件指令集保证一条硬件指令完成多次操作。常见指令：swap、fetch-andincrement、test-and-set、CAS、load-linked/store-conditional。
 	* 无同步方法：可重入代码、线程本地存储。
-
-
-
-
-
-
-
