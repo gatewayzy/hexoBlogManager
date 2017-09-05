@@ -1,14 +1,14 @@
 ---
-title: Mechine Learning Overview
+title: Machine Learning Overview
 comments: true
 date: 2017-01-14 13:58:13
 updated: 2017-01-14 13:58:56
-categories: AI Mechine Learning
+categories: AI Machine Learning
 tags:
-- Mechine Learning
+- Machine Learning
 ---
 
-**说明：**Mechine Learning算法简介。
+**说明：**Machine Learning算法简介。
 <!-- more -->
 
 ---

@@ -410,7 +410,9 @@ Blame 查找修改过的该文件的人
 ---
 * svn checkout URL （默认最新version）
 * svn checkout https://10.15.82.58/svn/usercenter/  #第一次检出会出现密码等交互设置
-* svn cleanup
+* svn add * 提交所有更新
+* svn commit -m "message"  更新到服务器
+* svn cleanup 
 * svn update
 
 ## 问题与解决

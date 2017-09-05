@@ -3,7 +3,7 @@ title: Statistical Learning Method
 comments: true
 date: 2017-01-14 13:58:19
 updated: 2017-01-14 13:58:19
-categories: AI Mechine Learning
+categories: AI Machine Learning
 tags:
 - 统计学习方法
 ---
