@@ -17,12 +17,24 @@ tags:
 Struts是web框架（jsp/action/actionfrom），spring也提供了springMVC。
 Hibernate是ORM（object relation mapping）框架，处于持久层。
 Spring属于容器框架，用于配置bean，维护bean之间的关系。
- 
----
-## Spring概念
+
+### Spring组成：
+	* **IOC**：Bean、Context、表达式语言
+	* **AOP**：Spring AOP、Aspects、Instrument
+	* **数据访问和集成**：JDBC、ORM、JMS、事务管理
+	* **Web及远程操作**：MVC、Portlet、Web Service
+	* **测试框架** 
+	
+### Spring概念
 Bean可以是java中的javabean/service/action/数据源/dao等等
 IOC（控制反转，inverse of control）：将创建对象bean和维护对象的关系的权利从程序中转移动spring容器（applicationContext.xml），程序本身不再维护。
-DI（dependency injection，依赖注入）：di和IOC实际相同，但开发者认为DI更能体现依赖关系，bean之间的关系用ref关系配置。
+DI（dependency injection，依赖注入）：di和IOC实际相同，但开发者认为DI更能体现依赖关系，bean之间的关系用ref关系配置。 
+
+### Spring的优缺点
+* spring缺点：
+	* 进行了大量的封装，在满足快速开发高质量程序的同时，隐藏了实现细节，底层实现的学习成本很高。
+	* spring生态圈越来越大，以致于组件太多，版本各异，整合困难。
+
 
 ## IOC容器
 ### IOC相关java基础

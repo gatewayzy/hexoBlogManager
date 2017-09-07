@@ -17,7 +17,10 @@ tags:
 
 ## 简介
 ---
-
+* 查看索引文件的内容-Luke
+	* Luke说明：使用[Luke](https://www.oschina.net/news/86840/luke-6-6-0)查看存储后的lucene文件。
+	* 下载Luke：直接下载release版本如果太慢，可以下载源码，使用mvn install自己编译（maven会下载很多jar然后编译）。
+	* 运行Luke：运行bat，进入交互界面，选取index路径即可。
 
 ## Lucene Demo
 ---
