@@ -30,10 +30,10 @@ tags:
 * 在进行反序列化时，JVM会把传来的字节流中的serialVersionUID与本地相应类的serialVersionUID进行比较，如果相同就认为是一致的，可以进行反序列化，否则就会出现序列化版本不一致的异常(InvalidCastException)。
 
 ### serialVersionUID的显示声明
-* 如果实现类没有显示声明`long serialVersionUID`，Java序列化机制会根据编译的class自动生成一个serialVersionUID作序列化版本比较用(它通过类名，方法名等诸多因素经过计算而得，不同class会有唯一的默认序列号)。这种情况下，如果class文件没有发生变化(增加空格,换行,增加注释,等等都不算变化)，serialVersionUID不会变化。这也就有一个问题，如果一端的类增加了类变量或成员变量等，就会导致两端版本号不同，无法兼容工作。
+* 如果实现类没有显示声明`long serialVersionUID`，Java序列化机制会根据编译的class自动生成一个serialVersionUID作序列化版本比较用(它通过类名，方法名等诸多因素经过计算而得，不同class会有唯一的默认序列号)。这种情况下，如果class文件没有发生变化(增加空格,换行,增加注释,等等都算变化)，serialVersionUID不会变化。这也就有一个问题，如果一端的类变化，就会导致两端默认版本号不同，无法兼容工作。
 * serialVersionUID有两种显示的声明方式如下。显示声明版本号的好处就是可以进行版本兼容。当旧版实现类设置了版本号，新版类只要版本号与旧版号一致，二者就可以相互序列化和反序列化，允许新版兼容旧版。
-    * 默认1L，如：`private static final long serialVersionUID = 1L;`
-    * 根据类名、接口名、成员方法及属性等生成64位的哈希字段，如：`private static final long serialVersionUID = 123L;`
+    * 默认1L，如：`private static final long serialVersionUID = 1L;`如果可兼容，可以保留旧版本号，如果不兼容，或者想让它不兼容，就手工递增版本号。
+    * 根据类名、接口名、成员方法及属性等生成64位的哈希字段，如：`private static final long serialVersionUID = 123L;`可以在每次修改类后就重新生成新的版本号，不向下兼容。
 
 ### IDE生成serialVersionUID的方法
 * Intellij IDEA默认关闭了继承了Serializable接口的类生成serialVersionUID的警告。如果需要ide提示生成serialVersionUID，那么需要做以下设置：

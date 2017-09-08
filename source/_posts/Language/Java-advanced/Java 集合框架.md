@@ -1,21 +1,22 @@
 ---
-title: Java 集合与数据结构
+title: Java 集合框架
 comments: true
 date: 2017-09-01 13:58:10
 updated: 2017-09-01 13:58:10
 categories: Language
 tags:
 - Java
+- Colletcion Framework
 ---
 
-**说明：**Java 集合与数据结构。
+**说明：**Java Colletcion Framework 集合框架。
 <!-- more -->
 
 
 参考文章：
 
 
-## Java 集合与数据结构
+## Colletcion Framework 集合框架
 * Java 2 之前，Java 为对象组的存储和操作提供了特别的类比如 字典Dictionary，向量Vector，堆栈Stack和属性Properties。缺乏明确主题和分类。
 * 后来提出了集合框架。集合框架中由接口、实现类、算法接口组成，构成完整的分类体系。
 
