@@ -202,11 +202,83 @@ public class $002Singleton5 {
 ### 时间与空间优化
 * s29 数组中出现次数超过一半的数字：从乱序数组中，找出出现次数超过总量一半的数字？  
 	* naive解法：排序，出现频次超过一半，那么中间位置肯定是所求。时间为O(nlog(n))。
-	* O(n)解法
+	* O(n)解法：本题实际上就是乱序中查找中位数。
+	* **成熟的O(n)算法找到n长数组中第k大的数字**：
+		* 对随机快速排序进行修改：当partition函数返回的值（该位置排序确定）不等于总数一半时不断进行重复
+		* 对快排进行修改：partition函数不断对第一个基准进行排序，返回的值（该位置排序确定）不等于总数一半时不断进行重复
+	* 根据数组特点找出O(n)的方法：一个cnt和tmp开始扫描，如果等于tmp就cnt++，否则cnt--，最终肯定是总数超过一半的数字在tmp中。
+* 随机快速排序算法：
+	* Partition函数{随机选取start和end之间的index及其对应的数值作为base基准（不采用随机就是普通快排，用第一个或者中间位置），两个指针从前向后扫描，一个比base大，一个比base小的时候，交换二者（比两个指针从两端向中间逼近的好处在于避免基本有序时大量负面移动），最终可以保证比base小的都在左边，比base大的都在base右边，返回base所在位置}
+	* 快速排序先Partition一个，然后对base划分的左半部分和右半部分递归使用Partition即可。
 
+```
+import java.util.Arrays;
 
+/**
+ * 快速排序：两个指针从前面向后面逼近
+ */
+public class QuickSortFromLeft {
+    public static void main(String[] args) {
+        int[] data = new int[]{1, 2, 6, 5, 4, 3, 7};
+        quickSort(data, 0, data.length - 1);
+        System.out.println(Arrays.toString(data));
+    }
 
-* s37 
+    static void quickSort(int[] data, int start, int end) {
+        System.out.println(start + " " + end);
+        if (start == end) return;
+        int index = partition(data, start, end);
+        if (index > start) {
+            quickSort(data, start, index - 1);
+        }
+        if (index < end) {
+            quickSort(data, index + 1, end);
+        }
+    }
+
+    static int partition(int[] data, int start, int end) {
+        // 选取基准，可以头部、中间或者随机选取
+        int index = (start + end) / 2; // index = random(start,end)
+        swap(data, index, end); // 基准放在最后方便编程
+
+        int small = start - 1;
+        for (index = start; index < end; ++index) {
+            if (data[index] < data[end]) {
+                ++small;
+                if (small != index) {
+                    swap(data, index, small);
+                }
+            }
+        }
+        ++small;
+        swap(data, small, end);
+        return small;
+    }
+
+    static void swap(int[] data, int i, int j) {
+        int tmp = data[i];
+        data[i] = data[j];
+        data[j] = tmp;
+    }
+}
+```
+
+* s30 数字中最小的k个数：从n个数字中输出最小的k个数？
+	* naive解法：O(nlog(n))的排序是最直观的。
+	* O(n)的解法：使用基于随机快排partition函数的方法：{直到partition返回的是k-1，也就是说k个最小的已经在同一侧了：运行partition，对于大于k和小于k有序的情况进行partition}
+	* 海量数据处理，O(nlog(k))解法：如果是海量数字中找出最小的k个数，需要使用大数据做法，拆分合并之类的。求最小的数字就用最大堆，这样比较的时候只和顶部结点比较，如果小于堆顶就加入重构堆。由于建堆是log(k)，所以n次就是O(nlog(k))。
+* s31 连续子数组的最大和：输入整形数组，输出和最大的连续子数组，如求{1 -2 3 10 -4 7 2 -5}？
+	* naive解法：如果对不同起点进行长度遍历，就是O(n*n)。
+	* O(n)，动态规划：求出以n为结尾的子数组的和f(n)，然后输出max(f(n))，其中：n=0时，f(n)=data[0]，n>0时，f(n)=max{f(n-1)+data[n],data[n]}。
+* s32 给定整数范围中，数字1出现的次数，比如从1到12345中1出现的次数？  将数字拆分成端，使用递归求解：递归在于12345包括了小于2345的部分，不过还需要对2346~12345进行统计，2346~9999是一段，10000~12345是一段，分别统计1在个十百千万位置上的次数。
+* 拓展：1到1000中1出现了几次？  0到999中，个十百位置都是0到9等概率出现为1000/(9-0+1)=100次，所以1在个十百一共3*100=300次，加上1000的1个1，一共301次。
+* s33 把数组排成最小的数：输入{13,232,2333} 输出能够成数值最小的数字？  由于是构成，可能存在大数问题，使用字符串解决。对首尾相同的数字，进行分析比较。
+* s34 输出第1000个丑数：因子只含有2,3,5的数字称为丑数，输出第1000个丑数？  低效解法：对自然数检验是不是丑数，计数到1000。用空间换时间：生成所有丑数存储到数组中，重点在于分析生成之后的丑数的排序。
+* s35 第一个只出现一次的字符：abaccdeff中输出b？  数组data['a']=a第一次出现的位置，再次出现就直接标记掉，第二次从头输出第一个data[x]=1。
+* s36 数组中的逆序对：{7,5,6,4}输出逆序对(7,6)(7,5)(7,4)(6,4)(5,4)？  暴力就是O(n*n)。基于归并排序实现O(nlog(n))算法：不断分解，合并的时候使用额外数组辅助输出逆序对。
+* s37 两个链表的第一个公共结点：两个链表分别长m，n，输出第一个公共结点，类似于结点顺序为{1,2,3,7,8}与{6,7,8}输出第一个公共的7？  
+	* 空间换时间，时空都是O(m+n)的解法：分别存入两个栈，都pop直到第一个公共结点。
+	* 时间是O(m+n)的解法：先都遍历得到各自长度，长的一方先走多出来的步数如5-3=2，然后二者一起向后走，直到第一个相同的结点。
 
 ### 知识迁移
 * s38 数字在排序数组中出现的次数：如{1,2,3,3,3,3,4,5}中3出现了4次？  naive解法：前后指针向中间逼近，O(n)。O(log(n))基于二分查找：前后分别进行二分查找，前半段用二分查找第一个3，只需向前，后半段二分只向后面找最后一个3。

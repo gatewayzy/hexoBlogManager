@@ -40,6 +40,7 @@ tags:
 ### 未分类例题
 * 不占用额外内存实现a，b的交换？ 用a存放二者之和，b=和减去原始b换成原始a：  a=a+b;b=a-b;a=a-b
 ）
+* 进栈顺序为a，b，c，d，出栈顺序有几种可能？  公式为C(2n,n)/(n+1)，这里是C(8,4)/5=14种。穷举：ABCD ABDC ACBD ACDB ADCB...
 
 #### 数组相关的编程题
 [数组相关的几个问题](https://www.cnblogs.com/graphics/archive/2010/08/24/1761620.html)
