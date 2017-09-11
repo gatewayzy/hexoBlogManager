@@ -108,7 +108,23 @@ insert ...
 EOF
 echo "运行该文件即对mysql进行shell多行，注意多行需要添加EOF开始，结束时的EOF必须为开头"
 ```
+### 定时备份
+* windows下添加计划任务，运行如下示例脚本。
 
+``
+rem 数据库备份
+set target_db=tcm
+set file_dir=G:/MySQL_backup/%target_db%
+rem 备份文件所在的目录
+set file_name=%target_db%_%date:~0,4%-%date:~5,2%-%date:~8,2%
+rem 备份文件名
+C:
+cd C:/Program Files/MySQL/MySQL Server 5.5/bin/
+echo 备份到文件：%file_dir%/%file_name%.sql
+mysqldump.exe -uroot -p123 %target_db%>%file_dir%/%file_name%.sql
+rem D:/develop/MySQL/MySQL Server 5.5/bin/mysqldump.exe为mysqldump程序所在地址，root为用户名，mysql为密码，tcm为待备份的数据库名
+
+```
 
 
 # SQL Server
