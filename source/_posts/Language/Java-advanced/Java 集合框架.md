@@ -24,7 +24,7 @@ tags:
 
 
 ### 集合接口
-|接口名称 |接口描述|
+接口名称 |接口描述|
 ---|---
 Collection |这让你可以使用对象组；它是集合层次阶段的顶端
 List |它继承了 Collection 并且 List 的一个实例存储了元素的一个有序集合
@@ -36,7 +36,7 @@ SortedMap |它继承了 Map 因此键按升序保持
 Enumeration->Iterator |它是旧有的接口并定义了你可以在对象的集合中列举(一次获得一个)元素的方法。这个旧有的接口被迭代器Iterator取代了。
 
 ### 集合实现类
-|实现类的名称 |类的描述|
+实现类的名称 |类的描述|
 ---|---
 AbstractCollection  |实现大部分的 Collection 接口  
 AbstractList  |继承 AbstractCollection 并且实现大部分 List 接口
@@ -55,7 +55,7 @@ LinkedHashMap  |继承 AbstractMap 来允许插入顺序迭代
 IdentityHashMap  |继承 AbstractMap 类并且当比较文档时平等使用参考
 
 ### 旧有的集合类
-|类的名称 |类的描述|
+类的名称 |类的描述|
 ---|---
  Vector |这实现一个动态数组。它和 ArrayList 类似，但也有一些不同。
  Stack |Stack 是 Vector 的实现标准的后进先出栈的子类
@@ -65,7 +65,7 @@ IdentityHashMap  |继承 AbstractMap 类并且当比较文档时平等使用参�
  BitSet |一个 BitSet 类创建一个特殊的保持 bit 数值的数组类型。这个数组的大小能根据需要增长
 
  ### 集合的算法
-|算法 |类的描述|
+算法 |类的描述|
 ---|---
 Iterable 接口    |一个Collection可以用迭代器，是Collection接口的父类。
 Iterator 接口   |一个Collection的迭代器，用于获得或者删除元素。其子接口类ListIterator接口，允许双向遍历和修改。
@@ -77,3 +77,8 @@ Comparable 接口 |元素可比较，需要实现compareTo方法
 * Collections类和Arrays类实现了大量static的方法，提供常用的集合操作。
 * 还有其他一些接口和实现类并没有提到。
 * 很多接口和类之间不是通过继承实现关系传递，而是通过程序组合起来的。比如Comparator和Comparable必然是联系的，但是不是继承关系。
+
+### HashSet如何保证元素不重复
+在HashSet中，基本的操作都是有HashMap底层实现的，因为HashSet底层是用HashMap存储数据的。当向HashSet中添加元素的时候，首先计算元素的hashcode值，然后用这个（元素的hashcode）%（HashMap集合的大小）+1计算出这个元素的存储位置，如果这个位置位空，就将元素添加进去；如果不为空，则用equals方法比较元素是否相等，相等就不添加，否则找一个空位添加。
+
+java中，两个对象的hashcode相等并不一定满足他们equals，但是满足equals必须使hashcode相等。
