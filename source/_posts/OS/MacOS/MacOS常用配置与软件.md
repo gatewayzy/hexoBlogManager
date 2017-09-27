@@ -21,7 +21,7 @@ tags:
 * cmd delete 删除文件
 * cmd q  关闭当前软件
 * cmd z/c/v/s...  撤销／复制／粘贴／保存...
-* cmd w|t|shift t  safari的关闭|新建|打开刚才的页面
+* cmd w|t|shift t  safari的关闭|新建|打开刚才的页面，浏览器快捷键与Windows下相似，cmd代替ctrl
 * ctr 单击 就是右键，或者双指轻点
 * cmd 是多选的control
 * cmd delete 删除文件等
