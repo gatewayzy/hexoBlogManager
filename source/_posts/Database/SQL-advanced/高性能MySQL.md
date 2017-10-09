@@ -12,6 +12,7 @@ tags:
 <!-- more -->
 参考文章：
 * 《高性能MySQL》
+* [学习MySQL优化原理](http://www.toutiao.com/a6470821003294425613/)
 
 
 ## MySQL逻辑架构
