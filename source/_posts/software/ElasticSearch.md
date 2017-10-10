@@ -18,83 +18,160 @@ tags:
 * [ELKstack 中文指南](https://kibana.logstash.es/content/logstash/get-start/full-config.html)
 
 ---
-## ES 介绍
+## ELKstack与软件安装
 
-* ES通过cluster名称自动加入结点，拓展性强，支持数据量亿级以上，自动选择master，构建索引时查询效率仍比较高。
+* ELKstack 一般包括Elasticsearch、Logstash、Kibana等套装软件。
+* Elasticsearch（ES）通过cluster名称自动加入结点，拓展性强，支持数据量亿级以上，自动选择master，构建索引时查询效率仍比较高。
 * 下文的ES、es均代指ElasticSearch。
 
----
-## ES与插件安装
+### 安装ES
+下载解压即可，之后配置完成即可使用。
 
-* 参考文章：官网[Get Started with Elasticsearch, Kibana, X-Pack](https://www.elastic.co/start)
-* 安装es:  for search — and logging, and analytics, and more. 下载解压。
-* 安装kibana: Visualize and manage your data. 下载解压。
-* 安装x-pack: Security, monitoring, and more for Elasticsearch and Kibana. 运行命令：
+### 安装kibana
+下载解压，配置好使用。用于可视化管理。
+
+### 安装x-pack
+* 用于ES的Security, monitoring, and more for Elasticsearch and Kibana. 安装方法为，运行命令：
     * es/bin/elasticsearch-plugin install x-pack
     * kibana/bin/kibana-plugin install x-pack
-* 安装(elasticsearch-head)[https://github.com/mobz/elasticsearch-head]
-    * es-head是集群可视化管理工具，es5.x版本之后不支持以插件安装es-head，按照github说明安装成独立nodejs web程序即可（安装node、npm，再npm install等）。
-    * 配置：
-        * 允许es跨域请求：添加ES配置`http.cors.enabled: true` `http.cors.allow-origin: "*"` 注意使用*不安全。
-        * 允许es认证：添加ES配置`http.cors.allow-headers: Authorization`
-        * 由于x-pack认证问题（见`https://github.com/mobz/elasticsearch-head/issues/304`），未成功，所以采用关闭x-pack认证，设置es`xpack.security.enabled: false`。当然也可以把该plugin文件夹删除。
-    * 如果显示集群状态存在red，可以删除所有的索引，重新构建。
-    * es-head使用方法可以参考[_head插件对elasticsearch 索引文档的增删改查](http://blog.csdn.net/bsh_csn/article/details/53908406)
-* 安装logstash
-    * [下载并安装logstash](https://www.elastic.co/downloads/logstash)，它可以书写logstash配置生成格式化的日志文件，非常适合日志记录与分析。
-    * 参考[Elasticsearch5.2.1集群搭建，动态加入节点，并添加监控诊断插件](http://blog.csdn.net/gamer_gyt/article/details/59077189)一文配置logstash。运行后，通过es-head查看生成的日志索引。注意下载文件应该检验sha1是否正确。
-    * 在logstash中配置logstash的端口等，在启动logstash对应的配置文件中，有输入input、过滤filter、输出output等配置，output中配置相应的es。
-* 安装bigdesk
-    * 使用[bigdesk](https://github.com/hlstudio/bigdesk)进行es集群性能监控。可以查看集群中各个节点的存储、查询、jvm等运行情况。
-    * 下载之后，将site文件夹重命名放到web容器(如tomcat)下发布访问相应的地址即可，如`http://127.0.0.1:8080/bigdesk/`，再链接相应的集群地址。
-* 总结来说：
-    * 整一套ES软件可以当作一个MVC模型，logstash是controller层，es是一个model层，kibana是view层。logstash负责日志分析，通过对输入进行格式化处理生成json数据，es负责数据索引，kibana负责可视化。ls和es基于java，kbn基于nodejs。
-    * 其他的第三方插件：es-head提供集群索引信息监管，bigdesk提供集群性能监控。
+
+### 安装[elasticsearch-head](https://github.com/mobz/elasticsearch-head)
+* es-head是集群可视化管理工具，es5.x版本之后不支持以插件安装es-head，按照github说明安装成独立nodejs web程序即可（安装node、npm，再npm install等）。
+* 配置：
+    * 允许es跨域请求：添加ES配置`http.cors.enabled: true` `http.cors.allow-origin: "*"` 注意使用*不安全。
+    * 允许es认证：添加ES配置`http.cors.allow-headers: Authorization`
+    * 由于x-pack认证问题（见`https://github.com/mobz/elasticsearch-head/issues/304`），未成功，所以采用关闭x-pack认证，设置es`xpack.security.enabled: false`。当然也可以把该plugin文件夹删除。
+* 如果显示集群状态存在red，可以删除所有的索引，重新构建。
+* es-head使用方法可以参考[_head插件对elasticsearch 索引文档的增删改查](http://blog.csdn.net/bsh_csn/article/details/53908406)
+
+### 安装logstash
+* [下载并安装logstash](https://www.elastic.co/downloads/logstash)，它可以书写logstash配置生成格式化的日志文件，非常适合日志记录与分析。
+* 参考[Elasticsearch5.2.1集群搭建，动态加入节点，并添加监控诊断插件](http://blog.csdn.net/gamer_gyt/article/details/59077189)一文配置logstash。运行后，通过es-head查看生成的日志索引。注意下载文件应该检验sha1是否正确。
+* 在logstash中配置logstash的端口等，在启动logstash对应的配置文件中，有输入input、过滤filter、输出output等配置，output中配置相应的es。
+
+### 安装bigdesk
+* 使用[bigdesk](https://github.com/hlstudio/bigdesk)进行es集群性能监控。可以查看集群中各个节点的存储、查询、jvm等运行情况。
+* 下载之后，将site文件夹重命名放到web容器(如tomcat)下发布访问相应的地址即可，如`http://127.0.0.1:8080/bigdesk/`，再链接相应的集群地址。
+
+### 总结来说
+* 整一套ES软件可以当作一个MVC模型，logstash是controller层，es是一个model层，kibana是view层。logstash负责日志分析，通过对输入进行格式化处理生成json数据，es负责数据索引，kibana负责可视化。ls和es基于java，kbn基于nodejs。
+* 其他的第三方插件：es-head提供集群索引信息监管，bigdesk提供集群性能监控。
 
 ---
-## ES启动与配置
+## Elasticsearch的配置与使用
 
-### 单节点es
+### 单节点ES的配置
 
-* 启动
-    * 启动es：bin/elasticsearch，访问9200端口查看。用户名密码: `Username: elastic Password: changeme`。安装x-pack的话，查看的时候就会需要该默认用户名密码。
-    * 启动kibana： bin/kibana，访问5601端口。用户名密码: `Username: elastic Password: changeme`
-* 关闭
-    * 重启es：只能查看端口，关闭进程，启动服务。ps -ef | grep elastic，kill -9 2382（进程号），sh elasticsearch 
-    * 重启kibana：ps -ef|grep kibana，ps -ef|grep 5601，都找不到，尝试 使用 fuser -n tcp 5601或者netstat -anp|grep 5601，kill -9 端口。启动即可 ./kibana。
-* 配置
-    * 配置es
-        * 修改conf中的jvm，设置大小等。修改elasticsearch.yml，修改集群名、端口、IP等。启动失败可以查看后文的“问题与解决”。
-    * 配置kibana
-        * 修改config的yml文件，设置用户名和密码对应es的设置(x-pack)。设置host对应ES的ip，设置请求的url是es的ip:port。
+* 启动es：bin/elasticsearch，访问9200端口查看。用户名密码: `Username: elastic Password: changeme`。安装x-pack的话，查看的时候就会需要该默认用户名密码。
+* 重启es：只能查看端口，关闭进程，启动服务。ps -ef | grep elastic，kill -9 2382（进程号），然后再启动es。 
+* 配置es：修改conf中的jvm.properties，设置xms、xmx大小等。修改elasticsearch.yml，修改集群名、端口、IP等。启动失败可以查看后文的“问题与解决”。
+    
 
-### 集群配置
+### ES集群配置
 
 * 配置es可以参考[Elasticsearch5.2.1集群搭建，动态加入节点，并添加监控诊断插件](http://blog.csdn.net/gamer_gyt/article/details/59077189)，但是建议`discovery.zen.minimum_master_nodes`至少为2，通讯端口、监听端口、集群节点列表等都是需要配置的。
 * 配置kibana可以参考[官方kibana集群设置](https://www.elastic.co/guide/en/kibana/current/production.html#load-balancing).用一个单独的es作为kibana结点。
+* ES高性能集群常用三种角色的ES结点：
+    1. master 主结点，不放数据但占有空闲资源，用于协调管理。设置node.master: true， node.data: false。
+    1. data 数据结点，只存放数据，不能选举为master，用于负载。设置node.master:false， node.data: true 。
+    1. 搜索器结点，不是master或data结点，主要负责从其他节点搜索、生成结果。设置node.master: false， node.data: false。
 
----
-## ES的使用
+#### ES集群配置demo
+* 4个ES结点（1个搜索器结点，3个data结点），集群使用2备份。下面是集群配置。注意集群是根据集群名进行区分的。
 
-### 増查改删
+1. es-9199的elasticsearch.yml，非master，非data，用于搜索器，比如用于给kibana做连接。
 
-* 见文末示例代码。
+```
+cluster.name: esc5.0
+node.name: 82.65-9199
+path.data: /home/zju/software/elastic/data/data0
+path.logs: /home/zju/logs/elasticsearch-0
+network.host: 10.15.82.65
+http.port: 9199
+transport.tcp.port: 9299
+discovery.zen.ping.unicast.hosts: ["10.15.82.65:9299", "10.15.82.65:9300", "10.15.82.66:9300", "10.15.82.66:9301"]
+discovery.zen.minimum_master_nodes: 2
 
-### 查询与高级查询
+# add for extension
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+#xpack.security.enabled: false
+node.master: false
+node.data: false
+node.ingest: false
+# dda
+```
 
-* 见文末示例代码。
+2. es-9200的elasticsearch.yml，不设置结点属性，集群自动分配master和data结点。
 
-### 批量操作
+```
+cluster.name: esc5.0
+node.name: 82.65-9200
+path.data: /home/zju/software/elastic/data/data1, /home/zju/software/elastic/data/data2
+path.logs: /home/zju/logs/elasticsearch-1
+network.host: 10.15.82.65
+http.port: 9200
+transport.tcp.port: 9300
+discovery.zen.ping.unicast.hosts: ["10.15.82.65:9300", "10.15.82.66:9300", "10.15.82.66:9301"]
+discovery.zen.minimum_master_nodes: 2
 
-* 见文末示例代码。
+# add for extension
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+#xpack.security.enabled: false
+# dda
+```
+
+3. 其余两个es结点类似的配置。
+
+```
+cluster.name: esc5.0
+node.name: 82.66-9200
+path.data: /home/zju/software/elastic/data/data1-1, /home/zju/software/elastic/data/data1-2
+path.logs: /home/zju/logs/elasticsearch-1
+network.host: 10.15.82.66
+http.port: 9200
+transport.tcp.port: 9300
+discovery.zen.ping.unicast.hosts: ["10.15.82.65:9299", "10.15.82.65:9300", "10.15.82.66:9300", "10.15.82.66:9301"]
+discovery.zen.minimum_master_nodes: 2
+
+# add for extension
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+#xpack.security.enabled: false
+# dda
+```
+
+#### ES集群启动与重启脚本
+* ES启动就是启动各个es结点，每个节点使用`./elasticsearch-5.0.0-9201/bin/elasticsearch &`
+* ES关闭使用端口进行kill，shutdown脚本如下。
+
+```
+ID=`lsof -i:9201 | awk '{print $2}'`
+echo $ID
+echo "To kill all the processes:"
+echo "##############################"
+for id in $ID
+do
+  kill -9 $id
+  echo "killed $id"
+done
+echo "#############################"
+```
+
+* 重启脚本就是先运行shutdown脚本，再运行启动脚本。
+
+### ES的Java API使用
+
+文末示例代码给出Java API对ES进行増查改删、查询与高级查询、批量操作的举例。
 
 ### SearchType详解
 
 es在查询时，可以指定搜索类型为`QUERY_THEN_FETCH, QUERY_AND_FEATCH, DFS_QUERY_THEN_FEATCH 和 DFS_QUERY_AND_FEATCH（SACN,COUNT都已不建议使用）`。那么这4种搜索类型有什么区别？
 
 ES天生就是为分布式而生，但分布式有分布式的缺点。比如要搜索某个单词，但是数据却分别在5个分片（Shard)上面，这5个分片可能在5台主机上面。因为全文搜索天生就要排序（按照匹配度进行排名）,但数据却在5个分片上，如何得到最后正确的排序呢？ES是这样做的，大概分两步。
-* step1. ES客户端会将这个搜索词同时向5个分片发起搜索请求，这叫Scatter, 
-* step2. 这5个分片基于本Shard独立完成搜索，然后将符合条件的结果全部返回，这一步叫Gather。 
+* ES客户端会将这个搜索词同时向5个分片发起搜索请求，这叫Scatter, 
+* 这5个分片基于本Shard独立完成搜索，然后将符合条件的结果全部返回，这一步叫Gather。 
 
 客户端将返回的结果进行重新排序和排名，最后返回给用户。也就是说，ES的一次搜索，是一次scatter/gather过程（这个跟map-reduce也很类似）.然而这其中有两个问题:
 * 第一、数量问题。比如，用户需要搜索”双黄连”，要求返回最符合条件的前10条。但在5个分片中，可能都存储着双黄连相关的数据。所以ES会向这5个分片都发出查询请求，并且要求每个分片都返回符合条件的10条记录。当ES得到返回的结果后，进行整体排序，然后取最符合条件的前10条返给用户。这种情况，ES5个shard最多会收到10*5=50条记录，这样返回给用户的结果数量会多于用户请求的数量。
@@ -117,7 +194,7 @@ DSF是什么缩写？初始化散发是一个什么样的过程？
 总结一下，从性能考虑`QUERY_AND_FETCH`是最快的，`DFS_QUERY_THEN_FETCH`是最慢的。从搜索的准确度来说，DFS要比非DFS的准确度更高。
 
 ---
-## Logstash的使用
+## Logstash的配置与使用
 
 参考文章：[logstash日志分析的配置和使用](http://yincheng.site/logstash)
 
@@ -128,123 +205,70 @@ DSF是什么缩写？初始化散发是一个什么样的过程？
 * 支持grok正则匹配、date时间匹配、mutate数据修改、goip查询归类、userAgent设备解析等。参考[Logstash 最佳实践](http://udn.yyuap.com/doc/logstash-best-practice-cn/filter/grok.html)
 
 
-### ES与Mysql数据的数据同步
+### Logstash将MySQL导入到ES
 
 * 参考文章：
     * [ElasticSearch与MySQL数据同步以及修改表结构](https://github.com/leotse90/blogs/blob/master/ElasticSearch%E4%B8%8EMySQL%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5%E4%BB%A5%E5%8F%8A%E4%BF%AE%E6%94%B9%E8%A1%A8%E7%BB%93%E6%9E%84.md)
     * [MySQL到Elasticsearch的同步之路](http://suclogger.com/MySQL%E5%88%B0Elasticsearch%E7%9A%84%E5%90%8C%E6%AD%A5%E4%B9%8B%E8%B7%AF/)
     * [Logstash Reference [5.4] » Input plugins » jdbc](https://www.elastic.co/guide/en/logstash/current/plugins-inputs-jdbc.html)
-    * 采用logstash方法，主要根据官网的说明进行配置：
-        * 下载jdbc驱动，书写logstash配置文件，官网有参数说明，启动logstash，查看ES集群。
-        * 遇到的问题：jvm堆溢出(修改jvm.properties设置)、`retrying failed action with response code: 429 `(提示信息不知道是不是并发问题，但是数据已经导入成功)
-        * 150万的短文本数据很快就导入完成，用时不到1min。主片存储空间2.5G(毕竟Lucene空间换时间)。
-    * 问题解决：时间格式匹配failure(在mysql中使用`DATE_FORMAT(in_time, '%Y-%m-%d %T') in_time`匹配为`yyyy-MM-dd HH:mm:ss`)，重复导入(设置`clean_run、use_column_value、tracking_column`，并且select语句中使用`where id >:sql_last_value`)，当然还是使用timestamp比较好，可以更新修改的记录。
-
----
-## Kibana的使用
-
-### 统计与生成地图
-
-* 参考文章
-    * [Kibana基本使用](http://blog.csdn.net/ming_311/article/details/50619859)
-* 大体流程：就是选择目标index，创建visualize图，保存图，组成dashboard。
-* 问题解决：生成Tile map提示`No Compatible Fields... geo_point`  参考： [Visualize Geo location of log using Elasticsearch + Logstash + Kibana](https://autofei.wordpress.com/2017/01/11/visualize-geo-location-of-log-using-elasticsearch-logstash-kibana/)，主要就是index默认匹配的是logstash-开头的。
-
----
-## 问题与解决
-* 启动错误`vm.max_map_count`过小
-    * 错误提示`max virtual memory areas vm.max_map_count [65530] likely too low, increase to at least [262144]`
-    * 临时解决：`sudo sysctl -w vm.max_map_count=262144`，更新设置sysctl -p，查看设置sysctl -a | grep max_map
-    * 永久解决：上面的修改，重启后值会无效，如果想永久改变需要如下操作： `vm.max_map_count=262144`直接写到/etc/sysctl.conf中,然后执行sysctl -p 
-* 启动错误`max file descriptors`过小
-    * 错误提示`max file descriptors [4096] for elasticsearch process likely too low, increase to at least [65536]`
-    * 解决：sudo vim /etc/security/limits.conf 添加用户zju的参数为`zju - nofile 65536` ，注销用户或重启，查看ulimit -n。
-
----
-## 配置文件示例
-
-### ES集群
-* ES-5.0.0
+* Logstash Reference [5.4]的官网流程主要为：
+    * 下载jdbc驱动，书写logstash配置文件，官网有参数说明，启动logstash，查看ES集群。
+    * 遇到的问题：jvm堆溢出(修改jvm.properties设置)、`retrying failed action with response code: 429 `(提示信息不知道是不是并发问题，但是数据已经导入成功)
+    * 150万的短文本数据很快就导入完成，用时不到1min。主片存储空间2.5G(毕竟Lucene空间换时间)。
+* 使用Demo：
+    * 配置文件看是否需要修改端口，jvm.properties文件等。
+    * 下面配置文件中，注意：schedule不设置就是立即执行，设置就是类似crontab定时，设置`clean_run=false`(默认true)就是`sql_last_value`为0（这一点不确定），`use_column_value`、`tracking_column`用于指定要track的栏目，指定之后就可以用`sql_last_value`存储上次更新后的值，支持track number和timestamp类型，建议用timestamp（考虑一下原有数据更新怎么办？数据软删除怎么办？）。【这几个重要的参数还是需要参考官网：[Logstash Reference [5.4] » Input plugins » jdbc](https://www.elastic.co/guide/en/logstash/current/plugins-inputs-jdbc.html)】
 
 ```
-# ES.yml
-cluster.name: esc5.0
-node.name: ip-9200
-
-#network.host: 192.168.0.1
-network.host: your-ip1
-http.port: 9200
-
-# The default list of hosts is ["127.0.0.1", "[::1]"]
-transport.tcp.port: 9300
-discovery.zen.ping.unicast.hosts: ["your-ip1:9300", "your-ip2:9300", "your-ip2:9301"]
-discovery.zen.minimum_master_nodes: 2
-
-# add for extension
-http.cors.enabled: true
-http.cors.allow-origin: "*"
-#xpack.security.enabled: false
-# dda
-```
-
-### Logstash同步mysql
-* Logstash-5.4.0
-* 配置文件看是否需要修改端口，jvm.properties文件等。
-* 下面配置文件中，注意：schedule不设置就是立即执行，设置就是类似crontab定时，设置clean_run=false(默认true)就是sql_last_value为0（这一点不确定），use_column_value、tracking_column用于指定要track的栏目，指定之后就可以用sql_last_value存储上次更新后的值，支持track number和timestamp类型，建议用timestamp（考虑一下原有数据更新怎么办？数据软删除怎么办？）。【这几个重要的参数还是需要参考官网：[Logstash Reference [5.4] » Input plugins » jdbc](https://www.elastic.co/guide/en/logstash/current/plugins-inputs-jdbc.html)】
-
-```
-
-# 用logstash同步mysql数据
+# 用logstash同步mysql数据，Logstash-5.4.0为例，schedule是定时配置，
 input {
-  jdbc {
-    type => "qa"
-    jdbc_driver_library => "~/software/elastic/logstash-5.4.0-9600/lib/mylib/mysql-connector-java-5.1.35.jar"
-    jdbc_driver_class => "com.mysql.jdbc.Driver"
-    jdbc_connection_string => "jdbc:mysql://ip:3306/qa"
-    jdbc_user => "user"
-    jdbc_password => "pass"
-    #schedule => "30 23 * * *"
-    schedule => "*/1 * * * *"
-    statement => "SELECT id, question, body, answer, source, source_id, timestamp edit_time from qa_all WHERE timestamp >:sql_last_value"
-    use_column_value => true
-    tracking_column => edit_time
-    clean_run => false
-  }
+  #jdbc {
+    #type => "qa"
+    #jdbc_driver_library => "~/software/elastic/logstash-5.4.0-9600/lib/mylib/mysql-connector-java-5.1.35.jar"
+    #jdbc_driver_class => "com.mysql.jdbc.Driver"
+    #jdbc_connection_string => "jdbc:mysql://10.15.82.58:3306/qa"
+    #jdbc_user => "hhh"
+    #jdbc_password => "hehe"
+    ##schedule => "0 5 * * *"
+    ##schedule => "*/1 * * * *"
+    #statement => "SELECT id, question, body, answer, source, source_id, timestamp edit_time from qa_all WHERE timestamp >:sql_last_value"
+    #use_column_value => true
+    #tracking_column => edit_time
+    #clean_run => false
+  #}
 
   jdbc {
-    type => "access-log"
+    type => "logstash-logs"
     jdbc_driver_library => "~/software/elastic/logstash-5.4.0-9600/lib/mylib/mysql-connector-java-5.1.35.jar"
     jdbc_driver_class => "com.mysql.jdbc.Driver"
-    jdbc_connection_string => "jdbc:mysql://ipp:3306/usercenter"
-    jdbc_user => "user"
-    jdbc_password => "pass"
-    #schedule => "30 23 * * *"
-    schedule => "*/4 * * * *"
-    statement => "SELECT ip, url, referrer, DATE_FORMAT(in_time, '%Y-%m-%d %T') in_time, DATE_FORMAT(out_time, '%Y-%m-%d %T')out_time, stay_time, position, timestamp edit_time FROM visitor_info WHERE timestamp >:sql_last_value"
+    jdbc_connection_string => "jdbc:mysql://10.15.82.50:3306/aaa"
+    jdbc_user => "hehe"
+    jdbc_password => "hehe"
+    #schedule => "*/4 * * * *"
+    statement => "SELECT visitor_id, user_id, ip, url, param, is_platform, referrer, windows_version, brower_version, screen_size, DATE_FORMAT(in_time, '%Y-%m-%d %T') in_time, DATE_FORMAT(out_time, '%Y-%m-%d %T')out_time, stay_time, click_list, move_list, position, url_id, is_ajax, resource_count, resource_unit, download_count, download_unit , timestamp FROM visitor_info WHERE timestamp >:sql_last_value"
     use_column_value => true
-    tracking_column => edit_time
+    tracking_column => timestamp
     clean_run => true
   }
 }
 
 filter{
-  if [type] == "access-log" {
-
-    date {
-      match => [ "in_time", "yyyy-MM-dd HH:mm:ss" , "yyyy-MM-dd HH:mm:ss.SSS" ]
-      locale => "cn"
-      #target => "@timestamp"
-    }
+  if [type] == "logstash-logs" {
+# 尝试使用filter实现datetime的格式转换
+#    date {
+#      match => [ "timestamp", "yyyy-MM-dd HH:mm:ss" , "yyyy-MM-dd HH:mm:ss.SSS" ]
+#      locale => "cn"
+#      #target => "@timestamp"
+#    }
 
     geoip {
-      source => "ip"
+      source => "ip" # 将ip字段解析为geoip
     }
 
     mutate{
-      convert => ["stay_time", "float"]
+      convert => ["stay_time", "float"] # 字段类型转换为float
     }
   }
-
 }
 
 output {
@@ -252,30 +276,91 @@ output {
     elasticsearch {
         #protocol => http
         index => "qa"
-        document_type => "me"
+        document_type => "tcm"
         #document_id => "%{uid}"
-        hosts => ["http://IP:9200"]
+        hosts => ["http://10.15.82.65:9200"]
     }
   }
-  if [type] == "access-log" {
+
+  if [type] == "logstash-logs" {
     elasticsearch {
         #protocol => http
         index => "logstash-logs"
-        document_type => "me"
+        document_type => "tcm"
         #document_id => "%{uid}"
-        hosts => ["http://ip:9200"]
+        hosts => ["http://10.15.82.65:9200"]
     }
   }
 }
-
 ```
 
-### Kibana
+### Logstash的启动重启脚本
+* 启动Logstash的脚本。
 
-* Kibana连接ES集群内的结点时，最好将该结点按照官网设置成`node.master: false` `node.data: false` `node.ingest: false`模式(写在es.yml中即可)以专门用于展现，不要用于数据分片，然后再Kibana配置中连接该ES结点。
+```
+# startup.sh
+# 启动Logstash脚本，指定对应的配置文件，后台运行
+./bin/logstash -f ./config/my_jdbc.conf &
+```
+
+* 关闭Logstash的脚本，使用进程查找的方式kill掉。
+```
+# shutdown.sh
+ID=`ps -aux |grep logstash |grep elastic |grep jdk| grep 9600| awk '{print $2}'`
+echo $ID
+echo "To kill all the processes:"
+echo "##############################"
+for id in $ID
+do
+  kill -9 $id
+  echo "killed $id"
+done
+echo "#############################"
+```
+
+* 重启Logstash的脚本：运行shutdown脚本，再运行startup脚本。
+
+## Kibana的配置与使用
+* 启动kibana： 运行`./bin/kibana`，访问5601端口。用户名密码: `Username: elastic Password: changeme`
+* 重启kibana：如果ps -ef|grep kibana，ps -ef|grep 5601 的方法找不到其进程，尝试使用`fuser -n tcp 5601`或者`netstat -anp|grep 5601``，再kill -9 关闭。然后启动即可。
+
+### Kibana的配置
+* 配置kibana：修改config的yml文件，设置用户名和密码对应es的设置(x-pack)。设置host对应ES的ip，设置请求的url是es的ip:port。
+* Kibana连接ES集群内的结点时，最好将该ES结点按照官网设置成`node.master: false` `node.data: false` `node.ingest: false`搜索器模式(写在es.yml中即可)以专门用于搜索，不作为master或者data结点，然后在Kibana配置中连接该ES结点。
+
+```
+# kibana配置，默认使用5601端口，listen的ip，配置name，连接的ES结点最好是搜索器模式。
+#server.port: 5601
+server.host: "10.15.82.65"
+server.name: "10.15.82.65-esc-kibana"
+elasticsearch.url: "http://10.15.82.65:9199"
+```
+
+### Kibana的使用
+* 参考文章
+    * [Kibana基本使用](http://blog.csdn.net/ming_311/article/details/50619859)
+* Kibana的使用还是比较简单的，由于是webUI的操作，基本就是选择ES数据，对应到图的设置即可。
+* 大体流程：就是选择目标index，创建visualize图，保存图，组成dashboard。
+* 问题解决：生成Tile map提示`No Compatible Fields... geo_point`  参考： [Visualize Geo location of log using Elasticsearch + Logstash + Kibana](https://autofei.wordpress.com/2017/01/11/visualize-geo-location-of-log-using-elasticsearch-logstash-kibana/)，主要就是index默认匹配的是logstash-开头的。
+
 
 ---
-## ES5 Java API代码示例
+## 问题与解决
+* ES启动报错`vm.max_map_count`过小
+    * 错误提示`max virtual memory areas vm.max_map_count [65530] likely too low, increase to at least [262144]`
+    * 临时解决：`sudo sysctl -w vm.max_map_count=262144`，更新设置sysctl -p，查看设置sysctl -a | grep max_map
+    * 永久解决：上面的修改，重启后值会无效，如果想永久改变需要如下操作： `vm.max_map_count=262144`直接写到/etc/sysctl.conf中,然后执行sysctl -p 
+* ES启动报错`max file descriptors`过小
+    * 错误提示`max file descriptors [4096] for elasticsearch process likely too low, increase to at least [65536]`
+    * 解决：sudo vim /etc/security/limits.conf 添加用户zju的参数为`zju - nofile 65536` ，注销用户或重启，查看ulimit -n。
+* Logstash导入时出现时间格式匹配failure
+    * 如果MySQL中是datatime类型，可能无法转换到timestamp类型，最简单的解决方法是设置tracking_column的一列最好就是timestamp类型，这样也会自动作为ES的doc的@timestamp信息。
+* Logstash定时导入出现重复导入
+    * 解决方法：正确设置`clean_run、use_column_value、tracking_column`，并且select语句中使用`where id >:sql_last_value`，当然tracking_column的一列最好使用timestamp，可以探测到修改的记录。
+
+
+---
+## ES 5.0 Java API代码示例
 
 ### index增查改删
 
