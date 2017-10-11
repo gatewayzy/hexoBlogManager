@@ -5,7 +5,7 @@ date: 2017-01-12 13:58:15
 updated: 2017-01-12 13:58:56
 categories: OS
 tags:
-- MacOS
+- OS
 ---
 
 **说明：**MacOS常用配置与软件。
