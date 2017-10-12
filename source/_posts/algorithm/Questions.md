@@ -324,8 +324,11 @@ int MaxProduct(int *a, int n) {
 ## Spring
 ----------------------------------------------------------------------------------------------------------
 * spring的IOC、AOP的理解
-* bean设置非单例？默认是单例scope="singleton"，还有session、request、prototype。
-
+* bean设置非单例？默认是单例scope="singleton"，web对应的WebApplicationContext通过属性对应到ApplicationContext，web还为bean提供额外的作用域范围：session、request、prototype。
+* spring类加载机制和java加载机制的区别？ java类加载使用的双亲委派模式，spring类加载提供3加载机制：
+	* 单例的预加载（默认方式）。项目一启动就产生一个且仅一个实例，即单例。并且，通过 @Autowired 只能获得这个单例。new Test()则不受单例限制。 `@Component//换行 public class Test{ }`
+	* 单例的懒加载。一个类设置为懒加载`@Lazy //换行 @Component //换行 public class Test{ }`，不能使用`@Autowired`的方式否则还是预加载，可以使用 BeanFactory 接口创建实例（使用类的首字母小写），如`@Autowired // BeanFactory beanFactory;  void doSth(){Test ts=(Test) beanFactory.getBean("test");}`
+	* 原型的懒加载（原型仅支持懒加载）`@Scope("prototype") //换行  //@Lazy //@Lazy对原型的bean无效 @Component //换行 public class Test{ }`，可以使用 BeanFactory 接口创建实例，与上面的一样。
 * spring 源码看过吗
 * spring aop的实现方法有几种？
 * 动态代理？Spring的REST用什么实现序列化的？

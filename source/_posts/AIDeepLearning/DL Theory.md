@@ -1,5 +1,5 @@
 ---
-title: Deep Learning Networks
+title: Deep Learning Theory
 comments: true
 date: 2017-01-14 13:58:04
 updated: 2017-01-14 13:58:56
@@ -8,7 +8,7 @@ tags:
 - Deep Learning
 ---
 
-**说明：**Deep Learning 基本知识。
+**说明：**Deep Learning 理论和基本原理。
 <!-- more -->
 
 
@@ -25,14 +25,14 @@ tags:
 * **前向传播**：信号正向传播，见[standfor.wiki-神经网络](http://deeplearning.stanford.edu/wiki/index.php/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C)
 	* 设定Wij和bi，每一个结点的输出都是上一层相连的所有结点的输出和并进行非线性激活，
 
-```
+$$
 \begin{align}
 a_1^{(2)} &= f(W_{11}^{(1)}x_1 + W_{12}^{(1)} x_2 + W_{13}^{(1)} x_3 + b_1^{(1)})  
 a_2^{(2)} &= f(W_{21}^{(1)}x_1 + W_{22}^{(1)} x_2 + W_{23}^{(1)} x_3 + b_2^{(1)})  
 a_3^{(2)} &= f(W_{31}^{(1)}x_1 + W_{32}^{(1)} x_2 + W_{33}^{(1)} x_3 + b_3^{(1)})  
 h_{W,b}(x) &= a_1^{(3)} =  f(W_{11}^{(2)}a_1^{(2)} + W_{12}^{(2)} a_2^{(2)} + W_{13}^{(2)} a_3^{(2)} + b_1^{(2)})
 \end{align}
-```
+$$
 
 * **反向传播**：误差反向传播，见[standfor.wiki-反向传播算法](http://deeplearning.stanford.edu/wiki/index.php/%E5%8F%8D%E5%90%91%E4%BC%A0%E5%AF%BC%E7%AE%97%E6%B3%95)
 	* 一次批量梯度下降法的过程：
