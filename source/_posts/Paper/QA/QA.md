@@ -58,21 +58,22 @@ CQA处理的应用场景不同划分为：简单的QA Pair问题和复杂的chat
   * [Ubuntu社区语料 Lowe1506](1506.08909 The Ubuntu Dialogue Corpus A Large Dataset for Research in Unstructured Multi-Turn Dialogue Systems.pdf)
   * [Twitter语料 Sordoni1506](1506.06714 A neural network approach to context-sensitive generation of conversational responses.pdf)
   * [SQuAD The Stanford Question Answering Dataset](1606.05250 SQuAD 100,000+ Questions for Machine Comprehension of Text.pdf)
-    * 数据示例：Question：where is xx？ Passage：xx is in **China**，where you can...对于一个问题，回答答案所在的段落，并将答案标出。
+    * 数据示例：Question：where is xx？ Passage：xx is in **China**，where you can...对于一个问题，目标是给出答案所在的段落，并将答案标出。
     * 用来做QA，机器理解MC
     * [实时的模型排名](https://rajpurkar.github.io/SQuAD-explorer/)
   * [微软MS MARCO](1611.09268 MS MARCO A Human Generated MAchine Reading COmprehension Dataset.pdf)
-  * [SemEval task]()CQA任务中包含问答对，答案标注为很好，一般，不好。
+  * [SemEval task](2017 SemEval-2017 Task3 Community Question Answering.pdf)CQA任务中包含问答对，答案标注为很好，一般，不好。
 
 ### CQA的模型评价
-
-* MAP，Mean Averaged Precision：
+* 参见SemEval系列task
+* MAP，Mean Averaged Precision：比如用top-10中命中的命中率的均值
 * BLEU [Papineni 2002](2002 BLEU a method for automatic evaluation of machine translation.pdf)。
 * Meteor [Lavie 2007](2007 METEOR An automatic metric for MT evaluation with high levels of correlation with human judgments.pdf)
-* P@1，排名第一的结果是正确结果的比例，越高越好。
+* P@1，precision@1，排名第一的结果是正确结果的比例，越高越好。
 * P@5
 * Hit@3，正确答案的排名在前3名中的比例，越高越好。
-* MRR，正确答案的排名的倒数的平均值，越高越好。
+* MRR，Mean Reciprocal Rank，比如top-10中正确答案的排名的倒数的平均值，越高越好。
+
 
 [Liu 2016](1603.08023How NOT To Evaluate Your Dialogue System An Empirical Study of Unsupervised Evaluation Metrics for Dialogue Response Generation.pdf)指出使用BLEU等popular方法进行模型评估的结果与人类的判断是不一致的。
 
