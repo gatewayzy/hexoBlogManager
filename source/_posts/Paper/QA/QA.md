@@ -1,8 +1,8 @@
 ---
 title: QA
 comments: true
-date: 2017-10-13 13:58:15
-updated: 2017-10-13 13:58:56
+date: 2017-10-14 13:58:15
+updated: 2017-10-14 13:58:56
 categories: QA
 tags:
 - QA
@@ -10,9 +10,7 @@ tags:
 
 **说明：** QA，比如qa pair问题，chatbot智能聊天，dialog对话系统。
 <!-- more -->
-
-# QA 自动问答
-
+---
 ## QA入门介绍
 
 ### QA的解决思路
@@ -34,6 +32,7 @@ QA处理的数据不同，可以进行不同角度的分类。
 * 根据数据的组织结构，分为：知识库KBQA Knowledge Base QA 和 问答对CQA Community QA。KBQA特点是数据权威，可进行推理拓展，答案质量高，但是目前实现复杂推理比较难，仍以单一三元组为主。CQA特点是数据噪声稍多，不能进行推理，只能回答覆盖到的问题。
 * 根据数据的领域性，分为：专业领域 和 开放域open-domain。
 
+---
 ## CQA
 
 ![CQA 百度脑图](http://zcy.ckcest.cn/cdn/zy/20171011-Image-1.jpg)
@@ -55,14 +54,15 @@ CQA处理的应用场景不同划分为：简单的QA Pair问题和复杂的chat
   * 开放域问答：[Web Questions]，[WikiQA]
   * 以目标为导向的对话聊天：[Movie Dialog]，[Ubuntu]
 * 常见的CQA语料集：
-  * [Ubuntu社区语料 Lowe1506](1506.08909 The Ubuntu Dialogue Corpus A Large Dataset for Research in Unstructured Multi-Turn Dialogue Systems.pdf)
   * [Twitter语料 Sordoni1506](1506.06714 A neural network approach to context-sensitive generation of conversational responses.pdf)
-  * [SQuAD The Stanford Question Answering Dataset](1606.05250 SQuAD 100,000+ Questions for Machine Comprehension of Text.pdf)
+  * [Ubuntu社区语料 Lowe1506](1506.08909 The Ubuntu Dialogue Corpus A Large Dataset for Research in Unstructured Multi-Turn Dialogue Systems.pdf)
+  * [SQuAD Stanford QA 1606](1606.05250 SQuAD 100,000+ Questions for Machine Comprehension of Text.pdf)
     * 数据示例：Question：where is xx？ Passage：xx is in **China**，where you can...对于一个问题，目标是给出答案所在的段落，并将答案标出。
     * 用来做QA，机器理解MC
     * [实时的模型排名](https://rajpurkar.github.io/SQuAD-explorer/)
   * [微软MS MARCO](1611.09268 MS MARCO A Human Generated MAchine Reading COmprehension Dataset.pdf)
   * [SemEval task](2017 SemEval-2017 Task3 Community Question Answering.pdf)CQA任务中包含问答对，答案标注为很好，一般，不好。
+  * [百度中文CQA数据集](http://idl.baidu.com/WebQA.html)
 
 ### CQA的模型评价
 * 参见SemEval系列task
@@ -78,7 +78,7 @@ CQA处理的应用场景不同划分为：简单的QA Pair问题和复杂的chat
 [Liu 2016](1603.08023How NOT To Evaluate Your Dialogue System An Empirical Study of Unsupervised Evaluation Metrics for Dialogue Response Generation.pdf)指出使用BLEU等popular方法进行模型评估的结果与人类的判断是不一致的。
 
 
-
+---
 ## CQA-seq2seq
 
 * seq2seq解决CQA时面临的问题：
