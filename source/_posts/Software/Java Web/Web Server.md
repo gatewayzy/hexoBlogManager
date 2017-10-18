@@ -5,13 +5,10 @@ date: 2017-01-12 13:58:23
 updated: 2017-01-12 13:58:56
 categories: Softwares
 tags:
-- Web Server
-- Apache
-- Tomcat
-- Jetty
+- Java web
 ---
 
-**说明：**Web Server配置使用，包括apache、tomcat、jetty等。
+**说明：**Web Server配置使用，包括Apache、Tomcat、Jetty等。
 <!-- more -->
 
 

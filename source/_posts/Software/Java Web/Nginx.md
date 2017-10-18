@@ -5,7 +5,7 @@ date: 2017-01-12 13:58:14
 updated: 2017-01-12 13:58:56
 categories: Softwares
 tags:
-- Nginx
+- Java web
 ---
 
 **说明：**Nginx配置使用。

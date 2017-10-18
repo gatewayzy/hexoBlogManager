@@ -5,7 +5,7 @@ date: 2017-01-12 13:58:10
 updated: 2017-01-12 13:58:56
 categories: Softwares
 tags:
-- JFinal
+- Java web
 ---
 
 **说明：**JFinal配置使用。

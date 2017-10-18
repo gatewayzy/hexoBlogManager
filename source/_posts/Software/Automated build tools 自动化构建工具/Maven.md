@@ -5,10 +5,10 @@ date: 2017-01-12 13:58:13
 updated: 2017-01-12 13:58:56
 categories: Softwares
 tags:
-- Maven
+- Automated build tools
 ---
 
-**说明：**Maven配置使用。
+**说明：**Maven自动化构建工具简单灵活，提供缺省设置和高级项目管理等功能，比Ant要简单很多。
 <!-- more -->
 
 

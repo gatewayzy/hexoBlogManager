@@ -5,8 +5,7 @@ date: 2017-01-12 13:58:19
 updated: 2017-01-12 13:58:56
 categories: Softwares
 tags:
-- SQL
-- NoSQL
+- Java web
 ---
 
 
@@ -422,7 +421,7 @@ public class TestMongoDB {
 	* 将dump.rdb复制到新的redis下，启动即可，注意会覆盖原有的rdb文件问题。
 	* 也可是使用client连接server，运行auth密码之后，使用SAVE命令生成rdb，存储路径在conf文件的working directory设置。
 * 方案：aof拓展
-	*  
+	
 
 
 

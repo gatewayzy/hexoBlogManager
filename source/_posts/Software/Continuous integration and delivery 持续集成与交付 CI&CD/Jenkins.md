@@ -5,18 +5,17 @@ date: 2017-01-12 13:58:10
 updated: 2017-01-12 13:58:56
 categories: Softwares
 tags:
-- Hudson
-- Jenkins
+- Continuous integration
 ---
 
-**说明：**Jenkins配置使用。
+**说明：**Jenkins原名Hudson，是一种可拓展性很强的持续化集成与发布工具。
 <!-- more -->
 
 
 ---
 参考文章：
 
-## Hudson简介
+## 简介
 ---
 * Jenkins的前身是Hudson，是一个基于java开发的持续集成工具，用于监控程序重复性工作，如：持续的软件版本发布/测试项目，监控外部调用执行的工作。
 * Jenkins特性：

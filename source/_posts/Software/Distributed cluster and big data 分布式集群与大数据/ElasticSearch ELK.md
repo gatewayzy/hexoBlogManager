@@ -5,8 +5,8 @@ date: 2017-01-12 13:58:05
 updated: 2017-01-12 13:58:56
 categories: Softwares
 tags:
-- ElasticSearch
-- Information Retrieval
+- Big data
+- Distributed cluster
 ---
 
 **说明：**ElasticSearch、logstash、kibana的配置使用。

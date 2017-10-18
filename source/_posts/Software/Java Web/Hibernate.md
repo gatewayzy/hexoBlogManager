@@ -5,7 +5,7 @@ date: 2017-01-12 13:58:08
 updated: 2017-01-12 13:58:56
 categories: Softwares
 tags:
-- Hibernate
+- Java web
 ---
 
 **说明：**Hibernate配置使用。

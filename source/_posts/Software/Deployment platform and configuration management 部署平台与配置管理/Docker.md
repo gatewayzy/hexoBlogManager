@@ -5,7 +5,7 @@ date: 2017-01-12 13:58:04
 updated: 2017-01-12 13:58:56
 categories: Softwares
 tags:
-- Docker
+- Deployment platform
 ---
 
 **说明：**Docker配置和使用。

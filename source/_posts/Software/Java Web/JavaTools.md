@@ -5,7 +5,7 @@ date: 2017-01-12 13:58:10
 updated: 2017-01-12 13:58:56
 categories: Softwares
 tags:
-- tools
+- Java web
 ---
 
 **说明：**JavaTools配置使用，包括jdbc、分词工具、quartz定时等。

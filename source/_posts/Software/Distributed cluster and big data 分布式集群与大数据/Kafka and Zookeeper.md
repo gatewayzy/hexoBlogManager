@@ -1,11 +1,11 @@
 ---
-title: Kafka And Zookeeper
+title: Kafka and Zookeeper
 comments: true
 date: 2017-01-12 13:58:15
 updated: 2017-01-12 13:58:56
-categories: Software
+categories: Softwares
 tags:
-- Kafka
+- Distributed cluster
 ---
 
 **说明：**Kafka And Zookeeper。

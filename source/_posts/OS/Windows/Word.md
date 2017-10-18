@@ -1,14 +1,14 @@
 ---
 title: Word
 comments: true
-date: 2017-01-12 13:58:23
+date: 2017-01-12 13:58:15
 updated: 2017-01-12 13:58:56
 categories: Softwares
 tags:
-- Word
+- OS
 ---
 
-**说明：**Word的使用。
+**说明：**微软Office的Word的使用。
 <!-- more -->
 
 ## 概述

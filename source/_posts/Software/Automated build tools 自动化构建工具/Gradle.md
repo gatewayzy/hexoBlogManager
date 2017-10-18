@@ -5,10 +5,10 @@ date: 2017-01-12 13:58:07
 updated: 2017-01-12 13:58:56
 categories: Softwares
 tags:
-- Gradle
+- Automated build tools
 ---
 
-**说明：**Gradle配置使用。
+**说明：**Gradle基于Groovy书写自动化构建配置，功能与maven相似，但不需要使用xml。
 <!-- more -->
 
 

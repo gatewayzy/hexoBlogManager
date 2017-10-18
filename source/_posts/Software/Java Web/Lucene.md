@@ -5,7 +5,7 @@ date: 2017-01-12 13:58:12
 updated: 2017-01-12 13:58:56
 categories: Softwares
 tags:
-- Lucene
+- Java web
 ---
 
 **说明：**Lucene配置使用。

@@ -5,7 +5,7 @@ date: 2017-01-12 13:58:12
 updated: 2017-01-12 13:58:56
 categories: Softwares
 tags:
-- Log4j
+- Java web
 ---
 
 **说明：**Log4j的配置使用。
