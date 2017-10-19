@@ -3,7 +3,7 @@
 ## 说明
 ---
 * Hexo博客的管理代码，网址为[github/gatewayzy/hexoBlogManager](https://github.com/gatewayzy/hexoBlogManager)。
-* 项目中含有大量的个人配置，一般使用是没什么问题的，但是如果您想发布自己的hexo blog，建议看一看本站搭建方法[搭建个人博客站点(1)-托管到github pages](http://bebetter.site/2016/08/08/blog/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E7%AB%99%E7%82%B91-%E6%89%98%E7%AE%A1%E5%88%B0github%20pages/)。
+* 项目中含有大量的个人配置，一般使用是没什么问题的，但是如果您想发布自己的hexo blog，建议看一看本站搭建方法[搭建个人博客站点(1)-托管到github pages](http://bebetter.site/2016/08/08/Blog/%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E7%AB%99%E7%82%B91-%E6%89%98%E7%AE%A1%E5%88%B0github%20pages/)。
 
 ## Links
 ---
