@@ -436,6 +436,55 @@ System.out.println(queue.remove());  // remove 获取并删除队首，空队会
 * 关键思想：中间数比较，等于则输出；不等于则确定对左边或右边进行二分查找
 * 时间O阶O(log(n))
 
+```
+/** 
+ * 二分查找又称折半查找，它是一种效率较高的查找方法。【要求】：1.必须用顺序存储结构 2.必须按关键字有序排列。
+ */  
+public class BinarySearch {   
+    public static void main(String[] args) {  
+        int[] src = new int[] {1, 3, 5, 7, 8, 9};   
+        System.out.println(binarySearch(src, 3));  
+        System.out.println(binarySearch(src,3,0,src.length-1));  
+    }  
+  
+    /** 
+     * 二分查找算法(循环实现)
+     */   
+   public static int binarySearch(int[] srcArray, int des){
+        int low = 0;   
+        int high = srcArray.length-1;   
+        while(low <= high) {   
+            int middle = (low + high)/2;   
+            if(des == srcArray[middle]) {   
+                return middle;   
+            }else if(des <srcArray[middle]) {   
+                high = middle - 1;   
+            }else {   
+                low = middle + 1;   
+            }  
+        }  
+        return -1;  
+   }  
+        
+      /**   
+     *二分查找特定整数在整型数组中的位置(递归实现)
+     */  
+    public static int binarySearch(int[] dataset,int data,int beginIndex,int endIndex){    
+       int midIndex = (beginIndex+endIndex)/2;    
+       if(data <dataset[beginIndex]||data>dataset[endIndex]||beginIndex>endIndex){  
+           return -1;    
+       }  
+       if(data <dataset[midIndex]){    
+           return binarySearch(dataset,data,beginIndex,midIndex-1);    
+       }else if(data>dataset[midIndex]){    
+           return binarySearch(dataset,data,midIndex+1,endIndex);    
+       }else {    
+           return midIndex;    
+       }    
+   }   
+} 
+```
+
 #### 插值查找
 
 * 在二分查找中，对下一级的半部分进行查找时选用的是头和尾的0.5，如果将0.5改为（key-a[low]）/（a[high]-a[low]），就叫插值查找。
