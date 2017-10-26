@@ -69,11 +69,67 @@ tags:
 	* 1. 作为主服务器Master，会把自己的每一次改动都记录到二进制日志 Binarylog 中。（从服务器会负责来读取这个log， 然后在自己那里再执行一遍）
 	* 2. 作为从服务器Slave，会用master上的账号登陆到 master上，读取master的Binarylog, 写入到自己的中继日志 Relaylog，然后自己的sql线程会负责读取这个中继日志，并执行一遍。通过执行相同的sql语句实现主从一致性。
 
+## 索引
 
+* 索引类型分为Primary key主键索引、Unique索引、Normal普通索引、Fulltext全文索引。
+* 索引方法有btree和hash两种索引方法。
+* 创建索引可以使用alter table和create index的方式。
 
+### alter table
+1. PRIMARY  KEY（主键索引）
+mysql>ALTER  TABLE  `table_name`  ADD  PRIMARY  KEY (  `column`  ) 
+2. UNIQUE(唯一索引)
+mysql>ALTER  TABLE  `table_name`  ADD  UNIQUE (`column` ) 
+3. INDEX(普通索引)
+mysql>ALTER  TABLE  `table_name`  ADD  INDEX index_name (  `column`  )
+4. FULLTEXT(全文索引)
+mysql>ALTER  TABLE  `table_name`  ADD  FULLTEXT ( `column` )
+5. 多列索引
+mysql>ALTER  TABLE  `table_name`  ADD  INDEX index_name (  `column1`,  `column2`,  `column3`  )
+
+* 举例：ALTER  TABLE  users  ADD  INDEX index1 (userid desc,  username asc)，将会添加index1对id和name进行Normal联合索引，默认使用BTREE索引（而不是HASH）
+
+### create index
+类似于alter的类型：
+CREATE INDEX index_name ON `table_name` (`column_list`)
+CREATE UNIQUE INDEX index_name ON `table_name` (`column_list`)
+
+### 查看索引
+show index from tblname; 或者
+show keys from tblname;
+
+### 删除索引
+ALTER TABLE `table_name` DROP INDEX `index_name`
+删除主键索引也可以： ALTER TABLE table_name DROP PRIMARY KEY
 
 ## 存储过程
 
+### 创建存储过程
+
+```
+CREATE PROCEDURE proc1(IN name1 CHAR(20))   /*IN 表示输入参数，char限定类型*/
+BEGIN 
+	IF name1 is null or name1='' THEN 
+		SELECT * FROM users; 
+	ELSE 
+		SELECT * FROM users WHERE username LIKE CONCAT('%',name1,'%');
+	END IF; 
+END 
+```
+
+### 调用存储过程
+1.基本语法：call proc1('qq')
+注意：存储过程名称后面必须加括号，哪怕该存储过程没有参数传递
+
+### 删除存储过程
+1.基本语法：
+drop procedure proc1//
+
+2.注意事项: 不能在一个存储过程中删除另一个存储过程，只能调用另一个存储过程
+
+### 其他常用命令
+1. show procedure status  显示数据库中所有存储的存储过程基本信息，包括所属数据库，存储过程名称，创建时间等
+2. show create procedure proc1  显示某一个MySQL存储过程的详细信息
 
 ## 引擎
 
@@ -81,38 +137,39 @@ tags:
 
 ```
  数据库中的存储引擎其实是对使用了该引擎的表进行某种设置，数据库中的表设定了什么存储引擎，那么该表在数据存储方式、数据更新方式、数据查询性能以及是否支持索引等方面就会有不同的“效果”。在MySQL数据库中存在着多种引擎（不同版本的MySQL数据库支持的引擎不同），熟悉各种引擎才能在软件开发中应用引擎，从而开发出高性能的软件，MySQL数据库中的引擎有哪些呢？一般来说，MySQL有以下几种引擎：ISAM、MyISAM、HEAP（也称为MEMORY）、CSV、BLACKHOLE、ARCHIVE、PERFORMANCE_SCHEMA、InnoDB、 Berkeley、Merge、Federated和Cluster/NDB等，除此以外我们也可以参照MySQL++ API创建自己的数据库引擎。下面逐次介绍一下各种引擎：
-    ISAM
-    该引擎在读取数据方面速度很快，而且不占用大量的内存和存储资源；但是ISAM不支持事务处理、不支持外来键、不能够容错、也不支持索引。该引擎在包括MySQL 5.1及其以上版本的数据库中不再支持。
-    MyISAM
-    该引擎基于ISAM数据库引擎，除了提供ISAM里所没有的索引和字段管理等大量功能，MyISAM还使用一种表格锁定的机制来优化多个并发的读写操作，但是需要经常运行OPTIMIZE TABLE命令，来恢复被更新机制所浪费的空间，否则碎片也会随之增加，最终影响数据访问性能。MyISAM还有一些有用的扩展，例如用来修复数据库文件的MyISAMChk工具和用来恢复浪费空间的 MyISAMPack工具。MyISAM强调了快速读取操作，主要用于高负载的select，这可能也是MySQL深受Web开发的主要原因：在Web开发中进行的大量数据操作都是读取操作，所以大多数虚拟主机提供商和Internet平台提供商（Internet Presence Provider，IPP）只允许使用MyISAM格式。
+    
+ISAM
+该引擎在读取数据方面速度很快，而且不占用大量的内存和存储资源；但是ISAM不支持事务处理、不支持外来键、不能够容错、也不支持索引。该引擎在包括MySQL 5.1及其以上版本的数据库中不再支持。
+MyISAM
+该引擎基于ISAM数据库引擎，除了提供ISAM里所没有的索引和字段管理等大量功能，MyISAM还使用一种表格锁定的机制来优化多个并发的读写操作，但是需要经常运行OPTIMIZE TABLE命令，来恢复被更新机制所浪费的空间，否则碎片也会随之增加，最终影响数据访问性能。MyISAM还有一些有用的扩展，例如用来修复数据库文件的MyISAMChk工具和用来恢复浪费空间的 MyISAMPack工具。MyISAM强调了快速读取操作，主要用于高负载的select，这可能也是MySQL深受Web开发的主要原因：在Web开发中进行的大量数据操作都是读取操作，所以大多数虚拟主机提供商和Internet平台提供商（Internet Presence Provider，IPP）只允许使用MyISAM格式。
 MyISAM类型的表支持三种不同的存储结构：静态型、动态型、压缩型。
-    静态型：指定义的表列的大小是固定（即不含有：xblob、xtext、varchar等长度可变的数据类型），这样MySQL就会自动使用静态MyISAM格式。使用静态格式的表的性能比较高，因为在维护和访问以预定格式存储数据时需要的开销很低；但这种高性能是以空间为代价换来的，因为在定义的时候是固定的，所以不管列中的值有多大，都会以最大值为准，占据了整个空间。
-    动态型：如果列（即使只有一列）定义为动态的（xblob, xtext, varchar等数据类型），这时MyISAM就自动使用动态型，虽然动态型的表占用了比静态型表较少的空间，但带来了性能的降低，因为如果某个字段的内容发生改变则其位置很可能需要移动，这样就会导致碎片的产生，随着数据变化的增多，碎片也随之增加，数据访问性能会随之降低。
-    对于因碎片增加而降低数据访问性这个问题，有两种解决办法：
-    a、尽可能使用静态数据类型；
-    b、经常使用optimize table table_name语句整理表的碎片，恢复由于表数据的更新和删除导致的空间丢失。如果存储引擎不支持 optimize table table_name则可以转储并        重新加载数据，这样也可以减少碎片；
-    压缩型：如果在数据库中创建在整个生命周期内只读的表，则应该使用MyISAM的压缩型表来减少空间的占用。
-    HEAP（也称为MEMORY）
-    该存储引擎通过在内存中创建临时表来存储数据。每个基于该存储引擎的表实际对应一个磁盘文件，该文件的文件名和表名是相同的，类型为.frm。该磁盘文件只存储表的结构，而其数据存储在内存中，所以使用该种引擎的表拥有极高的插入、更新和查询效率。这种存储引擎默认使用哈希（HASH）索引，其速度比使用B-+Tree型要快，但也可以使用B树型索引。由于这种存储引擎所存储的数据保存在内存中，所以其保存的数据具有不稳定性，比如如果mysqld进程发生异常、重启或计算机关机等等都会造成这些数据的消失，所以这种存储引擎中的表的生命周期很短，一般只使用一次。
-    CSV（Comma-Separated Values逗号分隔值）
-    使用该引擎的MySQL数据库表会在MySQL安装目录data文件夹中的和该表所在数据库名相同的目录中生成一个.CSV文件（所以，它可以将CSV类型的文件当做表进行处理），这种文件是一种普通文本文件，每个数据行占用一个文本行。该种类型的存储引擎不支持索引，即使用该种类型的表没有主键列；另外也不允许表中的字段为null。
-    BLACKHOLE（黑洞引擎）
-    该存储引擎支持事务，而且支持mvcc的行级锁，写入这种引擎表中的任何数据都会消失，主要用于做日志记录或同步归档的中继存储，这个存储引擎除非有特别目的，否则不适合使用。详见博客《BlackHole 存储引擎》
-    ARCHIVE
-    该存储引擎非常适合存储大量独立的、作为历史记录的数据。区别于InnoDB和MyISAM这两种引擎，ARCHIVE提供了压缩功能，拥有高效的插入速度，但是这种引擎不支持索引，所以查询性能较差一些。
-    PERFORMANCE_SCHEMA
-    该引擎主要用于收集数据库服务器性能参数。这种引擎提供以下功能：提供进程等待的详细信息，包括锁、互斥变量、文件信息；保存历史的事件汇总信息，为提供MySQL服务器性能做出详细的判断；对于新增和删除监控事件点都非常容易，并可以随意改变mysql服务器的监控周期，例如（CYCLE、MICROSECOND）。
-    InnoDB
-    该存储引擎为MySQL表提供了ACID事务支持、系统崩溃修复能力和多版本并发控制（即MVCC Multi-Version Concurrency Control）的行级锁;该引擎支持自增长列（auto_increment）,自增长列的值不能为空，如果在使用的时候为空则自动从现有值开始增值，如果有但是比现在的还大，则直接保存这个值; 该引擎存储引擎支持外键（foreign key） ,外键所在的表称为子表而所依赖的表称为父表。该引擎在5.5后的MySQL数据库中为默认存储引擎。
-    Berkeley（BDB）
-    该存储引擎支持COMMIT和ROLLBACK等其他事务特性。该引擎在包括MySQL 5.1及其以上版本的数据库中不再支持。
-    Merge
-    该引擎将一定数量的MyISAM表联合而成一个整体。参见博客《MySQL Merge存储引擎》
-    Federated
-    该存储引擎可以不同的Mysql服务器联合起来，逻辑上组成一个完整的数据库。这种存储引擎非常适合数据库分布式应用。
-    Cluster/NDB
-    该存储引擎用于多台数据机器联合提供服务以提高整体性能和安全性。适合数据量大、安全和性能要求高的场景。
-    以上是对MySQL数据库中存储引擎的总结，只是重点总结了一下各种不同存储引擎的特点，不对的地方还望各位指正，不胜感激。
+静态型：指定义的表列的大小是固定（即不含有：xblob、xtext、varchar等长度可变的数据类型），这样MySQL就会自动使用静态MyISAM格式。使用静态格式的表的性能比较高，因为在维护和访问以预定格式存储数据时需要的开销很低；但这种高性能是以空间为代价换来的，因为在定义的时候是固定的，所以不管列中的值有多大，都会以最大值为准，占据了整个空间。
+动态型：如果列（即使只有一列）定义为动态的（xblob, xtext, varchar等数据类型），这时MyISAM就自动使用动态型，虽然动态型的表占用了比静态型表较少的空间，但带来了性能的降低，因为如果某个字段的内容发生改变则其位置很可能需要移动，这样就会导致碎片的产生，随着数据变化的增多，碎片也随之增加，数据访问性能会随之降低。
+对于因碎片增加而降低数据访问性这个问题，有两种解决办法：
+a、尽可能使用静态数据类型；
+b、经常使用optimize table table_name语句整理表的碎片，恢复由于表数据的更新和删除导致的空间丢失。如果存储引擎不支持 optimize table table_name则可以转储并        重新加载数据，这样也可以减少碎片；
+压缩型：如果在数据库中创建在整个生命周期内只读的表，则应该使用MyISAM的压缩型表来减少空间的占用。
+HEAP（也称为MEMORY）
+该存储引擎通过在内存中创建临时表来存储数据。每个基于该存储引擎的表实际对应一个磁盘文件，该文件的文件名和表名是相同的，类型为.frm。该磁盘文件只存储表的结构，而其数据存储在内存中，所以使用该种引擎的表拥有极高的插入、更新和查询效率。这种存储引擎默认使用哈希（HASH）索引，其速度比使用B-+Tree型要快，但也可以使用B树型索引。由于这种存储引擎所存储的数据保存在内存中，所以其保存的数据具有不稳定性，比如如果mysqld进程发生异常、重启或计算机关机等等都会造成这些数据的消失，所以这种存储引擎中的表的生命周期很短，一般只使用一次。
+CSV（Comma-Separated Values逗号分隔值）
+使用该引擎的MySQL数据库表会在MySQL安装目录data文件夹中的和该表所在数据库名相同的目录中生成一个.CSV文件（所以，它可以将CSV类型的文件当做表进行处理），这种文件是一种普通文本文件，每个数据行占用一个文本行。该种类型的存储引擎不支持索引，即使用该种类型的表没有主键列；另外也不允许表中的字段为null。
+BLACKHOLE（黑洞引擎）
+该存储引擎支持事务，而且支持mvcc的行级锁，写入这种引擎表中的任何数据都会消失，主要用于做日志记录或同步归档的中继存储，这个存储引擎除非有特别目的，否则不适合使用。详见博客《BlackHole 存储引擎》
+ARCHIVE
+该存储引擎非常适合存储大量独立的、作为历史记录的数据。区别于InnoDB和MyISAM这两种引擎，ARCHIVE提供了压缩功能，拥有高效的插入速度，但是这种引擎不支持索引，所以查询性能较差一些。
+PERFORMANCE_SCHEMA
+该引擎主要用于收集数据库服务器性能参数。这种引擎提供以下功能：提供进程等待的详细信息，包括锁、互斥变量、文件信息；保存历史的事件汇总信息，为提供MySQL服务器性能做出详细的判断；对于新增和删除监控事件点都非常容易，并可以随意改变mysql服务器的监控周期，例如（CYCLE、MICROSECOND）。
+InnoDB
+该存储引擎为MySQL表提供了ACID事务支持、系统崩溃修复能力和多版本并发控制（即MVCC Multi-Version Concurrency Control）的行级锁;该引擎支持自增长列（auto_increment）,自增长列的值不能为空，如果在使用的时候为空则自动从现有值开始增值，如果有但是比现在的还大，则直接保存这个值; 该引擎存储引擎支持外键（foreign key） ,外键所在的表称为子表而所依赖的表称为父表。该引擎在5.5后的MySQL数据库中为默认存储引擎。
+Berkeley（BDB）
+该存储引擎支持COMMIT和ROLLBACK等其他事务特性。该引擎在包括MySQL 5.1及其以上版本的数据库中不再支持。
+Merge
+该引擎将一定数量的MyISAM表联合而成一个整体。参见博客《MySQL Merge存储引擎》
+Federated
+该存储引擎可以不同的Mysql服务器联合起来，逻辑上组成一个完整的数据库。这种存储引擎非常适合数据库分布式应用。
+Cluster/NDB
+该存储引擎用于多台数据机器联合提供服务以提高整体性能和安全性。适合数据量大、安全和性能要求高的场景。
+以上是对MySQL数据库中存储引擎的总结，只是重点总结了一下各种不同存储引擎的特点，不对的地方还望各位指正，不胜感激。
 ```
 
 
