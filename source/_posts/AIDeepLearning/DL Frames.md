@@ -144,4 +144,7 @@ Mini-batch GD 一般选20-1000大。
 * Weight normalization
 
 
+## 问题与解决
+### libcudnn找不到
+* 解决：编辑~/.bashrc，添加`export LD_LIBRARY_PATH=/usr/local/cuda/lib64/`，主要就是由于cuda虽然安装，但是没有添加到环境变量。一般cuda是链接到cuda-8.0文件夹这种形式，用于实现cuda通用版本链接。
 

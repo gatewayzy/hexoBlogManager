@@ -79,3 +79,15 @@ tags:
 	* 指定程序使用的显卡，几种方法：
 		* 在环境变量（系统或者pycharm等IDE）中添加CUDA_VISIBLE_DEVICES=1或者CUDA_VISIBLE_DEVICES=0,2,3
 		* 程序中设置`import os os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID" os.environ["CUDA_VISIBLE_DEVICES"]="0"`等
+
+### 安装cuda
+1. 打开[cuda安装官网](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&target_distro=Ubuntu&target_version=1604&target_type=deblocal)，选择自己系统对应的版本，下载安装文件，如1.2G的deb文件。
+2. 在服务器上按照官网的命令进行安装，基本流程就是添加本地文件源，然后安装，命令如下。安装过程会默认在/usr/local中创建cuda链接，链接到cuda-8.0具体版本。
+
+```
+sudo dpkg -i cuda-repo-ubuntu1604-9-0-local_9.0.176-1_amd64.deb
+sudo apt-key add /var/cuda-repo-<version>/7fa2af80.pub
+sudo apt-get update
+sudo apt-get install cuda
+```
+3. 测试安装状态，运行nvidia-smi查看显卡状态，如果有错误提示Failed to initialize NVML: Driver/library version mismatch，可以尝试重启解决。
