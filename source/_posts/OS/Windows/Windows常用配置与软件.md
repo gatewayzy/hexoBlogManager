@@ -46,6 +46,10 @@ tags:
 |alt + home	|转到主页	|
 |F12	|打开开发人员工具	|
 
+### 系统信息
+* 查看cpu信息：在cmd运行wmic，再运行`cpu get *`
+* 查看内存信息：在cmd运行wmic，再运行`memorychip`
+
 
 ### 环境变量
 ---
