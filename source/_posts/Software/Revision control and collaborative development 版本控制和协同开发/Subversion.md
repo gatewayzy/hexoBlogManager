@@ -24,7 +24,7 @@ tags:
 ### 安装使用Subversion
 ---
 * 安装软件：		sudo apt-get install subversion
-* 创建一个repo：	svnadmin create /home/myrepo
+* 创建一个repo：	`sudo svnadmin create /home/myrepo`
 * 创建好的repo可以checkout下来然后commit初始化代码。
 * 配置svn服务的配置文件svnserver.conf文件： vi /svn/project/conf/svnserve.conf
 
@@ -81,7 +81,7 @@ ma = r
 * 安装apache2 服务：		sudo apt-get install apache2 
 * 安装apache2 帮助命令：	sudo apt-get install apache2-utils 
 * 添加用户：	htpasswd -c /home/svn/passwd.conf user1（注意-c表示清除已有用户，普通添加不要写-c，用户的密码存储方式为MD5）
-* 打开apache的dav_svn插件：sudo a2enmod dav_svn
+* 打开apache的dav_svn插件：`sudo a2enmod dav_svn`
 * 配置dav_svn的svn配置：`vi /<apache-dir>/mods-enable/dav_svn.conf`，去掉 `<Location /svn>` 的注释并加入下面设置，修改相应的svn目录、名称和密码目录等，Basic表示用户方式访问。
 
 ```
@@ -119,6 +119,45 @@ ma = r
 * 将dump备份导入repo中：`svnadmin load myrepo < mysave.dump`
 * 将客户端的地址更新：右键要更改的已有仓库->TortoiseSVN->Relocate->在To URL这一项里填：`http://10.15.82.52/svn/myrepo` ->确定。然后就可以从新地址进行checkout了。或者进入项目目录下运行如下命令，再通过命令svn info查看是否成功。
 `svn switch --relocate https://10.15.82.58/svn/usercenter/ http://10.15.82.52/svn/usercenter`
+
+### subversion定期导出
+---
+使用上面的dump和load命令就可以定期对svn server进行定期备份和恢复，下面是一个示例dump出来进行备份的脚本。基本过程就是列出svn下面所有repo，然后导出到指定文件名即可。注意shell编程中，`[ 判断语句 ]`前后的空格，时间使用的是\`，不是引号
+
+```
+#!/bin/bash
+bakdate=`date "+%Y-%m-%d"`
+echo $bakdate
+mkdir ~/svn-bak/svn-$bakdate-bak
+cd ~/svn-bak/svn-$bakdate-bak
+
+for file in /svn/*
+do
+    if test -f $file
+    then
+         echo $file is f
+    fi
+
+    if test -d $file
+    then
+        echo $file is d
+        echo $(dirname $file)
+        echo $(basename $file)
+
+        if [ $(basename $file) == 'lost+found' ]
+        then 
+        echo $(basename $file) skipping.....
+        continue
+        else
+            echo "root密码" | sudo -S svnadmin dump $file > $(basename $file)-$bakdate.dump
+            echo ok
+        fi
+
+    fi
+done
+echo ======  see ~/svn-bak/svn-$bakdate-bak  ===========
+```
+
 
 
 ## TortoiseSVN客户端使用
@@ -230,9 +269,14 @@ export LANGUAGE=en_US.UTF-8
 * 运行TortoiseSVN安装程序，在modify中勾选上svn command line，或者一开始安装的时候就勾选上。
 
 
+###  提交到subversion提示Permission denied
+* 原因是create repo的时候，使用的root，导致`mod_dav_svn`就没有write权限等.
+* 解决方法：修改repo的owner和mod：`sudo chown -R zju:zju /svn/repo1` `sudo chmod -R u+x /svn/repo1`
 
 
-
+###  提交到subversion提示error sqlite3 readonly
+* 原因是repo没有w权限
+* 解决方法：修改repo权限，比如直接设置为chmod -R 777
 
 
 

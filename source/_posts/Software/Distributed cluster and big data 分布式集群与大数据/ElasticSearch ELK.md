@@ -64,7 +64,7 @@ tags:
 
 * 启动es：bin/elasticsearch，访问9200端口查看。用户名密码: `Username: elastic Password: changeme`。安装x-pack的话，查看的时候就会需要该默认用户名密码。
 * 重启es：只能查看端口，关闭进程，启动服务。ps -ef | grep elastic，kill -9 2382（进程号），然后再启动es。 
-* 配置es：修改conf中的jvm.properties，设置xms、xmx大小等。修改elasticsearch.yml，修改集群名、端口、IP等。启动失败可以查看后文的“问题与解决”。
+* 配置es：修改conf中的jvm.properties，设置xms、xmx大小（二者一样大）等。修改elasticsearch.yml，修改集群名、端口、IP等。启动失败可以查看后文的“问题与解决”。
     
 
 ### ES集群配置
