@@ -122,7 +122,7 @@ ma = r
 
 ### subversion定期导出
 ---
-使用上面的dump和load命令就可以定期对svn server进行定期备份和恢复，下面是一个示例dump出来进行备份的脚本。基本过程就是列出svn下面所有repo，然后导出到指定文件名即可。注意shell编程中，`[ 判断语句 ]`前后的空格，时间使用的是\`，不是引号
+使用上面的dump和load命令就可以定期对svn server进行定期备份和恢复，下面是一个示例dump出来进行备份的脚本。基本过程就是列出svn下面所有repo，然后导出到指定文件名，最后使用scp进行远程备份。注意shell编程中，`[ 判断语句 ]`前后的空格，时间使用的是\`，不是引号。
 
 ```
 #!/bin/bash
@@ -156,6 +156,10 @@ do
     fi
 done
 echo ======  see ~/svn-bak/svn-$bakdate-bak  ===========
+
+topath="Administrator@10.15.62.205:/home/Administrator/16_tcm_backup/03-svn-backup/"
+echo ======  sending files to  $topath, remote server\'s password needed ===========
+echo 'root密码' | sudo -S scp -r ~/svn-bak/svn-$bakdate-bak/ $topath
 ```
 
 
