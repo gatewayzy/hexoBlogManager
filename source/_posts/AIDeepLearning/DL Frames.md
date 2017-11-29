@@ -85,9 +85,25 @@ tags:
         * 举例：训练集有1000个样本，选取batchsize=10，那么训练完一次整个样本需要100次iteration，1epoch。
 ---
 ## layer
-* conv2d：二维卷积操作，输入的两个维度和channel，输出的两个维度和channel。卷积优点在于：参数共享、窗口稀疏(filter之外的稀疏为0)等。
-    * 卷积的核称为kernel、filter、patch.
+###  conv2d
+* 二维卷积操作，输入的两个维度和channel，输出的两个维度和channel。卷积优点在于：参数共享、窗口稀疏(filter之外的稀疏为0)等。
+* 卷积的核称为kernel、filter、patch.
+* conv2d的参数解释：tf.nn.conv2d(input, filter, strides, padding, use_cudnn_on_gpu=None, name=None)
+    * 第一个参数input：指需要做卷积的输入图像，它要求是一个Tensor，具有`[batch, in_height, in_width, in_channels]`这样的shape，具体含义是[训练时一个batch的图片数量, 图片高度, 图片宽度, 图像通道数]，注意这是一个4维的Tensor，要求类型为float32和float64其中之一
+    * 第二个参数filter：相当于CNN中的卷积核，它要求是一个Tensor，具有`[filter_height, filter_width, in_channels, out_channels]`这样的shape，具体含义是[卷积核的高度，卷积核的宽度，图像通道数，卷积核个数]，要求类型与参数input相同,filter的通道数要求与input的`in_channels`一致，有一个地方需要注意，第三维`in_channels`，就是参数input的第四维
+    * 第三个参数strides：卷积时在图像每一维的步长，这是一个一维的向量，长度4，具有`[1, strides[1], strides[2], 1]`，strides[0]=strides[3]=1
+    * 第四个参数padding：string类型的量，只能是"SAME","VALID"其中之一，这个值决定了不同的卷积方式。
+    * 第五个参数：`use_cudnn_on_gpu`:bool类型，是否使用cudnn加速，默认为true
+    * conv2d结果返回一个Tensor，这个输出，就是我们常说的feature map，尺寸为`[batch, out_height, out_width, out_channels]` 比长宽in，长宽in out，1s长s宽1，比长宽out
+        * SAME padding有：`out_height = ceil(float(in_height) / float(strides[1]))` 长/stride长 `out_width = ceil(float(in_width) / float(strides[2]))` 宽/stride宽
+        * VALID padding有：`out_height = ceil(float(in_height - filter_height + 1) / float(strides[1]))`(长-长+1)/stride长 `out_width = ceil(float(in_width - filter_width + 1) / float(strides[2]))`(宽-宽+1)/stride宽
 * Pooling：将多个维度的数值进行合并，降维降噪，防止过拟合。常见`max_pooing`、`average_pooling`、`min_pooling`。
+    * tf.nn.max_pool(input, ksize, strides, padding )
+        * input是输入，形状为`[batch_size, height, width, channels]`，
+        * ksize是kernel_size，形状为`[1, k_height, k_width, 1]`
+        * strides是步长，形状为`[1, stride[1], stride[2], 1]`
+        * padding是补全方式，有VALID和SAME，
+        * 输出是tensor，形状为`[batch_size, feature_height, fearure_width, channels]`。使用VALID-padding时，输出的大小与conv2d计算类似，`out_height = ceil(float(in_height - filter_height + 1) / float(strides[1]))`
 * Dropout：随机断开目标网络的连接，随机断开的机率是1-keep_prob。训练时进行dropout以防止训练过拟合，测试和预测时关闭dropout，因为模型已经定型了。
 
 
@@ -148,3 +164,22 @@ Mini-batch GD 一般选20-1000大。
 ### libcudnn找不到
 * 解决：编辑~/.bashrc，添加`export LD_LIBRARY_PATH=/usr/local/cuda/lib64/`，主要就是由于cuda虽然安装，但是没有添加到环境变量。一般cuda是链接到cuda-8.0文件夹这种形式，用于实现cuda通用版本链接。
 
+### tf版本导致的一些问题
+* 由于tf1.0之后的版本中，对很多方法进行了重新梳理和调整，代码上需要一些修改，比如：
+
+```
+    * tf.concat()参数顺序与老版本相反
+    * tf.mul()变成tf.multiply()
+    * tf.sub()变成tf.subtract()
+    * tf.initialize_all_variables() 改为：tf.global_variables_initializer()
+    * tf.all_variables() 改成 tf.global_variables()
+    * summary接口也改变很多：
+    * tf.histogram_summary 改为：tf.summary.histogram
+    * tf.scalar_summary 改为：tf.summary.scalar
+    * tf.train.SummaryWriter 改为：tf.summary.FileWriter
+    * tf.merge_all_summaries() 改为：summary_op = tf.summary.merge_all()
+    * tf.merge_summaries() 改为：summary_op = tf.summary.merge()
+```
+
+### tf的summaryWriter提示check failed size(2 VS 1)
+* 我是因为batch_size太大，导致GPU溢出，从100改成64就可以了。
