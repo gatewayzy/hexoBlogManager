@@ -74,8 +74,8 @@ CQA处理的应用场景不同划分为：简单的QA Pair问题和复杂的chat
 	* BLEU [Papineni 2002](2002 BLEU a method for automatic evaluation of machine translation.pdf)。
 	* Meteor [Lavie 2007](2007 METEOR An automatic metric for MT evaluation with high levels of correlation with human judgments.pdf)
 	* P@1，precision@1，排名第一的结果是正确结果的比例，越高越好。
-	* P@5, precision@5
-	* Hit@3，正确答案的排名在前3名中的比例，越高越好。
+	* P@3, precision@3
+  * Accuracy, 每个q的结果中，（结果数-最佳答案）/（结果数-1）的均值
 	* MRR，Mean Reciprocal Rank，比如top-10中正确答案的排名的倒数的平均值，越高越好。
 
 

@@ -91,3 +91,16 @@ sudo apt-get update
 sudo apt-get install cuda
 ```
 3. 测试安装状态，运行nvidia-smi查看显卡状态，如果有错误提示Failed to initialize NVML: Driver/library version mismatch，可以尝试重启解决。
+
+### 安装cudnn
+安装好cuda，可以进行nvidia-smi查看显卡状态，但是tf还需要使用cudnn加速，theano等可能就不一定需要。所以一般还需要再安装cudnn。
+1. 打开[cudnn下载官网](https://developer.nvidia.com/rdp/cudnn-download)，需要注册邮箱账号，登录选择cudnn相应的版本，下载即可。
+2. 进行安装，比如deb包，使用`sudo dpkg -i xx.deb`即可。需要将安装后产生的libcudnn.so.6/7/8文件放到/usr/local/cuda/lib64下，如果找不到，可以全盘搜索文件`find / -name libcudnn*`，我的是被安装到`/usr/lib/x86_64-linux-gnu`，拷贝到/usr/local/cuda/lib64/下面并修改可执行权限，或者添加链接`sudo ln -s libcudnn.so.5.1 libcudnn.so`
+3. 运行命令`nvcc`，需要确定libcudnn已经在path中，默认是不会添加到path的，不影响tf使用。如果要添加，可以修改.bashrc文件，添加
+
+```
+export CUDNN_HOME=/usr/local/cuda
+export LD_LIBRARY_PATH=${CUDNN_HOME}/lib64:$LD_LIBRARY_PATH
+export CPLUS_INCLUDE_PATH=${CUDNN_HOME}/include:$CPLUS_INCLUDE_PATH
+```
+* 注意cuda、cudnn、tf、python之间的版本关系，三者需要相互支持。比如合适的搭配：cuda8、libcudnn6_cuda8、tf1.3.0、python3.6。

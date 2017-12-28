@@ -51,11 +51,31 @@ tags:
 
 ## TensorFlow
 ---
-### 安装
+### tf安装过程
+* 一般是先安装显卡、安装显卡驱动，安装cuda，安装cudnn(tf要求必须安装)，安装anaconda(python)，安装tensorflow。
+* 注意cuda、cudnn、tf、python之间的版本关系，版本需要相互支持。比如合适的搭配：cuda8、libcudnn6_cuda8、python3.6、tf1.3.0。比较新的比如tf1.4可能就对py3.6支持上不是特别好，所以版本一般不要选最新的。
+
+### 安装tf
 ---
 * 安装多个python，系统环境变量默认选一个，不用改。每次运行时指定到对应python/bin目录下使用./pip或者./python进行操作。
 * 安装anaconda3，在其python位置运行./pip install 各种工具如scipy、tf.whl等。
 * 安装tensorflow：使用./pip安装tf.whl，注意tf.whl支持的python版本如cp35/cp34表示py3.5/py3.4，是cpu还是gpu，是linux还是windows，是32位还是x86_64位。安装过程中，少什么就装什么。
+
+* tf中文官网：<https://www.tensorflow.org/install/install_linux>
+
+#### Windows使用pip简单
+`pip3 search tensorflow` 查看到的`tensorflow`是cpu版本，`tensorflow-gpu`是gpu版本，`tf-nightly`和`tf-nightly-gpu`是nightly版本。但是windows下只能装64位且py3.5+的tf。
+
+
+#### Linux下载whl包
+* 中文官网上有各种介绍，下载也比较快。下载whl包网站：https://pypi.python.org/pypi/tensorflow-gpu
+* 确定python版本，确定cpu/gpu，确定tf版本，访问下面网站即可。
+
+* CPU support for linux cpu py3.6.0 tf1.4.0
+    https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-1.4.0-cp36-cp36m-linux_x86_64.whl
+
+* GPU support for linux gpu py3.6.0 tf1.4.0
+    https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-1.4.0-cp36-cp36m-linux_x86_64.whl
 
 ### 使用
 ---
