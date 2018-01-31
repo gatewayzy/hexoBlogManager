@@ -105,6 +105,8 @@ ALTER TABLE `table_name` DROP INDEX `index_name`
 ## 存储过程
 
 ### 创建存储过程
+1. 一般自定义的变量使用'@'符号开头，如 set @name='test'。
+2. 存储过程中的分号是必须的，begin、end等不需要分号。
 
 ```
 CREATE PROCEDURE proc1(IN name1 CHAR(20))   /*IN 表示输入参数，char限定类型*/
@@ -118,22 +120,72 @@ END
 ```
 
 ### 调用存储过程
-1.基本语法：call proc1('qq')
-注意：存储过程名称后面必须加括号，哪怕该存储过程没有参数传递
+1. 基本语法：call proc1('qq')，注意：存储过程名称后面必须加括号，哪怕该存储过程没有参数传递
+
 
 ### 删除存储过程
-1.基本语法：
-drop procedure proc1//
+1. 基本语法：drop procedure proc1
 
-2.注意事项: 不能在一个存储过程中删除另一个存储过程，只能调用另一个存储过程
+2. 注意事项: 不能在一个存储过程中删除另一个存储过程，只能调用另一个存储过程
 
 ### 其他常用命令
 1. show procedure status  显示数据库中所有存储的存储过程基本信息，包括所属数据库，存储过程名称，创建时间等
 2. show create procedure proc1  显示某一个MySQL存储过程的详细信息
 
+
+### 存储过程-遍历所有表的字段
+* 功能：将整个数据库中，值为'NULL'的字段全部置为null。
+* 思路：
+	* 先从MySQL的information_schema数据库中的COLUMNS表中，选取出目标数据库的所有表和字段到tmp表中。
+	* 然后使用存储过程，遍历tmp表，进行update操作。
+
+```
+# 先创建一个带输入参数的存储过程，用于更新指定的表和字段。
+# 注意这里使用参数值作为表/列名的方法，直接使用变量名会以变量名为表/列名。
+create PROCEDURE proc(in tab VARCHAR(50), in col VARCHAR(50))
+BEGIN
+
+set @t=CONCAT('update ',tab,' set ', col, '=null where ', col, ' ="NULL"');
+PREPARE statement1 from @t;
+EXECUTE statement1;
+DEALLOCATE PREPARE statement1;
+
+commit;
+end
+```
+
+```
+# 然后创建一个存储过程，使用游标进行遍历，调用上一个proc进行处理。
+create PROCEDURE pro4()
+BEGIN
+
+DECLARE col VARCHAR(40);
+DECLARE tab VARCHAR(40);
+
+DECLARE done int DEFAULT FALSE;
+
+DECLARE mycursor CURSOR for (SELECT tabs,  cols FROM `tmp` where tabs='symsynmap');
+DECLARE CONTINUE HANDLER for not found SET done = true;
+
+open mycursor;
+
+myloop: LOOP
+	FETCH mycursor into tab,col;
+	if done THEN
+		LEAVE myloop;
+	end IF;
+	call proc(tab, col);
+	COMMIT;
+end LOOP myloop;
+
+CLOSE mycursor;
+END;
+```
+
+
+
+
 ## 引擎
-
-
 
 ```
  数据库中的存储引擎其实是对使用了该引擎的表进行某种设置，数据库中的表设定了什么存储引擎，那么该表在数据存储方式、数据更新方式、数据查询性能以及是否支持索引等方面就会有不同的“效果”。在MySQL数据库中存在着多种引擎（不同版本的MySQL数据库支持的引擎不同），熟悉各种引擎才能在软件开发中应用引擎，从而开发出高性能的软件，MySQL数据库中的引擎有哪些呢？一般来说，MySQL有以下几种引擎：ISAM、MyISAM、HEAP（也称为MEMORY）、CSV、BLACKHOLE、ARCHIVE、PERFORMANCE_SCHEMA、InnoDB、 Berkeley、Merge、Federated和Cluster/NDB等，除此以外我们也可以参照MySQL++ API创建自己的数据库引擎。下面逐次介绍一下各种引擎：
