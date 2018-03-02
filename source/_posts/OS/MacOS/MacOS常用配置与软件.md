@@ -24,13 +24,16 @@ tags:
 | cmd delete |删除文件
 | cmd q  |关闭当前软件
 | cmd z/c/v/s... | 撤销／复制／粘贴／保存...
+| cmd option v| 剪切之前复制的文件
 | cmd w / t / shift t  |safari的关闭/新建/打开刚才的页面，浏览器快捷键与Windows下相似，cmd代替ctrl
 | ctr 单击 |就是右键，或者双指轻点
 | cmd |多选，类似于control
 | cmd delete |删除文件等
-| cmd 上下箭头  |打开上下级目录，在finder等中快速到顶端或底部
+| cmd 上下箭头  |打开上下级目录，在finder等中快速到顶端或底部以及前进后退一级
 | cmd o |打开文件／文件夹
 | alt cmd space| 打开finder的搜索
+| cmd shift 3| 全屏截图
+| cmd shift 4| 鼠标截图
 
 ---
 ## 软件
